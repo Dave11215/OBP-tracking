@@ -210,7 +210,7 @@ const TYPE={
 const PREHAB={se:"Shoulders/Elbows",ankle:"Ankle/Foot",knee:"Knees"};
 function prehabsFor(t){var run=(t==="easy_run"||t==="quality_run"||t==="track"||t==="long_run");var str=(t.indexOf("strength")===0);return (str||run)?["se","knee","ankle"]:["se"];}
 const SEQ=[
- "strength_A","easy_run","track","strength_B","rest","long_run","z2_bike",
+ "strength_A","easy_run","strength_B","track","rest","long_run","z2_bike",
  "strength_C","easy_run","quality_run","strength_A","rest","track","z2_bike",
  "strength_B","easy_run","track","strength_C","rest","long_run","z2_bike",
  "strength_A","easy_run","bike_vo2","strength_B","rest","long_run","z2_bike",
