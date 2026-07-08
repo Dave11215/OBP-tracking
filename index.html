@@ -224,6 +224,7 @@ function dateOf(i){const d=new Date(START);d.setDate(START.getDate()+i);return d
 // seed the two already-done days
 if(A[key(dateOf(0))]===undefined){A[key(dateOf(0))]={done:true,note:"Strength A"};}
 if(A[key(dateOf(1))]===undefined){A[key(dateOf(1))]={done:true,note:"4.18 mi trail run (woods), moderate/varied effort"};}
+if(A[key(dateOf(2))]===undefined){A[key(dateOf(2))]={done:true,note:"Strength B (home): incline DB press 3x12@30, CS row 3x12@30, hammer curl 3x12@20, Bulgarian split squat 3x12@10/hand. Knee circuit 3x12 (step-ups, sit-downs, reverse lunges, lateral lunges, star taps) + wall sits 3x30s. No hinge (RDL/swing skipped); ankle/foot circuit not done."};}
 save(A);
 let sel=null;
 function fmt(d){return (d.getMonth()+1)+"/"+d.getDate()}
