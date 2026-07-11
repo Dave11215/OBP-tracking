@@ -128,9 +128,9 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <h2>Weekly dose (per ~7&ndash;9 days, flex by recovery)</h2>
 <div class="doses">
 <div class="dose"><div class="n">2&ndash;3</div><div class="l">hard &mdash; one weekend (Long Run or Track) + one midweek (Quality Run or Bike VO2); a 3rd only when well-recovered.</div></div>
-<div class="dose"><div class="n">2&ndash;3</div><div class="l">strength (weekdays), rotating A &rarr; B &rarr; C</div></div>
+<div class="dose"><div class="n">1&ndash;2</div><div class="l">strength (weekdays), rotating A &rarr; B &rarr; C. Fewer than the old 2-3: protecting rest wins the tie.</div></div>
 <div class="dose"><div class="n">3&ndash;4</div><div class="l">easy aerobic &mdash; easy runs + Zone 2 rides (long ride on the weekend)</div></div>
-<div class="dose"><div class="n">1&ndash;2</div><div class="l">rest / recovery on weekdays; more when HRV is down</div></div>
+<div class="dose"><div class="n">2</div><div class="l">rest / recovery on weekdays; more when HRV is down. <b>Never more than ~5 straight training days.</b></div></div>
 </div>
 
 <h2>Sequencing rules</h2>
@@ -138,6 +138,7 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <li><b>Never two hard days back-to-back.</b> The two hard sessions sit ~3 days apart; the weekend pairs a hard Saturday with an easy long ride Sunday.</li>
 <li><b>Long Run on fresh-ish legs:</b> not the day after leg strength (C) or after a hard run.</li>
 <li><b>Track / speed ~weekly</b> is your economy driver; long runs progress ~a mile a week; Bike VO2 takes one slot to spare impact.</li>
+<li><b>Never more than ~5 consecutive training days without a rest day.</b> Recovery is half of what produced the HRV gain; a long unbroken block quietly drops that half.</li>
 <li><b>Usually two hard, occasionally three</b> &mdash; a third only on a genuinely well-recovered stretch, never on feel alone.</li>
 </ul></div>
 
@@ -247,10 +248,10 @@ const PREHAB={se:"Shoulders/Elbows",ankle:"Ankle/Foot",knee:"Knees"};
 function prehabsFor(t){var run=(t==="easy_run"||t==="quality_run"||t==="track"||t==="long_run");var str=(t.indexOf("strength")===0);return (str||run)?["se","knee","ankle"]:["se"];}
 const SEQ=[
 "strength_A","easy_run","strength_B","track","rest","long_run","track",
-"rest","strength_C","easy_run","bike_vo2","strength_A","long_run","z2_bike",
-"strength_B","easy_run","track","strength_C","rest","long_run","z2_bike",
-"strength_A","easy_run","bike_vo2","strength_B","rest","long_run","z2_bike",
-"strength_C","easy_run"];
+"rest","strength_C","easy_run","bike_vo2","rest","long_run","z2_bike",
+"strength_A","easy_run","track","rest","strength_B","long_run","z2_bike",
+"rest","strength_C","easy_run","bike_vo2","rest","long_run","z2_bike",
+"strength_A","easy_run"];
 const AKEY="obp_actual_v2";
 function load(){try{return JSON.parse(localStorage.getItem(AKEY))||{}}catch(e){return{}}}
 function save(s){localStorage.setItem(AKEY,JSON.stringify(s))}
@@ -269,7 +270,8 @@ const SEED={
 5:{done:true,actual:"z2_bike",note:"ADAPTED: Zone 2 ride instead of the long run, to fix the Zone 2 shortage and stay low-impact after a strength day + a tempo run. DONE: W&OD Trail, east from Hunter Mill Rd (paved rail-trail, out-and-back). 1:33:57, ~21 mi, 13.6 mph avg, avg HR 132 / max 155, Primary Benefit Base (Low Aerobic), aerobic TE 2.8 / anaerobic 0.5, load 70, +764 ft (gentle rail grade, under 1 percent), sweat 1,275 ml (biggest yet), BB -14. Avg HR 132 = dead center of the prescribed 120-140 band; the Zone-3 time was cardiac drift + the gentle uphill return leg, NOT hard riding. Landed as a true easy aerobic day: half Friday tempo load (70 vs 135) for twice the duration. Green morning: TR 74, HRV Balanced 52ms, sleep 85 with a REM rebound, RHR 50. VENUE NOTE: W&OD is smooth, non-technical, mile-marked = the right default for measured efforts (clean pace-at-HR data) and zero ankle-roll exposure."}
 ,
 6:{done:false,note:"TRACK (hard-changed from Z2 Bike; the session owed from Thursday). GATED on the AM: green = HRV Balanced ~48+, RHR near 50, TR 65+, decent sleep, no knee/ankle/calf signal. NO-GO = HRV Low or a clear drop, RHR up 3+, TR under 55, bad sleep, a headache (the under-salted tell), or any tissue niggle -> easy run or rest instead, not a reduced track. SESSION: on an actual track (not the W&OD - repeats need exact 400s and a safe uninterrupted surface). WU 12-15 min easy (HR under 140) + knee/ankle prehab + drills + 4-6 strides. MAIN: 5 x 400m at 5K effort, HR into upper Z4, CAP 172, all reps within a few seconds of each other; add a 6th only if reps 1-4 are controlled. RECOVERY: 2-3 min walk/easy jog between reps (generous, on purpose). CD 10 min. Cadence 165+. NOT a time trial. Pre-hydrate with SALTED fluid (1,275 ml sweat loss yesterday)."},
-11:{done:false,note:"Strength A, but keep the LOWER-BODY POWER LIGHT - lighten or skip the reverse lunge. The long run is tomorrow."},
+11:{done:false,note:"REST - and this one is deliberate. It sits between Thursday's hard Bike VO2 and Saturday's long run so BOTH land on fresh legs. Do not fill it. (This day was mistakenly turned into a strength session, which created a 10-day unbroken block; Dave caught it.)"},
+18:{done:false,note:"Strength B the day before the long run - keep the KB swings / hinge LIGHT so Saturday's legs are fresh."},
 12:{done:false,note:"FIRST LONG RUN of the block (the biggest gap in the plan so far). ~4-5 mi EASY-TO-MODERATE, not a hard effort - the week's spacing depends on it staying easy. Run it on the W&OD so the pace-at-HR data is clean and comparable (measurement venue, not the trail)."}
 };
 for(const i in SEED){ if(A[key(dateOf(+i))]===undefined){ A[key(dateOf(+i))]=SEED[i]; } }
