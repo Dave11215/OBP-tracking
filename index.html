@@ -41,7 +41,6 @@ h2{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--acce
 .cell .ab{font-size:9.5px;font-weight:800;color:#fff;border-radius:5px;padding:3px 1px;margin-top:2px;line-height:1.1}
 .cell .ph{margin-top:2px;font-size:8px;color:var(--ph);font-weight:700;letter-spacing:.02em}
 .cell .chk{position:absolute;top:2px;right:3px;font-size:11px;color:var(--accent);font-weight:800}
-.cell .adapt{position:absolute;top:2px;left:3px;font-size:10px;color:var(--adapt);font-weight:800}
 .legend{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 2px;font-size:11px;color:var(--muted)}
 .legend span{display:inline-flex;align-items:center;gap:5px}
 .sw{width:11px;height:11px;border-radius:3px;display:inline-block}
@@ -105,14 +104,13 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 </div>
 
 <h2>The 30-day plan</h2>
-<div class="note">Gray = what was prescribed. Colored chip = what you actually did. Tap any day to log it.</div>
+<div class="note">Colored pill = what you actually did. Gray line under it = what was prescribed. Tap any day to log it.</div>
 <div class="cal" id="dows"></div>
 <div class="cal" id="cal"></div>
 <div class="detail" id="detail"></div>
 <div class="legend" id="legend"></div>
 <div class="key">
-<b>&#10003;</b> green check = you honored the day (trained, or rested when rest was the right call). This is the streak. &nbsp;
-<b style="color:var(--adapt)">&#8646;</b> = you adapted, did something different from the plan and it was the right call. <b>Still counts. Not a miss.</b>
+<b>&#10003;</b> green check = you honored the day (trained, or rested when rest was the right call). This is the streak. Adapting the plan &mdash; swapping a session, or resting when rest was the right call &mdash; <b>still earns the check. Not a miss.</b>
 </div>
 
 <h2>How it's driven</h2>
@@ -310,10 +308,9 @@ SEQ.forEach((k,i)=>{
   const ph=prehabsFor(phFor).map(p=>p==="se"?"Sh":p==="knee"?"Kn":"Ak").join(" ");
   html+=`<div class="cell${wend?' wend':''}${isT?' today':''}${i===sel?' sel':''}" onclick="openDay(${i})">
 <div class="dn">${fmt(d)}</div>
-${adapted?`<div class="plan">${P.a}</div>`:``}
 <div class="ab" style="background:${shown.c}">${shown.a}</div>
+${adapted?`<div class="plan">${P.a}</div>`:``}
 <div class="ph">+ ${ph}</div>
-${adapted?'<div class="adapt">&#8646;</div>':''}
 ${done?'<div class="chk">&#10003;</div>':''}</div>`;});
 document.getElementById("cal").innerHTML=html;
 const leg=[["Easy Run","var(--run)"],["Tempo","var(--qual)"],["Track","var(--trk)"],["Long Run","var(--long)"],["Z2 Bike","var(--z2b)"],["Bike VO2","var(--vo2)"],["Str A","var(--sA)"],["Str B","var(--sB)"],["Str C","var(--sC)"],["Rest","var(--rest)"]];
@@ -328,7 +325,7 @@ const phFor=rec.actual?rec.actual:SEQ[i];
 const ph=prehabsFor(phFor).map(p=>`<span class="tag">${PREHAB[p]}</span>`).join("");
 const opts=ORDER.map(k=>`<option value="${k}"${k===cur?' selected':''}>${TYPE[k].n}${k===SEQ[i]?' (as prescribed)':''}</option>`).join("");
 let flag="";
-if(rec.done&&adapted)flag='<span class="flag ad">&#8646; Adapted &mdash; and it still counts</span>';
+if(rec.done&&adapted)flag='<span class="flag ad">Adapted &mdash; and it still counts</span>';
 else if(rec.done)flag='<span class="flag on">&#10003; Done as prescribed</span>';
 const el=document.getElementById("detail");el.className="detail show";
 el.innerHTML=`<div class="dt">${P.n}</div><div class="dm">Day ${i+1} &middot; ${d.toLocaleDateString(undefined,{weekday:'long'})} ${fmt(d)}</div>
