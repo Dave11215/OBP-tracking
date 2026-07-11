@@ -9,253 +9,340 @@
 <meta name="theme-color" content="#0f7a6b">
 <title>OBP Training Plan</title>
 <style>
-  :root{color-scheme:light;--ink:#1a2230;--muted:#5b6675;--line:#e4e8ee;--bg:#f6f8fb;--card:#fff;--accent:#0f7a6b;--accent-soft:#e6f2ef;
-    --sA:#0f7a6b;--sB:#2f5496;--sC:#8a4b9c;--run:#2e8b57;--qual:#c0392b;--long:#1f6f8b;--z2b:#3a7ca5;--vo2:#b0552c;--trk:#d98a1f;--rest:#9aa3af;--pow:#c0392b;--ph:#7a6a55}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.55}
-  .wrap{max-width:820px;margin:0 auto;padding:24px 16px 60px}
-  .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700}
-  h1{font-size:25px;margin:6px 0 3px;font-weight:800;letter-spacing:-.02em}
-  .sub{color:var(--muted);font-size:13px;margin-bottom:14px}
-  h2{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);margin:26px 0 9px}
-  .note{font-size:12px;color:var(--muted);margin:-2px 0 9px}
-  .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
-  .dow{font-size:10px;text-transform:uppercase;color:var(--muted);text-align:center;font-weight:700}
-  .dow.we{color:var(--accent)}
-  .cell{background:var(--card);border:1px solid var(--line);border-radius:9px;min-height:58px;padding:5px 3px 4px;text-align:center;cursor:pointer;position:relative}
-  .cell.wend{background:#fbfdfc;border-color:#cfe6e0}
-  .cell.today{outline:2px solid var(--ink);outline-offset:0}
-  .cell.sel{box-shadow:0 0 0 2px var(--ink) inset}
-  .cell .dn{font-size:10px;color:var(--muted)}
-  .cell .ab{font-size:9.5px;font-weight:800;color:#fff;border-radius:5px;padding:3px 1px;margin-top:3px;line-height:1.1}
-  .cell .ph{margin-top:2px;font-size:8px;color:var(--ph);font-weight:700;letter-spacing:.02em}
-  .cell .chk{position:absolute;top:2px;right:3px;font-size:11px;color:var(--accent);font-weight:800}
-  .legend{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 2px;font-size:11px;color:var(--muted)}
-  .legend span{display:inline-flex;align-items:center;gap:5px}
-  .sw{width:11px;height:11px;border-radius:3px;display:inline-block}
-  .detail{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:12px;display:none}
-  .detail.show{display:block}
-  .detail .dt{font-weight:800;font-size:16px}
-  .detail .dm{color:var(--muted);font-size:12px;margin:1px 0 8px}
-  .detail .row{font-size:13px;margin:6px 0}
-  .detail .row b{color:var(--ink)}
-  .detail .tag{display:inline-block;background:#f0ece4;color:var(--ph);border-radius:5px;padding:1px 7px;font-size:11.5px;font-weight:600;margin:2px 4px 2px 0}
-  .detail textarea{width:100%;margin-top:8px;border:1px solid var(--line);border-radius:8px;padding:8px;font-size:13px;font-family:inherit;resize:vertical;min-height:46px}
-  .detail .act{display:flex;gap:8px;margin-top:9px}
-  .btn{padding:9px 13px;border-radius:9px;border:1px solid var(--line);background:#fff;font-weight:700;font-size:13px;cursor:pointer}
-  .btn.pri{background:var(--accent);color:#fff;border-color:var(--accent)}
-  .btn.done{background:var(--accent-soft);color:var(--accent);border-color:#cfe6e0}
-  .box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 17px;margin-bottom:12px}
-  .box.accent{background:var(--accent-soft);border-color:#cfe6e0}
-  ul{margin:6px 0;padding-left:20px} li{margin:6px 0} li b{color:var(--ink)}
-  .doses{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .dose{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:12px 14px}
-  .dose .n{font-size:22px;font-weight:800;letter-spacing:-.02em}
-  .dose .l{font-size:12.5px;color:var(--muted);margin-top:1px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0;margin-bottom:11px;overflow:hidden}
-  .card .hd{padding:10px 15px;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .card .hd small{font-weight:400;opacity:.9;font-size:12.5px}
-  .card.ph .hd{background:var(--ph)}
-  .card .bd{padding:11px 15px}
-  ul.ex{margin:0;padding-left:18px}
-  ul.ex li{margin:3px 0;font-size:13.5px}
-  ul.ex li .s{color:var(--muted);font-size:12px}
-  .pw{display:inline-block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;background:#fbecea;color:var(--pow);border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:middle}
-  .desc{font-size:13px;color:var(--muted);margin:0}
-  .rules{font-size:12.5px;color:var(--muted);margin-top:14px;line-height:1.6}
-  .rules b{color:var(--ink)}
-  .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:9px;font-size:13px;opacity:0;transition:.25s;pointer-events:none}
-  .toast.show{opacity:1}
-  @media print{body{background:#fff}.card,.box,.dose,.cell{box-shadow:none}}
+:root{color-scheme:light;--ink:#1a2230;--muted:#5b6675;--line:#e4e8ee;--bg:#f6f8fb;--card:#fff;--accent:#0f7a6b;--accent-soft:#e6f2ef;
+--sA:#0f7a6b;--sB:#2f5496;--sC:#8a4b9c;--run:#2e8b57;--qual:#c0392b;--long:#1f6f8b;--z2b:#3a7ca5;--vo2:#b0552c;--trk:#d98a1f;--rest:#9aa3af;--pow:#c0392b;--ph:#7a6a55;--adapt:#c07a1f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.55}
+.wrap{max-width:820px;margin:0 auto;padding:24px 16px 60px}
+.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-size:25px;margin:6px 0 3px;font-weight:800;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:13px;margin-bottom:14px}
+h2{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);margin:26px 0 9px}
+.note{font-size:12px;color:var(--muted);margin:-2px 0 9px}
+.streak{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px 11px;margin-bottom:11px}
+.srow{display:flex;gap:8px;text-align:center}
+.sbox{flex:1}
+.sbox .n{font-size:21px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.sbox .n.hot{color:var(--accent)}
+.sbox .l{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:1px}
+.bar{height:7px;background:#eef1f5;border-radius:20px;margin-top:11px;overflow:hidden}
+.fill{height:100%;background:var(--accent);border-radius:20px;transition:width .4s}
+.goal{font-size:11.5px;color:var(--muted);margin-top:7px;text-align:center}
+.goal b{color:var(--accent)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.dow{font-size:10px;text-transform:uppercase;color:var(--muted);text-align:center;font-weight:700}
+.dow.we{color:var(--accent)}
+.cell{background:var(--card);border:1px solid var(--line);border-radius:9px;min-height:72px;padding:5px 3px 4px;text-align:center;cursor:pointer;position:relative}
+.cell.wend{background:#fbfdfc;border-color:#cfe6e0}
+.cell.today{outline:2px solid var(--ink);outline-offset:0}
+.cell.sel{box-shadow:0 0 0 2px var(--ink) inset}
+.cell .dn{font-size:10px;color:var(--muted)}
+.cell .plan{font-size:8px;color:#9aa3af;font-weight:700;margin-top:2px;line-height:1.1;letter-spacing:.01em}
+.cell .ab{font-size:9.5px;font-weight:800;color:#fff;border-radius:5px;padding:3px 1px;margin-top:2px;line-height:1.1}
+.cell .ph{margin-top:2px;font-size:8px;color:var(--ph);font-weight:700;letter-spacing:.02em}
+.cell .chk{position:absolute;top:2px;right:3px;font-size:11px;color:var(--accent);font-weight:800}
+.cell .adapt{position:absolute;top:2px;left:3px;font-size:10px;color:var(--adapt);font-weight:800}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 2px;font-size:11px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+.key{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.7}
+.key b{color:var(--ink)}
+.detail{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:12px;display:none}
+.detail.show{display:block}
+.detail .dt{font-weight:800;font-size:16px}
+.detail .dm{color:var(--muted);font-size:12px;margin:1px 0 8px}
+.detail .row{font-size:13px;margin:7px 0}
+.detail .row b{color:var(--ink)}
+.detail .tag{display:inline-block;background:#f0ece4;color:var(--ph);border-radius:5px;padding:1px 7px;font-size:11.5px;font-weight:600;margin:2px 4px 2px 0}
+.detail select{width:100%;margin-top:4px;border:1px solid var(--line);border-radius:8px;padding:8px;font-size:13px;font-family:inherit;background:#fff;color:var(--ink)}
+.detail textarea{width:100%;margin-top:8px;border:1px solid var(--line);border-radius:8px;padding:8px;font-size:13px;font-family:inherit;resize:vertical;min-height:52px}
+.detail .act{display:flex;gap:8px;margin-top:9px}
+.flag{display:inline-block;font-size:11px;font-weight:700;border-radius:5px;padding:2px 8px;margin-top:2px}
+.flag.on{background:var(--accent-soft);color:var(--accent)}
+.flag.ad{background:#fbf0e0;color:var(--adapt)}
+.btn{padding:9px 13px;border-radius:9px;border:1px solid var(--line);background:#fff;font-weight:700;font-size:13px;cursor:pointer}
+.btn.pri{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.done{background:var(--accent-soft);color:var(--accent);border-color:#cfe6e0}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 17px;margin-bottom:12px}
+.box.accent{background:var(--accent-soft);border-color:#cfe6e0}
+ul{margin:6px 0;padding-left:20px} li{margin:6px 0} li b{color:var(--ink)}
+.doses{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dose{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:12px 14px}
+.dose .n{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.dose .l{font-size:12.5px;color:var(--muted);margin-top:1px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0;margin-bottom:11px;overflow:hidden}
+.card .hd{padding:10px 15px;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.card .hd small{font-weight:400;opacity:.9;font-size:12.5px}
+.card.ph .hd{background:var(--ph)}
+.card .bd{padding:11px 15px}
+ul.ex{margin:0;padding-left:18px}
+ul.ex li{margin:3px 0;font-size:13.5px}
+ul.ex li .s{color:var(--muted);font-size:12px}
+.pw{display:inline-block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;background:#fbecea;color:var(--pow);border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:middle}
+.desc{font-size:13px;color:var(--muted);margin:0}
+.rules{font-size:12.5px;color:var(--muted);margin-top:14px;line-height:1.6}
+.rules b{color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:9px;font-size:13px;opacity:0;transition:.25s;pointer-events:none}
+.toast.show{opacity:1}
+@media print{body{background:#fff}.card,.box,.dose,.cell{box-shadow:none}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="eyebrow">Optimal Body Platform</div>
-  <h1>Training Plan</h1>
-  <div class="sub">Run + bike + strength, recovery-driven. Weekends outdoors; rest on weekdays. Tap a day to see the workout + prehab and log what you actually did. Jul 6 &rarr; Aug 4, 2026.</div>
+<div class="eyebrow">Optimal Body Platform</div>
+<h1>Training Plan</h1>
+<div class="sub">Run + bike + strength, recovery-driven. Weekends outdoors; rest on weekdays. Each day carries three things: what was <b>prescribed</b>, what you <b>actually did</b>, and a green check for <b>honoring the day</b>. Adapting the plan still earns the check. Jul 6 &rarr; Aug 4, 2026.</div>
 
-  <h2>The 30-day plan</h2>
-  <div class="note">Each day: prescribed workout (color) + prehab. Tap to open, log what you did, and check it off. Weekends shaded; today outlined.</div>
-  <div class="cal" id="dows"></div>
-  <div class="cal" id="cal"></div>
-  <div class="detail" id="detail"></div>
-  <div class="legend" id="legend"></div>
-
-  <h2>How it's driven</h2>
-  <div class="box accent">
-    <ul>
-      <li><b>Recovery and hard/easy balance set the order, not the day of week.</b> The calendar is one sound arrangement, not a fixed template &mdash; slide sessions by how recovered you are.</li>
-      <li><b>Weekends are your outdoor days.</b> Long Run, Track intervals, and long Zone 2 rides on Sat/Sun; rest and strength on weekdays. Droppable if recovery needs a weekend rest.</li>
-      <li><b>Polarized:</b> most sessions easy, usually two genuinely hard per week, a third only on a well-recovered stretch.</li>
-      <li><b>Run + bike mix:</b> running carries the higher-intensity work; the bike carries joint-sparing Zone 2 volume and is the impact-free hard option.</li>
-      <li><b>Autoregulate by HRV trend:</b> a hard session goes only when the trend is flat/up and sleep was decent; if it dips, that slot becomes easy or rest.</li>
-    </ul>
+<h2>The streak</h2>
+<div class="streak">
+  <div class="srow">
+    <div class="sbox"><div class="n hot" id="stStreak">0</div><div class="l">day streak</div></div>
+    <div class="sbox"><div class="n" id="stHonored">0/0</div><div class="l">days honored</div></div>
+    <div class="sbox"><div class="n" id="stPct">0%</div><div class="l">of the 30</div></div>
   </div>
+  <div class="bar"><div class="fill" id="stFill" style="width:0%"></div></div>
+  <div class="goal" id="stGoal"></div>
+</div>
 
-  <h2>Weekly dose (per ~7&ndash;9 days, flex by recovery)</h2>
-  <div class="doses">
-    <div class="dose"><div class="n">2&ndash;3</div><div class="l">hard &mdash; one weekend (Long Run or Track) + one midweek (Quality Run or Bike VO2); a 3rd only when well-recovered.</div></div>
-    <div class="dose"><div class="n">2&ndash;3</div><div class="l">strength (weekdays), rotating A &rarr; B &rarr; C</div></div>
-    <div class="dose"><div class="n">3&ndash;4</div><div class="l">easy aerobic &mdash; easy runs + Zone 2 rides (long ride on the weekend)</div></div>
-    <div class="dose"><div class="n">1&ndash;2</div><div class="l">rest / recovery on weekdays; more when HRV is down</div></div>
-  </div>
+<h2>The 30-day plan</h2>
+<div class="note">Gray = what was prescribed. Colored chip = what you actually did. Tap any day to log it.</div>
+<div class="cal" id="dows"></div>
+<div class="cal" id="cal"></div>
+<div class="detail" id="detail"></div>
+<div class="legend" id="legend"></div>
+<div class="key">
+<b>&#10003;</b> green check = you honored the day (trained, or rested when rest was the right call). This is the streak. &nbsp;
+<b style="color:var(--adapt)">&#8646;</b> = you adapted, did something different from the plan and it was the right call. <b>Still counts. Not a miss.</b>
+</div>
 
-  <h2>Sequencing rules</h2>
-  <div class="box"><ul>
-    <li><b>Never two hard days back-to-back.</b> The two hard sessions sit ~3 days apart; the weekend pairs a hard Saturday with an easy long ride Sunday.</li>
-    <li><b>Long Run on fresh-ish legs:</b> not the day after leg strength (C) or after a hard run.</li>
-    <li><b>Track / speed ~weekly</b> is your economy driver; long runs progress ~a mile a week; Bike VO2 takes one slot to spare impact.</li>
-    <li><b>Usually two hard, occasionally three</b> &mdash; a third only on a genuinely well-recovered stretch, never on feel alone.</li>
-  </ul></div>
+<h2>How it's driven</h2>
+<div class="box accent">
+<ul>
+<li><b>Recovery and hard/easy balance set the order, not the day of week.</b> The calendar is one sound arrangement, not a fixed template &mdash; slide sessions by how recovered you are.</li>
+<li><b>Adapting is not failing.</b> Swapping a session, or turning a hard day into rest when life or recovery demands it, is the system working. Log what you actually did and keep the check.</li>
+<li><b>Weekends are your outdoor days.</b> Long Run, Track intervals, and long Zone 2 rides on Sat/Sun; rest and strength on weekdays.</li>
+<li><b>Polarized:</b> most sessions easy, usually two genuinely hard per week, a third only on a well-recovered stretch.</li>
+<li><b>Run + bike mix:</b> running carries the higher-intensity work; the bike carries joint-sparing Zone 2 volume and is the impact-free hard option.</li>
+<li><b>Autoregulate by HRV trend:</b> a hard session goes only when the trend is flat/up and sleep was decent; if it dips, that slot becomes easy or rest.</li>
+</ul>
+</div>
 
-  <h2>Running sessions</h2>
-  <div class="card"><div class="hd" style="background:var(--run)">Easy Run + strides <small>&mdash; Zone 2</small></div>
-    <div class="bd"><p class="desc">30&ndash;40 min conversational (HR ~125&ndash;140, cap 145), then 4&ndash;6 x 10&ndash;15s strides. Keep it genuinely easy.</p></div></div>
-  <div class="card"><div class="hd" style="background:var(--qual)">Quality Run <small>&mdash; midweek hard (gated)</small></div>
-    <div class="bd"><p class="desc">5K tempo / threshold. Warm up, finish strong but not to failure, cadence high. Swap to Bike VO2 if legs/HRV need it.</p></div></div>
-  <div class="card"><div class="hd" style="background:var(--trk)">Track intervals <small>&mdash; speed (gated)</small></div>
-    <div class="bd"><p class="desc">WU 12&ndash;15 min + drills, then 5&ndash;6 x 400&ndash;800 m at ~5K effort (HR to upper Z4, cap ~172) with generous recovery, CD. Never a time trial.</p></div></div>
-  <div class="card"><div class="hd" style="background:var(--long)">Long Run <small>&mdash; weekend endurance</small></div>
-    <div class="bd"><p class="desc">Easy-to-moderate, progressing ~a mile a week (~4 &rarr; 5 &rarr; 6 &rarr; 6&ndash;7). Outdoors on the weekend.</p></div></div>
+<h2>Weekly dose (per ~7&ndash;9 days, flex by recovery)</h2>
+<div class="doses">
+<div class="dose"><div class="n">2&ndash;3</div><div class="l">hard &mdash; one weekend (Long Run or Track) + one midweek (Quality Run or Bike VO2); a 3rd only when well-recovered.</div></div>
+<div class="dose"><div class="n">2&ndash;3</div><div class="l">strength (weekdays), rotating A &rarr; B &rarr; C</div></div>
+<div class="dose"><div class="n">3&ndash;4</div><div class="l">easy aerobic &mdash; easy runs + Zone 2 rides (long ride on the weekend)</div></div>
+<div class="dose"><div class="n">1&ndash;2</div><div class="l">rest / recovery on weekdays; more when HRV is down</div></div>
+</div>
 
-  <h2>Bike sessions</h2>
-  <div class="card"><div class="hd" style="background:var(--z2b)">Zone 2 Bike <small>&mdash; easy base, joint-sparing</small></div>
-    <div class="bd"><p class="desc">Conversational Zone 2, 40&ndash;80 min. Long outdoor ride on the weekend, or a short spin midweek.</p></div></div>
-  <div class="card"><div class="hd" style="background:var(--vo2)">Bike VO2 <small>&mdash; impact-free hard</small></div>
-    <div class="bd"><p class="desc">WU 10&ndash;12 min, intervals at ~90&ndash;95% max HR (3&ndash;4 min on / 3&ndash;4 easy), CD. Redline is fine, no impact. Never to failure.</p></div></div>
+<h2>Sequencing rules</h2>
+<div class="box"><ul>
+<li><b>Never two hard days back-to-back.</b> The two hard sessions sit ~3 days apart; the weekend pairs a hard Saturday with an easy long ride Sunday.</li>
+<li><b>Long Run on fresh-ish legs:</b> not the day after leg strength (C) or after a hard run.</li>
+<li><b>Track / speed ~weekly</b> is your economy driver; long runs progress ~a mile a week; Bike VO2 takes one slot to spare impact.</li>
+<li><b>Usually two hard, occasionally three</b> &mdash; a third only on a genuinely well-recovered stretch, never on feel alone.</li>
+</ul></div>
 
-  <h2>Strength (A / B / C rotation)</h2>
-  <div class="card"><div class="hd" style="background:var(--sA)">Strength A <small>&mdash; push + quad-dominant lower</small></div>
-    <div class="bd"><ul class="ex">
-      <li>Reverse Lunge <span class="pw">power</span> <span class="s">&middot; 3 x 8/leg</span></li>
-      <li>Barbell Bench Press <span class="s">&middot; 3 x 8-10</span></li>
-      <li>Incline DB Press <span class="s">&middot; 3 x 10-12</span></li>
-      <li>Chest-Supported DB Row <span class="s">&middot; 3 x 10-12</span></li>
-      <li>Low-to-High Cable Chop <span class="s">&middot; 3 x 10-12/side</span></li>
-      <li>Cable Lateral Raise <span class="s">&middot; 3 x 12-15</span></li>
-      <li>Tricep Pushdown <span class="s">&middot; 3 x 12-15</span></li>
-      <li>Pallof Press <span class="s">&middot; 3 x 10-12/side</span></li>
-    </ul></div></div>
-  <div class="card"><div class="hd" style="background:var(--sB)">Strength B <small>&mdash; pull + hip-hinge lower</small></div>
-    <div class="bd"><ul class="ex">
-      <li>Kettlebell Swing <span class="pw">power</span> <span class="s">&middot; 4 x 8</span></li>
-      <li>Lat Pulldown <span class="s">&middot; 3 x 10-12</span></li>
-      <li>Seated Cable Row <span class="s">&middot; 3 x 10-12</span></li>
-      <li>Cable Face Pull <span class="s">&middot; 3 x 15</span></li>
-      <li>Flat DB Press <span class="s">&middot; 3 x 10-12</span></li>
-      <li>Hammer Curl <span class="s">&middot; 3 x 10-12</span></li>
-      <li>Farmer's Carry <span class="s">&middot; 3 x ~40 m</span></li>
-      <li>Cable Woodchop <span class="s">&middot; 3 x 10-12/side</span></li>
-    </ul></div></div>
-  <div class="card"><div class="hd" style="background:var(--sC)">Strength C <small>&mdash; legs + shoulders + arms</small></div>
-    <div class="bd"><ul class="ex">
-      <li>Box Step-Up <span class="pw">power</span> <span class="s">&middot; 3 x 6/leg</span></li>
-      <li>Bulgarian Split Squat <span class="s">&middot; 3 x 8-10/leg</span></li>
-      <li>Leg Extension <span class="s">&middot; 3 x 12-15</span></li>
-      <li>Machine Leg Curl <span class="s">&middot; 3 x 12</span></li>
-      <li>Standing Calf Raise <span class="s">&middot; 3 x 12-15</span></li>
-      <li>Cable Lateral Raise <span class="s">&middot; 3 x 12-15</span></li>
-      <li>Hammer Curl + Tricep Pushdown <span class="s">&middot; superset, 2 x 12</span></li>
-      <li>Pallof Press or Plank <span class="s">&middot; 3 sets</span></li>
-    </ul></div></div>
+<h2>Running sessions</h2>
+<div class="card"><div class="hd" style="background:var(--run)">Easy Run + strides <small>&mdash; Zone 2</small></div>
+<div class="bd"><p class="desc">30&ndash;40 min conversational (HR ~125&ndash;140, cap 145), then 4&ndash;6 x 10&ndash;15s strides. Keep it genuinely easy.</p></div></div>
+<div class="card"><div class="hd" style="background:var(--qual)">Quality Run <small>&mdash; midweek hard (gated)</small></div>
+<div class="bd"><p class="desc">5K tempo / threshold. Warm up, finish strong but not to failure, cadence high. Swap to Bike VO2 if legs/HRV need it.</p></div></div>
+<div class="card"><div class="hd" style="background:var(--trk)">Track intervals <small>&mdash; speed (gated)</small></div>
+<div class="bd"><p class="desc">WU 12&ndash;15 min + drills, then 5&ndash;6 x 400&ndash;800 m at ~5K effort (HR to upper Z4, cap ~172) with generous recovery, CD. Never a time trial.</p></div></div>
+<div class="card"><div class="hd" style="background:var(--long)">Long Run <small>&mdash; weekend endurance</small></div>
+<div class="bd"><p class="desc">Easy-to-moderate, progressing ~a mile a week (~4 &rarr; 5 &rarr; 6 &rarr; 6&ndash;7). Outdoors on the weekend.</p></div></div>
 
-  <h2>Prehab routines</h2>
-  <div class="note">Knees + ankle/foot ride with your runs (do them as a quick pre-run activation) and strength days; shoulders/elbows is a daily near-freebie. A few minutes each.</div>
-  <div class="card ph"><div class="hd">Shoulders / Elbows <small>&mdash; daily, ~3&ndash;5 min</small></div>
-    <div class="bd"><ul class="ex">
-      <li>Reverse Tyler Twist <span class="s">&middot; for the right common-flexor tendon, 2 x 12-15</span></li>
-      <li>Band external + internal rotation <span class="s">&middot; 2 x 12/side</span></li>
-      <li>Scapular / face pulls <span class="s">&middot; 2 x 12-15</span></li>
-      <li>Hammer eccentric pronation + supination <span class="s">&middot; slow, 2 x 10/side</span></li>
-    </ul><p class="desc" style="margin-top:6px">Protects the right elbow (partial common-flexor tear + golfer's elbow) and shoulder. Keep sub-painful.</p></div></div>
-  <div class="card ph"><div class="hd">Knees <small>&mdash; run + strength days (pre-run activation), ~3&ndash;5 min</small></div>
-    <div class="bd"><ul class="ex">
-      <li>Step-ups <span class="s">&middot; controlled, 2 x 10/leg</span></li>
-      <li>Eccentric step-downs <span class="s">&middot; slow single-leg lower, 2 x 8/leg</span></li>
-      <li>Star taps <span class="s">&middot; single-leg reach in 3 directions, 2 rounds/leg</span></li>
-      <li>Wall sit <span class="s">&middot; 2 x 30-45s</span></li>
-      <li>Terminal knee extension (band) <span class="s">&middot; 2 x 15</span></li>
-    </ul><p class="desc" style="margin-top:6px">Maintenance for the knee (the strength-before-running gate that closed the recurrence cycle). Cadence toward 165+ is the #1 running-mechanics fix alongside this.</p></div></div>
-  <div class="card ph"><div class="hd">Ankle / Foot <small>&mdash; run + strength days, ~5 min (trail-driven)</small></div>
-    <div class="bd"><ul class="ex">
-      <li>Single-leg balance <span class="s">&middot; 30s/leg; eyes open &rarr; closed &rarr; on a cushion</span></li>
-      <li>Band eversion (peroneals) <span class="s">&middot; slow, 2 x 15/leg &mdash; resists the ankle-roll</span></li>
-      <li>Eccentric calf raise <span class="s">&middot; 3s lower, 2-3 x 10/leg (straight + bent knee)</span></li>
-      <li>Single-leg RDL reach <span class="s">&middot; 2 x 8/leg</span></li>
-      <li>Knee-to-wall dorsiflexion <span class="s">&middot; 2 x 10/leg</span></li>
-      <li>Short-foot / toe splay <span class="s">&middot; 5 x 5s hold</span></li>
-    </ul><p class="desc" style="margin-top:6px">Ankle stability for trail. Add hop-and-stick (2 x 5/leg) from week 3. The left ankle is a running abort signal.</p></div></div>
+<h2>Bike sessions</h2>
+<div class="card"><div class="hd" style="background:var(--z2b)">Zone 2 Bike <small>&mdash; easy base, joint-sparing</small></div>
+<div class="bd"><p class="desc">Conversational Zone 2, HR 120&ndash;140 (soft cap 145), 45&ndash;90 min. Long outdoor ride on the weekend; carbs + salted fluid past ~75 min.</p></div></div>
+<div class="card"><div class="hd" style="background:var(--vo2)">Bike VO2 <small>&mdash; impact-free hard</small></div>
+<div class="bd"><p class="desc">WU 10&ndash;12 min, intervals at ~90&ndash;95% max HR (3&ndash;4 min on / 3&ndash;4 easy), CD. Redline is fine, no impact. Never to failure. This is where the over-threshold work lives.</p></div></div>
 
-  <div class="rules">
-    <b>Daily anchors:</b> morning-light walk &middot; protein-forward eating &middot; hydration + salt.
-    <b>Standing rules:</b> no overhead pressing &middot; no sit-ups &middot; elbow-friendly grips &middot; power moves first, driven fast &middot; never train to failure (RIR 1&ndash;2) &middot; keep the easy run genuinely easy &middot; abort a run on any calf / Achilles / hamstring / knee / left-ankle signal &middot; don't stack alcohol + a fatty late meal on a hard-training evening.
-  </div>
+<h2>Strength (A / B / C rotation)</h2>
+<div class="card"><div class="hd" style="background:var(--sA)">Strength A <small>&mdash; push + quad-dominant lower</small></div>
+<div class="bd"><ul class="ex">
+<li>Reverse Lunge <span class="pw">power</span> <span class="s">&middot; 3 x 8/leg</span></li>
+<li>Barbell Bench Press <span class="s">&middot; 3 x 8-10</span></li>
+<li>Incline DB Press <span class="s">&middot; 3 x 10-12</span></li>
+<li>Chest-Supported DB Row <span class="s">&middot; 3 x 10-12</span></li>
+<li>Low-to-High Cable Chop <span class="s">&middot; 3 x 10-12/side</span></li>
+<li>Cable Lateral Raise <span class="s">&middot; 3 x 12-15</span></li>
+<li>Tricep Pushdown <span class="s">&middot; 3 x 12-15</span></li>
+<li>Pallof Press <span class="s">&middot; 3 x 10-12/side</span></li>
+</ul></div></div>
+<div class="card"><div class="hd" style="background:var(--sB)">Strength B <small>&mdash; pull + hip-hinge lower</small></div>
+<div class="bd"><ul class="ex">
+<li>Kettlebell Swing <span class="pw">power</span> <span class="s">&middot; 4 x 8</span></li>
+<li>Lat Pulldown <span class="s">&middot; 3 x 10-12</span></li>
+<li>Seated Cable Row <span class="s">&middot; 3 x 10-12</span></li>
+<li>Cable Face Pull <span class="s">&middot; 3 x 15</span></li>
+<li>Flat DB Press <span class="s">&middot; 3 x 10-12</span></li>
+<li>Hammer Curl <span class="s">&middot; 3 x 10-12</span></li>
+<li>Farmer's Carry <span class="s">&middot; 3 x ~40 m</span></li>
+<li>Cable Woodchop <span class="s">&middot; 3 x 10-12/side</span></li>
+</ul></div></div>
+<div class="card"><div class="hd" style="background:var(--sC)">Strength C <small>&mdash; legs + shoulders + arms</small></div>
+<div class="bd"><ul class="ex">
+<li>Box Step-Up <span class="pw">power</span> <span class="s">&middot; 3 x 6/leg</span></li>
+<li>Bulgarian Split Squat <span class="s">&middot; 3 x 8-10/leg</span></li>
+<li>Leg Extension <span class="s">&middot; 3 x 12-15</span></li>
+<li>Machine Leg Curl <span class="s">&middot; 3 x 12</span></li>
+<li>Standing Calf Raise <span class="s">&middot; 3 x 12-15</span></li>
+<li>Cable Lateral Raise <span class="s">&middot; 3 x 12-15</span></li>
+<li>Hammer Curl + Tricep Pushdown <span class="s">&middot; superset, 2 x 12</span></li>
+<li>Pallof Press or Plank <span class="s">&middot; 3 sets</span></li>
+</ul></div></div>
+
+<h2>Prehab routines</h2>
+<div class="note">Knees + ankle/foot ride with your runs (do them as a quick pre-run activation) and strength days; shoulders/elbows is a daily near-freebie. A few minutes each.</div>
+<div class="card ph"><div class="hd">Shoulders / Elbows <small>&mdash; daily, ~3&ndash;5 min</small></div>
+<div class="bd"><ul class="ex">
+<li>Reverse Tyler Twist <span class="s">&middot; for the right common-flexor tendon, 2 x 12-15</span></li>
+<li>Band external + internal rotation <span class="s">&middot; 2 x 12/side</span></li>
+<li>Scapular / face pulls <span class="s">&middot; 2 x 12-15</span></li>
+<li>Hammer eccentric pronation + supination <span class="s">&middot; slow, 2 x 10/side</span></li>
+</ul><p class="desc" style="margin-top:6px">Protects the right elbow (partial common-flexor tear + golfer's elbow) and shoulder. Keep sub-painful.</p></div></div>
+<div class="card ph"><div class="hd">Knees <small>&mdash; run + strength days, ~3&ndash;5 min</small></div>
+<div class="bd"><ul class="ex">
+<li>Step-ups <span class="s">&middot; controlled, 3 x 12</span></li>
+<li>Sit-downs to a bench/box <span class="s">&middot; 3 x 12</span></li>
+<li>Reverse lunges <span class="s">&middot; 3 x 12</span></li>
+<li>Lateral lunges <span class="s">&middot; 3 x 12 &mdash; the frontal-plane work running never trains</span></li>
+<li>Star taps <span class="s">&middot; 3 x 12</span></li>
+<li>Wall sits <span class="s">&middot; 3 x 30s</span></li>
+<li>Eccentric step-downs <span class="s">&middot; add these: highest-value patellar-tendon move, 2 x 8/leg slow</span></li>
+</ul><p class="desc" style="margin-top:6px">Maintenance for the knee (the strength-before-running gate that closed the recurrence cycle). Cadence toward 165+ is the #1 running-mechanics fix alongside this.</p></div></div>
+<div class="card ph"><div class="hd">Ankle / Foot <small>&mdash; run + strength days, ~5 min (trail-driven)</small></div>
+<div class="bd"><ul class="ex">
+<li>Single-leg balance <span class="s">&middot; 30s/leg; eyes open &rarr; closed &rarr; on a cushion</span></li>
+<li>Band eversion (peroneals) <span class="s">&middot; slow, 2 x 15/leg &mdash; resists the ankle-roll</span></li>
+<li>Eccentric calf raise <span class="s">&middot; 3s lower, 2-3 x 10/leg (straight + bent knee)</span></li>
+<li>Single-leg RDL reach <span class="s">&middot; 2 x 8/leg</span></li>
+<li>Knee-to-wall dorsiflexion <span class="s">&middot; 2 x 10/leg</span></li>
+<li>Short-foot / toe splay <span class="s">&middot; 5 x 5s hold</span></li>
+</ul><p class="desc" style="margin-top:6px">Ankle stability for trail. Add hop-and-stick (2 x 5/leg) from week 3. The left ankle is a running abort signal.</p></div></div>
+
+<div class="rules">
+<b>Daily anchors:</b> morning-light walk &middot; protein-forward eating &middot; hydration + salt.
+<b>Standing rules:</b> no overhead pressing &middot; no sit-ups &middot; elbow-friendly grips &middot; power moves first, driven fast &middot; never train to failure (RIR 1&ndash;2) &middot; keep the easy run genuinely easy &middot; abort a run on any calf / Achilles / hamstring / knee / left-ankle signal &middot; don't stack alcohol + a fatty late meal on a hard-training evening &middot; protein and veg before refined carbs, and walk 10-15 min after a big meal.
+</div>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
 const START=new Date(2026,6,6);
 const TYPE={
-  strength_A:{a:"Str A",c:"var(--sA)",n:"Strength A",d:"push + quad. Reverse Lunge (power), Bench, Incline DB, CS Row, Cable Chop, Lat Raise, Pushdown, Pallof."},
-  strength_B:{a:"Str B",c:"var(--sB)",n:"Strength B",d:"pull + hinge. KB Swing (power), Pulldown, Cable Row, Face Pull, Flat DB, Hammer Curl, Farmer Carry, Woodchop."},
-  strength_C:{a:"Str C",c:"var(--sC)",n:"Strength C",d:"legs. Box Step-Up (power), Bulgarian Split Squat, Leg Ext, Leg Curl, Calf Raise, Lat Raise, arm SS, core."},
-  easy_run:{a:"Easy Run",c:"var(--run)",n:"Easy Run + strides",d:"30-40 min Zone 2 (HR ~125-140, cap 145) + 4-6 strides. Genuinely easy."},
-  quality_run:{a:"Quality Run",c:"var(--qual)",n:"Quality Run (hard)",d:"5K tempo/threshold. Finish strong not to failure, cadence high. Bike VO2 swap if needed."},
-  track:{a:"Track",c:"var(--trk)",n:"Track intervals (hard)",d:"WU + drills, 5-6 x 400-800m @5K effort (HR to ~172), generous recovery, CD. Not a time trial."},
-  long_run:{a:"Long Run",c:"var(--long)",n:"Long Run (weekend)",d:"Easy-moderate endurance, progressing ~1 mi/wk. Outdoors."},
-  bike_vo2:{a:"Bike VO2",c:"var(--vo2)",n:"Bike VO2 (impact-free hard)",d:"WU, ~90-95% max HR intervals (3-4 on/3-4 easy), CD. Never to failure."},
-  z2_bike:{a:"Z2 Bike",c:"var(--z2b)",n:"Zone 2 Bike",d:"Conversational Z2, 40-80 min. Long outdoor ride on the weekend."},
-  rest:{a:"Rest",c:"var(--rest)",n:"Rest / mobility",d:"Full rest or easy walk + mobility."}};
+strength_A:{a:"Str A",c:"var(--sA)",n:"Strength A",d:"push + quad. Reverse Lunge (power), Bench, Incline DB, CS Row, Cable Chop, Lat Raise, Pushdown, Pallof."},
+strength_B:{a:"Str B",c:"var(--sB)",n:"Strength B",d:"pull + hinge. KB Swing (power), Pulldown, Cable Row, Face Pull, Flat DB, Hammer Curl, Farmer Carry, Woodchop."},
+strength_C:{a:"Str C",c:"var(--sC)",n:"Strength C",d:"legs. Box Step-Up (power), Bulgarian Split Squat, Leg Ext, Leg Curl, Calf Raise, Lat Raise, arm SS, core."},
+easy_run:{a:"Easy Run",c:"var(--run)",n:"Easy Run + strides",d:"30-40 min Zone 2 (HR ~125-140, cap 145) + 4-6 strides. Genuinely easy."},
+quality_run:{a:"Tempo Run",c:"var(--qual)",n:"Quality / Tempo Run (hard)",d:"5K tempo/threshold. Finish strong not to failure, cadence high. Bike VO2 swap if needed."},
+track:{a:"Track",c:"var(--trk)",n:"Track intervals (hard)",d:"WU + drills, 5-6 x 400-800m @5K effort (HR to ~172), generous recovery, CD. Not a time trial."},
+long_run:{a:"Long Run",c:"var(--long)",n:"Long Run (weekend)",d:"Easy-moderate endurance, progressing ~1 mi/wk. Outdoors."},
+bike_vo2:{a:"Bike VO2",c:"var(--vo2)",n:"Bike VO2 (impact-free hard)",d:"WU, ~90-95% max HR intervals (3-4 on/3-4 easy), CD. Never to failure."},
+z2_bike:{a:"Z2 Bike",c:"var(--z2b)",n:"Zone 2 Bike",d:"Conversational Z2, HR 120-140 (cap 145), 45-90 min. Carbs + salted fluid past ~75 min."},
+rest:{a:"Rest",c:"var(--rest)",n:"Rest / recovery",d:"Full rest or an easy walk + mobility. Honoring a rest day earns the check."},
+other:{a:"Other",c:"#6b7a8f",n:"Other activity",d:"Something else that counted (walk, hike, swim, play, ocean)."}};
+const ORDER=["strength_A","strength_B","strength_C","easy_run","quality_run","track","long_run","z2_bike","bike_vo2","rest","other"];
 const PREHAB={se:"Shoulders/Elbows",ankle:"Ankle/Foot",knee:"Knees"};
 function prehabsFor(t){var run=(t==="easy_run"||t==="quality_run"||t==="track"||t==="long_run");var str=(t.indexOf("strength")===0);return (str||run)?["se","knee","ankle"]:["se"];}
 const SEQ=[
- "strength_A","easy_run","strength_B","track","rest","long_run","z2_bike",
- "strength_C","easy_run","quality_run","strength_A","rest","track","z2_bike",
- "strength_B","easy_run","track","strength_C","rest","long_run","z2_bike",
- "strength_A","easy_run","bike_vo2","strength_B","rest","long_run","z2_bike",
- "strength_C","easy_run"];
-const AKEY="obp_actual_v1";
+"strength_A","easy_run","strength_B","track","rest","long_run","z2_bike",
+"strength_C","easy_run","quality_run","strength_A","rest","track","z2_bike",
+"strength_B","easy_run","track","strength_C","rest","long_run","z2_bike",
+"strength_A","easy_run","bike_vo2","strength_B","rest","long_run","z2_bike",
+"strength_C","easy_run"];
+const AKEY="obp_actual_v2";
 function load(){try{return JSON.parse(localStorage.getItem(AKEY))||{}}catch(e){return{}}}
 function save(s){localStorage.setItem(AKEY,JSON.stringify(s))}
 let A=load();
 function key(d){return d.toISOString().slice(0,10)}
 function dateOf(i){const d=new Date(START);d.setDate(START.getDate()+i);return d}
-// seed the two already-done days
-if(A[key(dateOf(0))]===undefined){A[key(dateOf(0))]={done:true,note:"Strength A"};}
-if(A[key(dateOf(1))]===undefined){A[key(dateOf(1))]={done:true,note:"4.18 mi trail run (woods), moderate/varied effort"};}
-if(A[key(dateOf(2))]===undefined){A[key(dateOf(2))]={done:true,note:"Strength B (home): incline DB press 3x12@30, CS row 3x12@30, hammer curl 3x12@20, Bulgarian split squat 3x12@10/hand. Knee circuit 3x12 (step-ups, sit-downs, reverse lunges, lateral lunges, star taps) + wall sits 3x30s. No hinge (RDL/swing skipped); ankle/foot circuit not done."};}
-if(A[key(dateOf(3))]===undefined){A[key(dateOf(3))]={done:true,note:"REST (de facto). Track DROPPED: family dog emergency + drive to NC, no workout. Thursday became the rest day. Reslot a track session on a green day."};}
-if(A[key(dateOf(4))]===undefined){A[key(dateOf(4))]={done:true,note:"Ran in place of rest. 4.1 mi hilly Durham run/walk, 42:17, avg 10:19/mi (faded 9:51 to 11:22), avg HR 156 / max 178, Tempo TE 3.7, load 135, cadence 158, +400ft, BB -12. Well-placed quality effort on a recovered system (Fri AM green except Fair sleep); the 156/178 = hills + heat. Nothing to flag."};}
-save(A);
-let sel=null;
 function fmt(d){return (d.getMonth()+1)+"/"+d.getDate()}
+
+// ---- backfill: what was actually done so far ----
+const SEED={
+0:{done:true,actual:"strength_A",note:"Strength A, as prescribed."},
+1:{done:true,actual:"easy_run",note:"4.18 mi TRAIL run through the woods, moderate/varied effort. Trail conditions explain the numbers. Counts as the easy run."},
+2:{done:true,actual:"strength_B",note:"Strength B at home (bench + DBs to 30 lb + bands): incline DB press 3x12@30, chest-supported row 3x12@30, hammer curl 3x12@20, Bulgarian split squat 3x12@10/hand. Knee circuit 3x12 (step-ups, sit-downs, reverse lunges, lateral lunges, star taps) + wall sits 3x30s. Hinge (RDL/swing) skipped; ankle circuit not done."},
+3:{done:true,actual:"rest",note:"ADAPTED: family dog emergency + drive to NC. Track dropped and this became the rest day. The right call, and it earned the check. Reslot a track session on a green day."},
+4:{done:true,actual:"quality_run",note:"ADAPTED: ran on the day rest was scheduled, because Thursday had already become the rest day. 4.1 mi hilly Durham run/walk, 42:17, avg 10:19/mi (faded 9:51 to 11:22), avg HR 156 / max 178, Tempo TE 3.7, load 135, cadence 158, +400 ft. Well-placed quality effort on a recovered system (Fri AM green). The 156/178 = hills + heat. Nothing to flag."},
+5:{done:true,actual:"z2_bike",note:"ADAPTED: Zone 2 ride instead of the long run, to fix the Zone 2 shortage and stay low-impact after a strength day + a tempo run. 75 min target (60-90 range), HR 120-140. Green morning: TR 74, HRV Balanced 52ms, sleep 85 with a real REM rebound, RHR 50."}
+};
+for(const i in SEED){ if(A[key(dateOf(+i))]===undefined){ A[key(dateOf(+i))]=SEED[i]; } }
+save(A);
+
+let sel=null;
+function elapsedCount(){const t=new Date();t.setHours(0,0,0,0);const diff=Math.floor((t-START)/86400000)+1;return Math.max(0,Math.min(30,diff));}
+function stats(){
+  const el=elapsedCount();let honored=0,total=0,streak=0;
+  for(let i=0;i<30;i++){const r=A[key(dateOf(i))];if(r&&r.done){total++;if(i<el)honored++;}}
+  for(let i=el-1;i>=0;i--){const r=A[key(dateOf(i))];if(r&&r.done)streak++;else break;}
+  return {el,honored,total,streak};
+}
+function renderStats(){
+  const s=stats();
+  document.getElementById("stStreak").textContent=s.streak;
+  document.getElementById("stHonored").textContent=s.honored+"/"+s.el;
+  const pct=Math.round(s.total/30*100);
+  document.getElementById("stPct").textContent=pct+"%";
+  document.getElementById("stFill").style.width=pct+"%";
+  const left=30-s.total;
+  let g;
+  if(s.total>=30){g="<b>Perfect month. All 30 days honored.</b>";}
+  else if(s.el>0&&s.honored===s.el){g="<b>Perfect so far.</b> Every day honored. "+left+" to go for the full 30.";}
+  else {g="Goal: a check every day. "+left+" left to reach 30/30.";}
+  document.getElementById("stGoal").innerHTML=g;
+}
 function render(){
-  document.getElementById("dows").innerHTML=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map((x,i)=>`<div class="dow${i>4?' we':''}">${x}</div>`).join("");
-  const today=new Date();today.setHours(0,0,0,0);
-  let html="";
-  SEQ.forEach((k,i)=>{const d=dateOf(i);const t=TYPE[k];const wend=(d.getDay()===0||d.getDay()===6);
-    const isT=d.getTime()===today.getTime();const done=A[key(d)]&&A[key(d)].done;
-    const ph=prehabsFor(k).map(p=>p==="se"?"Sh":p==="knee"?"Kn":"Ak").join(" ");
-    html+=`<div class="cell${wend?' wend':''}${isT?' today':''}${i===sel?' sel':''}" onclick="openDay(${i})">
-      <div class="dn">${fmt(d)}</div><div class="ab" style="background:${t.c}">${t.a}</div><div class="ph">+ ${ph}</div>${done?'<div class="chk">&#10003;</div>':''}</div>`;});
-  document.getElementById("cal").innerHTML=html;
-  const leg=[["Easy Run","var(--run)"],["Quality Run","var(--qual)"],["Track","var(--trk)"],["Long Run","var(--long)"],["Z2 Bike","var(--z2b)"],["Bike VO2","var(--vo2)"],["Str A","var(--sA)"],["Str B","var(--sB)"],["Str C","var(--sC)"],["Rest","var(--rest)"]];
-  document.getElementById("legend").innerHTML=leg.map(l=>`<span><span class="sw" style="background:${l[1]}"></span>${l[0]}</span>`).join("")+' <span style="color:var(--ph)">prehab: Sh shoulders/elbows &middot; Kn knees &middot; Ak ankle/foot</span>';
+document.getElementById("dows").innerHTML=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map((x,i)=>`<div class="dow${i>4?' we':''}">${x}</div>`).join("");
+const today=new Date();today.setHours(0,0,0,0);
+let html="";
+SEQ.forEach((k,i)=>{
+  const d=dateOf(i);const P=TYPE[k];const rec=A[key(d)]||{};
+  const wend=(d.getDay()===0||d.getDay()===6);
+  const isT=d.getTime()===today.getTime();
+  const done=!!rec.done;
+  const adapted=!!(rec.actual&&rec.actual!==k);
+  const shown=rec.actual?TYPE[rec.actual]:P;
+  const phFor=rec.actual?rec.actual:k;
+  const ph=prehabsFor(phFor).map(p=>p==="se"?"Sh":p==="knee"?"Kn":"Ak").join(" ");
+  html+=`<div class="cell${wend?' wend':''}${isT?' today':''}${i===sel?' sel':''}" onclick="openDay(${i})">
+<div class="dn">${fmt(d)}</div>
+${adapted?`<div class="plan">${P.a}</div>`:``}
+<div class="ab" style="background:${shown.c}">${shown.a}</div>
+<div class="ph">+ ${ph}</div>
+${adapted?'<div class="adapt">&#8646;</div>':''}
+${done?'<div class="chk">&#10003;</div>':''}</div>`;});
+document.getElementById("cal").innerHTML=html;
+const leg=[["Easy Run","var(--run)"],["Tempo","var(--qual)"],["Track","var(--trk)"],["Long Run","var(--long)"],["Z2 Bike","var(--z2b)"],["Bike VO2","var(--vo2)"],["Str A","var(--sA)"],["Str B","var(--sB)"],["Str C","var(--sC)"],["Rest","var(--rest)"]];
+document.getElementById("legend").innerHTML=leg.map(l=>`<span><span class="sw" style="background:${l[1]}"></span>${l[0]}</span>`).join("")+' <span style="color:var(--ph)">prehab: Sh shoulders/elbows &middot; Kn knees &middot; Ak ankle/foot</span>';
+renderStats();
 }
-function openDay(i){sel=i;const d=dateOf(i);const t=TYPE[SEQ[i]];const rec=A[key(d)]||{};
-  const ph=prehabsFor(SEQ[i]).map(p=>`<span class="tag">${PREHAB[p]}</span>`).join("");
-  const el=document.getElementById("detail");el.className="detail show";
-  el.innerHTML=`<div class="dt">${t.n}</div><div class="dm">Day ${i+1} &middot; ${d.toLocaleDateString(undefined,{weekday:'long'})} ${fmt(d)}</div>
-    <div class="row"><b>Prescribed:</b> ${t.d}</div>
-    <div class="row"><b>Prehab today:</b> ${ph}</div>
-    <textarea id="noteBox" placeholder="What I actually did (workout + prehab + how it felt)...">${rec.note||""}</textarea>
-    <div class="act"><button class="btn ${rec.done?'done':'pri'}" onclick="toggle(${i})">${rec.done?'&#10003; Done':'Mark done'}</button>
-    <button class="btn" onclick="saveNote(${i})">Save</button></div>`;
-  render();el.scrollIntoView({behavior:"smooth",block:"nearest"});
+function openDay(i){
+sel=i;const d=dateOf(i);const P=TYPE[SEQ[i]];const rec=A[key(d)]||{};
+const cur=rec.actual||SEQ[i];
+const adapted=!!(rec.actual&&rec.actual!==SEQ[i]);
+const phFor=rec.actual?rec.actual:SEQ[i];
+const ph=prehabsFor(phFor).map(p=>`<span class="tag">${PREHAB[p]}</span>`).join("");
+const opts=ORDER.map(k=>`<option value="${k}"${k===cur?' selected':''}>${TYPE[k].n}${k===SEQ[i]?' (as prescribed)':''}</option>`).join("");
+let flag="";
+if(rec.done&&adapted)flag='<span class="flag ad">&#8646; Adapted &mdash; and it still counts</span>';
+else if(rec.done)flag='<span class="flag on">&#10003; Done as prescribed</span>';
+const el=document.getElementById("detail");el.className="detail show";
+el.innerHTML=`<div class="dt">${P.n}</div><div class="dm">Day ${i+1} &middot; ${d.toLocaleDateString(undefined,{weekday:'long'})} ${fmt(d)}</div>
+${flag}
+<div class="row"><b>Prescribed:</b> ${P.d}</div>
+<div class="row"><b>What I actually did:</b><select id="actSel">${opts}</select></div>
+<div class="row"><b>Prehab for this day:</b> ${ph}</div>
+<textarea id="noteBox" placeholder="Details: what you did, how it felt, why you adapted...">${rec.note||""}</textarea>
+<div class="act"><button class="btn ${rec.done?'done':'pri'}" onclick="toggle(${i})">${rec.done?'&#10003; Honored':'Mark honored'}</button>
+<button class="btn" onclick="saveDay(${i})">Save</button></div>`;
+render();el.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
-function toggle(i){const k=key(dateOf(i));A[k]=A[k]||{};A[k].done=!A[k].done;save(A);openDay(i);toast(A[k].done?"Marked done":"Unmarked")}
-function saveNote(i){const k=key(dateOf(i));A[k]=A[k]||{};A[k].note=document.getElementById("noteBox").value;save(A);toast("Saved")}
+function toggle(i){const k=key(dateOf(i));A[k]=A[k]||{};A[k].done=!A[k].done;if(A[k].done&&!A[k].actual)A[k].actual=SEQ[i];save(A);openDay(i);toast(A[k].done?"Day honored":"Unmarked")}
+function saveDay(i){const k=key(dateOf(i));A[k]=A[k]||{};A[k].note=document.getElementById("noteBox").value;A[k].actual=document.getElementById("actSel").value;save(A);openDay(i);toast("Saved")}
 render();
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1500)}
 </script>
