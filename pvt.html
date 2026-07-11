@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="OBP PVT">
+<meta name="theme-color" content="#0f7a6b">
+<title>OBP PVT</title>
+<style>
+:root{color-scheme:light;--ink:#1a2230;--muted:#5b6675;--line:#e4e8ee;--bg:#f6f8fb;--card:#fff;--accent:#0f7a6b;--accent-soft:#e6f2ef;--red:#c0392b;--amber:#c07a1f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.55;-webkit-user-select:none;user-select:none}
+.wrap{max-width:760px;margin:0 auto;padding:14px 12px 60px}
+.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-size:21px;margin:2px 0 4px;font-weight:800;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:12.5px;margin-bottom:12px}
+h2{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);margin:22px 0 8px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin-bottom:11px}
+.box.warn{border-left:3px solid var(--amber)}
+label{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700;display:block;margin-bottom:3px}
+select,input,textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px;font-size:14px;font-family:inherit;background:#fff;color:var(--ink)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px}
+.btn{width:100%;padding:14px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-weight:800;font-size:15px;cursor:pointer;margin-top:4px}
+.btn.sec{background:#fff;color:var(--ink);border:1px solid var(--line);font-weight:700;padding:10px;font-size:13px}
+.btn:disabled{opacity:.5}
+/* ---- TEST SCREEN ---- */
+#stage{position:fixed;inset:0;background:#111823;color:#fff;display:none;align-items:center;justify-content:center;flex-direction:column;z-index:50;cursor:pointer;touch-action:manipulation}
+#stage.on{display:flex}
+#counter{font-size:64px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em;color:#e0e6ef;min-height:78px}
+#counter.go{color:#ff4d4d}
+#msg{font-size:15px;color:#98a3b3;margin-top:14px;text-align:center;padding:0 20px}
+#prog{position:fixed;top:0;left:0;height:4px;background:var(--accent);width:0%}
+#quit{position:fixed;top:12px;right:14px;color:#5b6675;font-size:12px;font-weight:700}
+/* ---- RESULTS ---- */
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:9px}
+.m{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 10px;text-align:center}
+.m .n{font-size:19px;font-weight:800;letter-spacing:-.02em}
+.m .n.bad{color:var(--red)}
+.m .l{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;margin-top:1px;line-height:1.25}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line)}
+th{font-size:10px;text-transform:uppercase;color:var(--muted);letter-spacing:.04em}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.tag{display:inline-block;font-size:10px;font-weight:800;border-radius:4px;padding:1px 6px}
+.t-pre{background:#fbf0e0;color:var(--amber)}
+.t-post{background:var(--accent-soft);color:var(--accent)}
+.t-base{background:#eef1f5;color:var(--muted)}
+.t-ctrl{background:#e8eef7;color:#2f5496}
+.note{font-size:11.5px;color:var(--muted);line-height:1.6}
+.note b{color:var(--ink)}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="eyebrow">Optimal Body Platform</div>
+<h1>PVT &mdash; Psychomotor Vigilance Task</h1>
+<div class="sub">The validated instrument for sleep pressure. Your data, your record, exportable. <a href="./">&larr; back to the plan</a></div>
+
+<div class="box">
+  <div class="row2">
+    <div>
+      <label>Test</label>
+      <select id="mode">
+        <option value="b">PVT-B &mdash; 3 min (daily use)</option>
+        <option value="full">PVT-10 &mdash; 10 min (gold standard)</option>
+      </select>
+    </div>
+    <div>
+      <label>Tag this session</label>
+      <select id="tag">
+        <option value="baseline">Baseline</option>
+        <option value="pre-nap">PRE-nap</option>
+        <option value="post-nap">POST-nap</option>
+        <option value="control-early">Control &mdash; early (no nap)</option>
+        <option value="control-late">Control &mdash; late (no nap)</option>
+      </select>
+    </div>
+  </div>
+  <label>Note (optional)</label>
+  <input id="note" placeholder="e.g. after 70 min nap, woke 12:50">
+  <button class="btn" id="start">Start test</button>
+</div>
+
+<div id="last"></div>
+
+<h2>History</h2>
+<div class="box" style="padding:8px 10px"><div id="hist"></div></div>
+<button class="btn sec" id="csv">Export CSV</button>
+<button class="btn sec" id="wipe" style="margin-top:6px;color:var(--red)">Erase all data</button>
+
+<h2>How to run it</h2>
+<div class="box note">
+<b>1. Same device, every time.</b> Absolute reaction times are NOT comparable to published PVT norms &mdash; browsers and touchscreens add a latency offset of roughly 30&ndash;100 ms. But that offset is <b>constant on your device</b>, so it cancels out when you compare pre-nap to post-nap. That comparison is the whole point, and it stays valid.<br><br>
+<b>2. Baseline first.</b> Run 7&ndash;10 sessions before the pre/post data means anything. The PVT is famously resistant to practice effects, but you still need to know your own day-to-day noise before you can call a change real.<br><br>
+<b>3. Pre-nap:</b> immediately before you lie down.<br>
+<b>4. Post-nap:</b> <b>wait 15&ndash;20 minutes after waking</b>, so sleep inertia has cleared. Testing at minute one measures grogginess, not restoration.<br><br>
+<b>5. The control condition is not optional.</b> Alertness rises naturally through the morning. If you test at 9am and again at 11am, the clock alone could produce an "improvement." So on some <b>non-nap</b> days, run <b>control-early</b> and <b>control-late</b> at the same two clock times, with no nap between. That isolates the nap from the circadian rise. Without this the whole experiment is confounded.<br><br>
+<b>6.</b> No caffeine between the two tests. Same posture, same room, same brightness.
+</div>
+
+<h2>What the numbers mean</h2>
+<div class="box note">
+<b>Response speed (mean 1/RT)</b> is the headline metric &mdash; it's the most sensitive PVT measure to sleep pressure (Basner &amp; Dinges). Higher is better.<br>
+<b>Lapses</b> are the classic sleep-deprivation signature: attention simply drops out. PVT-B counts RT &gt; 355 ms; PVT-10 counts RT &gt; 500 ms. Lower is better.<br>
+<b>Slowest 10%</b> degrades before the mean does. Watch it.<br>
+<b>False starts</b> are responses before the stimulus (or under 100 ms). A few is normal; many means you're guessing the rhythm.
+</div>
+
+<h2>The prediction on the record</h2>
+<div class="box warn note">
+Solance predicted (2026-07-12): <b>post-nap PVT improves measurably &mdash; response speed up, lapses down &mdash; even though overnight HRV does not move.</b> The HRV null is settled at n=309 days (adjusted effect &minus;0.35 ms, 95% CI &minus;1.29 to +0.58, p=0.46).<br><br>
+<b>CONFIRMS:</b> post-nap improvement clearly exceeds your pre-nap day-to-day variability, AND exceeds the control-early &rarr; control-late change on no-nap days.<br>
+<b>REFUTES:</b> no improvement beyond noise, or the same improvement shows up on control days without a nap (meaning it was the clock, not the nap).<br><br>
+A refute would be the more interesting result: it would mean the "reboot" is real to you but has no psychomotor correlate at all.
+</div>
+</div>
+
+<div id="stage">
+  <div id="prog"></div>
+  <div id="quit">tap here to quit</div>
+  <div id="counter">&nbsp;</div>
+  <div id="msg">Tap anywhere (or press SPACE) the instant the red counter appears.<br>Do not anticipate.<br><br><b>Tap to begin.</b></div>
+</div>
+
+<script>
+const KEY="obp_pvt_v1";
+const CFG={ b:{dur:180000, isiMin:1000, isiMax:4000, lapse:355, name:"PVT-B (3 min)"},
+            full:{dur:600000, isiMin:2000, isiMax:10000, lapse:500, name:"PVT-10 (10 min)"} };
+let cfg, rts=[], falseStarts=0, t0=null, armed=false, running=false, tStart=0, timer=null, raf=null;
+const stage=document.getElementById('stage'), counter=document.getElementById('counter'),
+      msg=document.getElementById('msg'), prog=document.getElementById('prog');
+
+function load(){ try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return[]} }
+function save(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+
+document.getElementById('start').onclick=()=>{
+  cfg=CFG[document.getElementById('mode').value];
+  rts=[]; falseStarts=0; running=false; armed=false;
+  stage.classList.add('on'); counter.classList.remove('go'); counter.innerHTML="&nbsp;";
+  msg.innerHTML="Tap anywhere (or press SPACE) the instant the red counter appears.<br>Do not anticipate.<br><br><b>Tap to begin.</b>";
+  prog.style.width="0%";
+  stage.onclick=begin; document.onkeydown=e=>{ if(e.code==="Space"){e.preventDefault(); begin();} };
+};
+document.getElementById('quit').onclick=(e)=>{ e.stopPropagation(); abort(); };
+
+function begin(){
+  if(running) return;
+  running=true; tStart=performance.now();
+  stage.onclick=respond;
+  document.onkeydown=e=>{ if(e.code==="Space"){ e.preventDefault(); respond(); } };
+  msg.innerHTML="";
+  nextTrial();
+}
+function nextTrial(){
+  if(performance.now()-tStart >= cfg.dur){ return finish(); }
+  armed=false; t0=null;
+  counter.classList.remove('go'); counter.innerHTML="&nbsp;";
+  const isi = cfg.isiMin + Math.random()*(cfg.isiMax-cfg.isiMin);
+  timer=setTimeout(()=>{
+    t0=performance.now(); armed=true;
+    counter.classList.add('go');
+    const tick=()=>{ if(!armed) return;
+      counter.textContent = Math.round(performance.now()-t0);
+      prog.style.width = Math.min(100,100*(performance.now()-tStart)/cfg.dur)+"%";
+      raf=requestAnimationFrame(tick); };
+    raf=requestAnimationFrame(tick);
+  }, isi);
+}
+function respond(){
+  if(!running) return;
+  if(!armed){                       // pressed during the ISI = false start
+    clearTimeout(timer); falseStarts++;
+    counter.classList.remove('go'); counter.textContent="—";
+    msg.innerHTML="<span style='color:#ff4d4d'>FALSE START</span>";
+    setTimeout(()=>{ msg.innerHTML=""; nextTrial(); }, 900);
+    return;
+  }
+  const rt = performance.now()-t0;
+  armed=false; cancelAnimationFrame(raf);
+  if(rt < 100){ falseStarts++; counter.textContent="—"; }    // anticipation
+  else { rts.push(rt); counter.textContent=Math.round(rt); }
+  counter.classList.remove('go');
+  prog.style.width = Math.min(100,100*(performance.now()-tStart)/cfg.dur)+"%";
+  setTimeout(nextTrial, 700);
+}
+function abort(){ running=false; armed=false; clearTimeout(timer); cancelAnimationFrame(raf);
+  stage.classList.remove('on'); document.onkeydown=null; }
+
+function metrics(r){
+  if(!r.length) return null;
+  const s=[...r].sort((a,b)=>a-b), n=s.length, k=Math.max(1,Math.round(n*0.1));
+  const mean=a=>a.reduce((x,y)=>x+y,0)/a.length;
+  const speed = mean(r.map(x=>1000/x));                       // mean 1/RT, per second
+  return { n, mean:mean(r), median:s[Math.floor(n/2)],
+           speed, lapses:r.filter(x=>x>cfg.lapse).length,
+           fast10:mean(s.slice(0,k)), slow10:mean(s.slice(-k)), fs:falseStarts };
+}
+function finish(){
+  running=false; armed=false; clearTimeout(timer); cancelAnimationFrame(raf);
+  const m=metrics(rts);
+  stage.classList.remove('on'); document.onkeydown=null;
+  if(!m){ alert("No valid responses recorded."); return; }
+  const rec={ ts:new Date().toISOString(), mode:cfg.name, lapseThr:cfg.lapse,
+    tag:document.getElementById('tag').value, note:document.getElementById('note').value,
+    ...m, rts:rts.map(x=>Math.round(x)) };
+  const all=load(); all.push(rec); save(all);
+  document.getElementById('note').value="";
+  render(); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function tagCls(t){ return t==='pre-nap'?'t-pre':t==='post-nap'?'t-post':t.startsWith('control')?'t-ctrl':'t-base'; }
+function render(){
+  const all=load();
+  const L=document.getElementById('last');
+  if(all.length){
+    const r=all[all.length-1];
+    L.innerHTML=`<h2>Last session &mdash; <span class="tag ${tagCls(r.tag)}">${r.tag}</span></h2>
+    <div class="res">
+      <div class="m"><div class="n">${r.speed.toFixed(2)}</div><div class="l">Response speed<br>(mean 1/RT)</div></div>
+      <div class="m"><div class="n ${r.lapses>3?'bad':''}">${r.lapses}</div><div class="l">Lapses<br>(&gt;${r.lapseThr} ms)</div></div>
+      <div class="m"><div class="n">${Math.round(r.mean)}</div><div class="l">Mean RT<br>(ms)</div></div>
+      <div class="m"><div class="n">${Math.round(r.median)}</div><div class="l">Median RT</div></div>
+      <div class="m"><div class="n">${Math.round(r.fast10)}</div><div class="l">Fastest 10%</div></div>
+      <div class="m"><div class="n">${Math.round(r.slow10)}</div><div class="l">Slowest 10%</div></div>
+    </div>
+    <div class="note" style="margin-bottom:11px">${r.n} stimuli &middot; ${r.fs} false start${r.fs===1?'':'s'} &middot; ${r.mode}</div>`;
+  } else L.innerHTML="";
+
+  const H=document.getElementById('hist');
+  if(!all.length){ H.innerHTML='<div class="note">No sessions yet. Run 7&ndash;10 baselines first.</div>'; return; }
+  let h='<table><tr><th>When</th><th>Tag</th><th class="num">Speed</th><th class="num">Lapses</th><th class="num">Mean</th><th class="num">Slow10%</th></tr>';
+  [...all].reverse().slice(0,40).forEach(r=>{
+    const d=new Date(r.ts);
+    h+=`<tr><td>${(d.getMonth()+1)}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}</td>
+    <td><span class="tag ${tagCls(r.tag)}">${r.tag}</span></td>
+    <td class="num">${r.speed.toFixed(2)}</td><td class="num">${r.lapses}</td>
+    <td class="num">${Math.round(r.mean)}</td><td class="num">${Math.round(r.slow10)}</td></tr>`;
+  });
+  H.innerHTML=h+'</table>';
+}
+document.getElementById('csv').onclick=()=>{
+  const all=load(); if(!all.length) return alert("No data yet.");
+  let c="timestamp,mode,tag,note,n,mean_rt_ms,median_rt_ms,response_speed_1perRT,lapses,lapse_threshold_ms,fastest10_ms,slowest10_ms,false_starts,all_rts_ms\n";
+  all.forEach(r=>{ c+=[r.ts,r.mode,r.tag,'"'+(r.note||'').replace(/"/g,"'")+'"',r.n,r.mean.toFixed(1),
+    r.median.toFixed(1),r.speed.toFixed(4),r.lapses,r.lapseThr,r.fast10.toFixed(1),r.slow10.toFixed(1),r.fs,
+    '"'+r.rts.join(' ')+'"'].join(",")+"\n"; });
+  const b=new Blob([c],{type:"text/csv"}), a=document.createElement("a");
+  a.href=URL.createObjectURL(b); a.download="obp_pvt_"+new Date().toISOString().slice(0,10)+".csv"; a.click();
+};
+document.getElementById('wipe').onclick=()=>{ if(confirm("Erase ALL PVT data on this device?")){ localStorage.removeItem(KEY); render(); } };
+render();
+</script>
+</body>
+</html>
