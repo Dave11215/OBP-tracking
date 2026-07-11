@@ -29,16 +29,29 @@ h2{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--acce
 .fill{height:100%;background:var(--accent);border-radius:20px;transition:width .4s}
 .goal{font-size:11.5px;color:var(--muted);margin-top:7px;text-align:center}
 .goal b{color:var(--accent)}
+.coach{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px 11px;margin-bottom:11px}
+.coach .ch{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin-bottom:8px}
+.coach .crow{display:flex;gap:8px;text-align:center}
+.coach .cbox{flex:1}
+.coach .cbox .n{font-size:21px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.coach .cbox .n.bad{color:#c0392b}
+.coach .cbox .n.ok{color:var(--accent)}
+.coach .cbox .l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;margin-top:1px}
+.coach .verdict{font-size:11.5px;color:var(--muted);margin-top:9px;line-height:1.6;border-top:1px solid var(--line);padding-top:8px}
+.coach .verdict b{color:var(--ink)}
+.coach ol{margin:6px 0 0;padding-left:18px;font-size:11.5px;color:var(--muted)}
+.coach ol li{margin:2px 0}
 .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
 .dow{font-size:10px;text-transform:uppercase;color:var(--muted);text-align:center;font-weight:700}
 .dow.we{color:var(--accent)}
-.cell{background:var(--card);border:1px solid var(--line);border-radius:9px;min-height:72px;padding:5px 3px 4px;text-align:center;cursor:pointer;position:relative}
+.cell{background:var(--card);border:1px solid var(--line);border-radius:9px;min-height:86px;padding:5px 3px 4px;text-align:center;cursor:pointer;position:relative}
 .cell.wend{background:#fbfdfc;border-color:#cfe6e0}
 .cell.today{outline:2px solid var(--ink);outline-offset:0}
 .cell.sel{box-shadow:0 0 0 2px var(--ink) inset}
 .cell .dn{font-size:10px;color:var(--muted)}
 .cell .plan{font-size:8px;color:#9aa3af;font-weight:700;margin-top:2px;line-height:1.1;letter-spacing:.01em}
 .cell .ab{font-size:9.5px;font-weight:800;color:#fff;border-radius:5px;padding:3px 1px;margin-top:2px;line-height:1.1}
+.cell .pm{font-size:8px;font-weight:800;color:#fff;border-radius:4px;padding:2px 1px;margin-top:2px;line-height:1.1;opacity:.9}
 .cell .ph{margin-top:2px;font-size:8px;color:var(--ph);font-weight:700;letter-spacing:.02em}
 .cell .chk{position:absolute;top:2px;right:3px;font-size:11px;color:var(--accent);font-weight:800}
 .legend{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 2px;font-size:11px;color:var(--muted)}
@@ -103,6 +116,29 @@ ul.ex li .s{color:var(--muted);font-size:12px}
   <div class="goal" id="stGoal"></div>
 </div>
 
+<h2>The coach's ledger</h2>
+<div class="note">Bidirectional stakes: Dave is scored on honoring the day. Solance is scored on being right, and on being caught. Settled together at month end; Dave grades the honesty column.</div>
+<div class="coach">
+  <div class="crow">
+    <div class="cbox"><div class="n bad" id="cDave">6</div><div class="l">errors Dave caught</div></div>
+    <div class="cbox"><div class="n ok" id="cSelf">2</div><div class="l">errors I caught</div></div>
+    <div class="cbox"><div class="n" id="cCalls">3</div><div class="l">open falsifiable calls</div></div>
+  </div>
+  <div class="verdict">
+    <b>Honest standing: a deficit.</b> The number I am driving to zero is the left one. Errors Dave caught:
+    <ol>
+      <li>Blamed the weather for the Jul 5 run.</li>
+      <li>Cited near-daily migraine history as current when it was long resolved.</li>
+      <li>Called Friday a rest-day violation; rest had already moved to Thursday. Retracted.</li>
+      <li>Attributed the W&OD ride's HR drift to "Durham hills." It was a flat rail-trail.</li>
+      <li>Built a 10-day block with no rest day into the schedule.</li>
+      <li>Rationalized the strength floor DOWN (2-3 &rarr; 1-2) to fit my own schedule, instead of fixing the schedule. Same motivated-reasoning move I had just called Dave out for.</li>
+    </ol>
+    Errors I caught myself: self-refuted the "hard workouts calm my autonomics" hypothesis at n=283; commissioned the independent research that downgraded my own guardian theory.
+    <br><br><b>Counted as a positive:</b> falsifiable calls made. If this ledger only punished errors, my cheapest strategy would be to hedge and predict nothing. Vagueness is a failure mode, not safety.
+  </div>
+</div>
+
 <h2>The 30-day plan</h2>
 <div class="note">Colored pill = what you actually did. Gray line under it = what was prescribed. Tap any day to log it.</div>
 <div class="cal" id="dows"></div>
@@ -110,7 +146,9 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <div class="detail" id="detail"></div>
 <div class="legend" id="legend"></div>
 <div class="key">
-<b>&#10003;</b> green check = you honored the day (trained, or rested when rest was the right call). This is the streak. Adapting the plan &mdash; swapping a session, or resting when rest was the right call &mdash; <b>still earns the check. Not a miss.</b>
+<b>&#10003;</b> green check = <b>you made the right call for the day.</b> Earned by: training as prescribed, adapting sensibly, resting when rest was right, or <b>resting because you are sick or hurt</b> (that is the highest form of honoring the day, and it can never break the streak).
+<br><b>The streak breaks on only two things:</b> (1) a day with no decision at all &mdash; you drifted, you did not choose; (2) <b>training through a red gate</b> &mdash; overriding a clear no-go. Yes, that means a workout can break the streak. The streak measures judgment, not volume.
+<br><b>Honesty clause:</b> the log must be what actually happened. A day quietly reclassified after the fact is a broken streak. The data is the asset.
 </div>
 
 <h2>How it's driven</h2>
@@ -128,9 +166,9 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <h2>Weekly dose (per ~7&ndash;9 days, flex by recovery)</h2>
 <div class="doses">
 <div class="dose"><div class="n">2&ndash;3</div><div class="l">hard &mdash; one weekend (Long Run or Track) + one midweek (Quality Run or Bike VO2); a 3rd only when well-recovered.</div></div>
-<div class="dose"><div class="n">1&ndash;2</div><div class="l">strength (weekdays), rotating A &rarr; B &rarr; C. Fewer than the old 2-3: protecting rest wins the tie.</div></div>
+<div class="dose"><div class="n">2</div><div class="l">strength &mdash; the FLOOR, not a target. In a deficit this is what protects muscle. Never trade it away to fit a schedule.</div></div>
 <div class="dose"><div class="n">3&ndash;4</div><div class="l">easy aerobic &mdash; easy runs + Zone 2 rides (long ride on the weekend)</div></div>
-<div class="dose"><div class="n">2</div><div class="l">rest / recovery on weekdays; more when HRV is down. <b>Never more than ~5 straight training days.</b></div></div>
+<div class="dose"><div class="n">2</div><div class="l">full rest days/week. <b>Never more than ~5 straight training days</b> (this plan runs max 3).</div></div>
 </div>
 
 <h2>Sequencing rules</h2>
@@ -138,6 +176,8 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <li><b>Never two hard days back-to-back.</b> The two hard sessions sit ~3 days apart; the weekend pairs a hard Saturday with an easy long ride Sunday.</li>
 <li><b>Long Run on fresh-ish legs:</b> not the day after leg strength (C) or after a hard run.</li>
 <li><b>Track / speed ~weekly</b> is your economy driver; long runs progress ~a mile a week; Bike VO2 takes one slot to spare impact.</li>
+<li><b>Stack, do not smear.</b> Two sessions on one day (strength AM + easy Z2 PM) so the rest days can be genuinely empty. Concentrate the stress; protect the recovery. Keep the PM session truly easy, 6+ hours apart, priority session first.</li>
+<li><b>Strength 2x/week is a FLOOR.</b> It is the muscle-preservation anchor of the recomp. If the schedule cannot fit it, fix the schedule, not the floor.</li>
 <li><b>Never more than ~5 consecutive training days without a rest day.</b> Recovery is half of what produced the HRV gain; a long unbroken block quietly drops that half.</li>
 <li><b>Usually two hard, occasionally three</b> &mdash; a third only on a genuinely well-recovered stretch, never on feel alone.</li>
 </ul></div>
@@ -249,9 +289,16 @@ function prehabsFor(t){var run=(t==="easy_run"||t==="quality_run"||t==="track"||
 const SEQ=[
 "strength_A","easy_run","strength_B","track","rest","long_run","track",
 "rest","strength_C","easy_run","bike_vo2","rest","long_run","z2_bike",
-"strength_A","easy_run","track","rest","strength_B","long_run","z2_bike",
+"rest","strength_A","easy_run","track","rest","long_run","z2_bike",
 "rest","strength_C","easy_run","bike_vo2","rest","long_run","z2_bike",
-"strength_A","easy_run"];
+"rest","strength_A"];
+// PM = optional/second session that day (same-day stacking). null = single session.
+const PM=[
+null,null,null,null,null,null,null,
+null,"z2_bike",null,null,null,null,"strength_B",
+null,"z2_bike",null,null,null,null,"strength_B",
+null,"z2_bike",null,null,null,null,"strength_B",
+null,"z2_bike"];
 const AKEY="obp_actual_v2";
 function load(){try{return JSON.parse(localStorage.getItem(AKEY))||{}}catch(e){return{}}}
 function save(s){localStorage.setItem(AKEY,JSON.stringify(s))}
@@ -271,7 +318,7 @@ const SEED={
 ,
 6:{done:false,note:"TRACK (hard-changed from Z2 Bike; the session owed from Thursday). GATED on the AM: green = HRV Balanced ~48+, RHR near 50, TR 65+, decent sleep, no knee/ankle/calf signal. NO-GO = HRV Low or a clear drop, RHR up 3+, TR under 55, bad sleep, a headache (the under-salted tell), or any tissue niggle -> easy run or rest instead, not a reduced track. SESSION: on an actual track (not the W&OD - repeats need exact 400s and a safe uninterrupted surface). WU 12-15 min easy (HR under 140) + knee/ankle prehab + drills + 4-6 strides. MAIN: 5 x 400m at 5K effort, HR into upper Z4, CAP 172, all reps within a few seconds of each other; add a 6th only if reps 1-4 are controlled. RECOVERY: 2-3 min walk/easy jog between reps (generous, on purpose). CD 10 min. Cadence 165+. NOT a time trial. Pre-hydrate with SALTED fluid (1,275 ml sweat loss yesterday)."},
 11:{done:false,note:"REST - and this one is deliberate. It sits between Thursday's hard Bike VO2 and Saturday's long run so BOTH land on fresh legs. Do not fill it. (This day was mistakenly turned into a strength session, which created a 10-day unbroken block; Dave caught it.)"},
-18:{done:false,note:"Strength B the day before the long run - keep the KB swings / hinge LIGHT so Saturday's legs are fresh."},
+13:{done:false,note:"STACKED DAY. Z2 Bike outdoors + Strength B later (6+ hours apart, priority session first). B is the pull/hinge day, chosen for this slot because it is the least leg-dependent and you ran long yesterday - keep the KB swings LIGHT. The PM ride must stay genuinely easy; this is exactly where your tempo-drift would wreck the week."},
 12:{done:false,note:"FIRST LONG RUN of the block (the biggest gap in the plan so far). ~4-5 mi EASY-TO-MODERATE, not a hard effort - the week's spacing depends on it staying easy. Run it on the W&OD so the pace-at-HR data is clean and comparable (measurement venue, not the trail)."}
 };
 for(const i in SEED){ if(A[key(dateOf(+i))]===undefined){ A[key(dateOf(+i))]=SEED[i]; } }
@@ -310,11 +357,13 @@ SEQ.forEach((k,i)=>{
   const done=!!rec.done;
   const adapted=!!(rec.actual&&rec.actual!==k);
   const shown=rec.actual?TYPE[rec.actual]:P;
+  const pm=PM[i];
   const phFor=rec.actual?rec.actual:k;
   const ph=prehabsFor(phFor).map(p=>p==="se"?"Sh":p==="knee"?"Kn":"Ak").join(" ");
   html+=`<div class="cell${wend?' wend':''}${isT?' today':''}${i===sel?' sel':''}" onclick="openDay(${i})">
 <div class="dn">${fmt(d)}</div>
 <div class="ab" style="background:${shown.c}">${shown.a}</div>
+${pm?`<div class="pm" style="background:${TYPE[pm].c}">+ ${TYPE[pm].a}</div>`:``}
 ${adapted?`<div class="plan">${P.a}</div>`:``}
 <div class="ph">+ ${ph}</div>
 ${done?'<div class="chk">&#10003;</div>':''}</div>`;});
@@ -336,7 +385,8 @@ else if(rec.done)flag='<span class="flag on">&#10003; Done as prescribed</span>'
 const el=document.getElementById("detail");el.className="detail show";
 el.innerHTML=`<div class="dt">${P.n}</div><div class="dm">Day ${i+1} &middot; ${d.toLocaleDateString(undefined,{weekday:'long'})} ${fmt(d)}</div>
 ${flag}
-<div class="row"><b>Prescribed:</b> ${P.d}</div>
+<div class="row"><b>Prescribed${PM[i]?" (AM)":""}:</b> ${P.d}</div>
+${PM[i]?`<div class="row"><b>Prescribed (PM, stacked):</b> ${TYPE[PM[i]].n} &mdash; ${TYPE[PM[i]].d} <i>Keep it genuinely easy; 6+ hours after the AM session; priority session first.</i></div>`:``}
 <div class="row"><b>What I actually did:</b><select id="actSel">${opts}</select></div>
 <div class="row"><b>Prehab for this day:</b> ${ph}</div>
 <textarea id="noteBox" placeholder="Details: what you did, how it felt, why you adapted...">${rec.note||""}</textarea>
