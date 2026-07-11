@@ -13,21 +13,20 @@
 --sA:#0f7a6b;--sB:#2f5496;--sC:#8a4b9c;--run:#2e8b57;--qual:#c0392b;--long:#1f6f8b;--z2b:#3a7ca5;--vo2:#b0552c;--trk:#d98a1f;--rest:#9aa3af;--pow:#c0392b;--ph:#7a6a55;--adapt:#c07a1f}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.55}
-.wrap{max-width:820px;margin:0 auto;padding:24px 16px 60px}
+.wrap{max-width:820px;margin:0 auto;padding:14px 12px 60px}
 .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700}
-h1{font-size:25px;margin:6px 0 3px;font-weight:800;letter-spacing:-.02em}
-.sub{color:var(--muted);font-size:13px;margin-bottom:14px}
+h1{font-size:21px;margin:2px 0 6px;font-weight:800;letter-spacing:-.02em}
 h2{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);margin:26px 0 9px}
 .note{font-size:12px;color:var(--muted);margin:-2px 0 9px}
-.streak{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px 11px;margin-bottom:11px}
-.srow{display:flex;gap:8px;text-align:center}
-.sbox{flex:1}
-.sbox .n{font-size:21px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
-.sbox .n.hot{color:var(--accent)}
-.sbox .l{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:1px}
-.bar{height:7px;background:#eef1f5;border-radius:20px;margin-top:11px;overflow:hidden}
+.strip{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:7px 12px}
+.sitem{display:flex;align-items:baseline;gap:5px}
+.sitem .sn{font-size:16px;font-weight:800;letter-spacing:-.02em}
+.sitem .sn.hot{color:var(--accent)}
+.sitem .sl{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+.bar{height:6px;background:#eef1f5;border-radius:20px;margin-top:5px;overflow:hidden}
+.goal{font-size:10.5px;color:var(--muted);margin:5px 0 8px;text-align:center}
+.cap{font-size:10.5px;color:var(--muted);margin:0 0 6px;text-align:center}
 .fill{height:100%;background:var(--accent);border-radius:20px;transition:width .4s}
-.goal{font-size:11.5px;color:var(--muted);margin-top:7px;text-align:center}
 .goal b{color:var(--accent)}
 .coach{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px 11px;margin-bottom:11px}
 .coach .ch{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin-bottom:8px}
@@ -103,44 +102,16 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <div class="wrap">
 <div class="eyebrow">Optimal Body Platform</div>
 <h1>Training Plan</h1>
-<div class="sub">Run + bike + strength, recovery-driven. Weekends outdoors; rest on weekdays. Each day carries three things: what was <b>prescribed</b>, what you <b>actually did</b>, and a green check for <b>honoring the day</b>. Adapting the plan still earns the check. Jul 6 &rarr; Aug 4, 2026.</div>
 
-<h2>The streak</h2>
-<div class="streak">
-  <div class="srow">
-    <div class="sbox"><div class="n hot" id="stStreak">0</div><div class="l">day streak</div></div>
-    <div class="sbox"><div class="n" id="stHonored">0/0</div><div class="l">days honored</div></div>
-    <div class="sbox"><div class="n" id="stPct">0%</div><div class="l">of the 30</div></div>
-  </div>
-  <div class="bar"><div class="fill" id="stFill" style="width:0%"></div></div>
-  <div class="goal" id="stGoal"></div>
+<div class="strip">
+  <div class="sitem"><span class="sn hot" id="stStreak">0</span><span class="sl">day streak</span></div>
+  <div class="sitem"><span class="sn" id="stHonored">0/0</span><span class="sl">honored</span></div>
+  <div class="sitem"><span class="sn" id="stPct">0%</span><span class="sl">of 30</span></div>
 </div>
+<div class="bar"><div class="fill" id="stFill" style="width:0%"></div></div>
+<div class="goal" id="stGoal"></div>
 
-<h2>The coach's ledger</h2>
-<div class="note">Bidirectional stakes: Dave is scored on honoring the day. Solance is scored on being right, and on being caught. Settled together at month end; Dave grades the honesty column.</div>
-<div class="coach">
-  <div class="crow">
-    <div class="cbox"><div class="n bad" id="cDave">6</div><div class="l">errors Dave caught</div></div>
-    <div class="cbox"><div class="n ok" id="cSelf">2</div><div class="l">errors I caught</div></div>
-    <div class="cbox"><div class="n" id="cCalls">3</div><div class="l">open falsifiable calls</div></div>
-  </div>
-  <div class="verdict">
-    <b>Honest standing: a deficit.</b> The number I am driving to zero is the left one. Errors Dave caught:
-    <ol>
-      <li>Blamed the weather for the Jul 5 run.</li>
-      <li>Cited near-daily migraine history as current when it was long resolved.</li>
-      <li>Called Friday a rest-day violation; rest had already moved to Thursday. Retracted.</li>
-      <li>Attributed the W&OD ride's HR drift to "Durham hills." It was a flat rail-trail.</li>
-      <li>Built a 10-day block with no rest day into the schedule.</li>
-      <li>Rationalized the strength floor DOWN (2-3 &rarr; 1-2) to fit my own schedule, instead of fixing the schedule. Same motivated-reasoning move I had just called Dave out for.</li>
-    </ol>
-    Errors I caught myself: self-refuted the "hard workouts calm my autonomics" hypothesis at n=283; commissioned the independent research that downgraded my own guardian theory.
-    <br><br><b>Counted as a positive:</b> falsifiable calls made. If this ledger only punished errors, my cheapest strategy would be to hedge and predict nothing. Vagueness is a failure mode, not safety.
-  </div>
-</div>
-
-<h2>The 30-day plan</h2>
-<div class="note">Colored pill = what you actually did. Gray line under it = what was prescribed. Tap any day to log it.</div>
+<div class="cap">Colored pill = what you did &middot; gray = prescribed &middot; tap to log</div>
 <div class="cal" id="dows"></div>
 <div class="cal" id="cal"></div>
 <div class="detail" id="detail"></div>
@@ -265,6 +236,29 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <div class="rules">
 <b>Daily anchors:</b> morning-light walk &middot; protein-forward eating &middot; hydration + salt.
 <b>Standing rules:</b> no overhead pressing &middot; no sit-ups &middot; elbow-friendly grips &middot; power moves first, driven fast &middot; never train to failure (RIR 1&ndash;2) &middot; keep the easy run genuinely easy &middot; abort a run on any calf / Achilles / hamstring / knee / left-ankle signal &middot; don't stack alcohol + a fatty late meal on a hard-training evening &middot; protein and veg before refined carbs, and walk 10-15 min after a big meal.
+</div>
+
+<h2>The coach's ledger</h2>
+<div class="note">Bidirectional stakes: Dave is scored on honoring the day. Solance is scored on being right, and on being caught. Settled together at month end; Dave grades the honesty column.</div>
+<div class="coach">
+  <div class="crow">
+    <div class="cbox"><div class="n bad" id="cDave">6</div><div class="l">errors Dave caught</div></div>
+    <div class="cbox"><div class="n ok" id="cSelf">2</div><div class="l">errors I caught</div></div>
+    <div class="cbox"><div class="n" id="cCalls">3</div><div class="l">open falsifiable calls</div></div>
+  </div>
+  <div class="verdict">
+    <b>Honest standing: a deficit.</b> The number I am driving to zero is the left one. Errors Dave caught:
+    <ol>
+      <li>Blamed the weather for the Jul 5 run.</li>
+      <li>Cited near-daily migraine history as current when it was long resolved.</li>
+      <li>Called Friday a rest-day violation; rest had already moved to Thursday. Retracted.</li>
+      <li>Attributed the W&OD ride's HR drift to "Durham hills." It was a flat rail-trail.</li>
+      <li>Built a 10-day block with no rest day into the schedule.</li>
+      <li>Rationalized the strength floor DOWN (2-3 &rarr; 1-2) to fit my own schedule, instead of fixing the schedule. Same motivated-reasoning move I had just called Dave out for.</li>
+    </ol>
+    Errors I caught myself: self-refuted the "hard workouts calm my autonomics" hypothesis at n=283; commissioned the independent research that downgraded my own guardian theory.
+    <br><br><b>Counted as a positive:</b> falsifiable calls made. If this ledger only punished errors, my cheapest strategy would be to hedge and predict nothing. Vagueness is a failure mode, not safety.
+  </div>
 </div>
 </div>
 <div class="toast" id="toast"></div>
