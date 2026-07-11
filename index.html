@@ -246,8 +246,8 @@ const ORDER=["strength_A","strength_B","strength_C","easy_run","quality_run","tr
 const PREHAB={se:"Shoulders/Elbows",ankle:"Ankle/Foot",knee:"Knees"};
 function prehabsFor(t){var run=(t==="easy_run"||t==="quality_run"||t==="track"||t==="long_run");var str=(t.indexOf("strength")===0);return (str||run)?["se","knee","ankle"]:["se"];}
 const SEQ=[
-"strength_A","easy_run","strength_B","track","rest","long_run","z2_bike",
-"strength_C","easy_run","quality_run","strength_A","rest","track","z2_bike",
+"strength_A","easy_run","strength_B","track","rest","long_run","track",
+"rest","strength_C","easy_run","bike_vo2","strength_A","long_run","z2_bike",
 "strength_B","easy_run","track","strength_C","rest","long_run","z2_bike",
 "strength_A","easy_run","bike_vo2","strength_B","rest","long_run","z2_bike",
 "strength_C","easy_run"];
@@ -267,6 +267,10 @@ const SEED={
 3:{done:true,actual:"rest",note:"ADAPTED: family dog emergency + drive to NC. Track dropped and this became the rest day. The right call, and it earned the check. Reslot a track session on a green day."},
 4:{done:true,actual:"quality_run",note:"ADAPTED: ran on the day rest was scheduled, because Thursday had already become the rest day. 4.1 mi hilly Durham run/walk, 42:17, avg 10:19/mi (faded 9:51 to 11:22), avg HR 156 / max 178, Tempo TE 3.7, load 135, cadence 158, +400 ft. Well-placed quality effort on a recovered system (Fri AM green). The 156/178 = hills + heat. Nothing to flag."},
 5:{done:true,actual:"z2_bike",note:"ADAPTED: Zone 2 ride instead of the long run, to fix the Zone 2 shortage and stay low-impact after a strength day + a tempo run. DONE: W&OD Trail, east from Hunter Mill Rd (paved rail-trail, out-and-back). 1:33:57, ~21 mi, 13.6 mph avg, avg HR 132 / max 155, Primary Benefit Base (Low Aerobic), aerobic TE 2.8 / anaerobic 0.5, load 70, +764 ft (gentle rail grade, under 1 percent), sweat 1,275 ml (biggest yet), BB -14. Avg HR 132 = dead center of the prescribed 120-140 band; the Zone-3 time was cardiac drift + the gentle uphill return leg, NOT hard riding. Landed as a true easy aerobic day: half Friday tempo load (70 vs 135) for twice the duration. Green morning: TR 74, HRV Balanced 52ms, sleep 85 with a REM rebound, RHR 50. VENUE NOTE: W&OD is smooth, non-technical, mile-marked = the right default for measured efforts (clean pace-at-HR data) and zero ankle-roll exposure."}
+,
+6:{done:false,note:"TRACK (hard-changed from Z2 Bike; the session owed from Thursday). GATED on the AM: green = HRV Balanced ~48+, RHR near 50, TR 65+, decent sleep, no knee/ankle/calf signal. NO-GO = HRV Low or a clear drop, RHR up 3+, TR under 55, bad sleep, a headache (the under-salted tell), or any tissue niggle -> easy run or rest instead, not a reduced track. SESSION: on an actual track (not the W&OD - repeats need exact 400s and a safe uninterrupted surface). WU 12-15 min easy (HR under 140) + knee/ankle prehab + drills + 4-6 strides. MAIN: 5 x 400m at 5K effort, HR into upper Z4, CAP 172, all reps within a few seconds of each other; add a 6th only if reps 1-4 are controlled. RECOVERY: 2-3 min walk/easy jog between reps (generous, on purpose). CD 10 min. Cadence 165+. NOT a time trial. Pre-hydrate with SALTED fluid (1,275 ml sweat loss yesterday)."},
+11:{done:false,note:"Strength A, but keep the LOWER-BODY POWER LIGHT - lighten or skip the reverse lunge. The long run is tomorrow."},
+12:{done:false,note:"FIRST LONG RUN of the block (the biggest gap in the plan so far). ~4-5 mi EASY-TO-MODERATE, not a hard effort - the week's spacing depends on it staying easy. Run it on the W&OD so the pace-at-HR data is clean and comparable (measurement venue, not the trail)."}
 };
 for(const i in SEED){ if(A[key(dateOf(+i))]===undefined){ A[key(dateOf(+i))]=SEED[i]; } }
 save(A);
