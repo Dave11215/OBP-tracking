@@ -28,6 +28,17 @@ h2{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--acce
 .cap{font-size:10.5px;color:var(--muted);margin:0 0 6px;text-align:center}
 .fill{height:100%;background:var(--accent);border-radius:20px;transition:width .4s}
 .goal b{color:var(--accent)}
+.board{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:11px}
+@media(max-width:560px){.board{grid-template-columns:1fr}}
+.bcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+.bcard.dave{border-color:#cfe6e0;background:var(--accent-soft)}
+.bcard h4{margin:0 0 2px;font-size:14px;font-weight:800}
+.bcard .who{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;margin-bottom:7px}
+.bcard .claim{font-size:12.5px;line-height:1.55;margin:0 0 8px}
+.bcard .claim b{color:var(--ink)}
+.bcard .wrong{font-size:11.5px;color:#c0392b;font-weight:700;border-top:1px solid var(--line);padding-top:7px;margin-top:7px}
+.clash{background:var(--card);border:1px solid var(--line);border-left:3px solid #c0392b;border-radius:10px;padding:11px 14px;font-size:12px;color:var(--muted);line-height:1.6}
+.clash b{color:var(--ink)}
 .coach{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px 11px;margin-bottom:11px}
 .coach .ch{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin-bottom:8px}
 .coach .crow{display:flex;gap:8px;text-align:center}
@@ -236,6 +247,32 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <div class="rules">
 <b>Daily anchors:</b> morning-light walk &middot; protein-forward eating &middot; hydration + salt.
 <b>Standing rules:</b> no overhead pressing &middot; no sit-ups &middot; elbow-friendly grips &middot; power moves first, driven fast &middot; never train to failure (RIR 1&ndash;2) &middot; keep the easy run genuinely easy &middot; abort a run on any calf / Achilles / hamstring / knee / left-ankle signal &middot; don't stack alcohol + a fatty late meal on a hard-training evening &middot; protein and veg before refined carbs, and walk 10-15 min after a big meal.
+</div>
+
+<h2>The scoreboard &mdash; settles Aug 4</h2>
+<div class="note">Two predictions, made the same day, same no-goalpost-moving rules. Both of us are on the hook.</div>
+<div class="board">
+  <div class="bcard dave">
+    <div class="who">Dave predicts</div>
+    <h4>The all-time best month</h4>
+    <p class="claim">"My numbers will be the <b>all-time best numbers for any given month</b> since we started with the watch in September 2025."<br><br>
+    <b>Scored on 8 metrics</b> (July 2026 vs every month Sept 2025 &ndash; Jun 2026): overnight HRV mean, RHR mean, VO2max, Fitness Age, sleep score, stress, Training Readiness, 5K predictor.<br>
+    <b>&ge;6 of 8 best-ever = CONFIRMED. 4&ndash;5 = split. &le;3 = wrong.</b><br><br>
+    The bar is real: Sept/Oct 2025 set his annual bests at <b>RHR 46&ndash;47</b> and <b>HRV 52</b>. He has to beat those.</p>
+    <div class="wrong">WRONG IF: best on 3 or fewer of the 8.</div>
+  </div>
+  <div class="bcard">
+    <div class="who">Solance predicts</div>
+    <h4>A split, not a sweep &mdash; 55%</h4>
+    <p class="claim">Dave lands <b>4&ndash;5 of 8</b>. He <b>wins</b> the fitness metrics (VO2max 49, Fitness Age 45 &mdash; both would themselves be all-time bests) and <b>loses the raw autonomic pair</b>.<br><br>
+    Why: Sept&ndash;Oct 2025's low RHR and high HRV came from freshness, low life-stress, and his constitutional bradycardia &mdash; <b>not earned fitness</b>. That's a partly-artifactual high-water mark, and it's hard to beat. July's monthly mean HRV also carries the early-July rebound days, when he was still climbing out of the beach trough.<br><br>
+    Full set: <b>22 further numeric calls</b>, each with a confidence level and a WRONG-IF.</p>
+    <div class="wrong">WRONG IF: Dave hits 6 of 8 or more.</div>
+  </div>
+</div>
+<div class="clash">
+  <b>Where we actually collide.</b> Less than it looks on the fitness metrics &mdash; Solance's predicted VO2max 49 and Fitness Age 45 would <i>themselves</i> be all-time bests, so Dave can win those without beating Solance. The hard clash is the autonomic pair: an all-time-best RHR requires <b>&le;46</b>, and Solance predicted <b>49</b>. Those cannot both be right. <b>If Dave sweeps, Solance's RHR call dies outright and the HRV call comes under real pressure.</b>
+  <br><br><b>Open action:</b> the Garmin export ends Jun 30. A fresh export covering July must be pulled by Aug 4 or none of this is scoreable.
 </div>
 
 <h2>The coach's ledger</h2>
