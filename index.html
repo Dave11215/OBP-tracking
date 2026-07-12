@@ -368,7 +368,15 @@ const SEED={
 13:{done:false,note:"STACKED DAY. Z2 Bike outdoors + Strength B later (6+ hours apart, priority session first). B is the pull/hinge day, chosen for this slot because it is the least leg-dependent and you ran long yesterday - keep the KB swings LIGHT. The PM ride must stay genuinely easy; this is exactly where your tempo-drift would wreck the week."},
 12:{done:false,note:"FIRST LONG RUN of the block (the biggest gap in the plan so far). ~4-5 mi EASY-TO-MODERATE, not a hard effort - the week's spacing depends on it staying easy. Run it on the W&OD so the pace-at-HR data is clean and comparable (measurement venue, not the trail)."}
 };
-for(const i in SEED){ if(A[key(dateOf(+i))]===undefined){ A[key(dateOf(+i))]=SEED[i]; } }
+// SEED VERSIONING: when Solance ships new/updated log data, it must actually land.
+// Without this, a day already stored (e.g. seeded done:false) could never be updated.
+const SEEDV="2026-07-12c";
+if(localStorage.getItem("obp_seedv")!==SEEDV){
+  for(const i in SEED){ A[key(dateOf(+i))]=SEED[i]; }   // authoritative refresh
+  localStorage.setItem("obp_seedv",SEEDV);
+} else {
+  for(const i in SEED){ if(A[key(dateOf(+i))]===undefined){ A[key(dateOf(+i))]=SEED[i]; } }
+}
 save(A);
 
 let sel=null;
