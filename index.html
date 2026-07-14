@@ -442,4 +442,39 @@ SEQ.forEach((k,i)=>{
 <div class="ab" style="background:${shown.c}">${shown.a}</div>
 ${pm?`<div class="pm" style="background:${TYPE[pm].c}">+ ${TYPE[pm].a}</div>`:``}
 ${adapted?`<div class="plan">${P.a}</div>`:``}
-<
+<div class="ph">+ ${ph}</div>
+${done?'<div class="chk">&#10003;</div>':''}</div>`;});
+document.getElementById("cal").innerHTML=html;
+const leg=[["Easy Run","var(--run)"],["Tempo","var(--qual)"],["Track","var(--trk)"],["Long Run","var(--long)"],["Z2 Bike","var(--z2b)"],["Bike VO2","var(--vo2)"],["Str A","var(--sA)"],["Str B","var(--sB)"],["Str C","var(--sC)"],["Rest","var(--rest)"]];
+document.getElementById("legend").innerHTML=leg.map(l=>`<span><span class="sw" style="background:${l[1]}"></span>${l[0]}</span>`).join("")+' <span style="color:var(--ph)">prehab: Sh shoulders/elbows &middot; Kn knees &middot; Ak ankle/foot</span>';
+renderStats();
+}
+function openDay(i){
+sel=i;const d=dateOf(i);const P=TYPE[SEQ[i]];const rec=A[key(d)]||{};
+const cur=rec.actual||SEQ[i];
+const adapted=!!(rec.actual&&rec.actual!==SEQ[i]);
+const phFor=rec.actual?rec.actual:SEQ[i];
+const ph=prehabsFor(phFor).map(p=>`<span class="tag">${PREHAB[p]}</span>`).join("");
+const opts=ORDER.map(k=>`<option value="${k}"${k===cur?' selected':''}>${TYPE[k].n}${k===SEQ[i]?' (as prescribed)':''}</option>`).join("");
+let flag="";
+if(rec.done&&adapted)flag='<span class="flag ad">Adapted &mdash; and it still counts</span>';
+else if(rec.done)flag='<span class="flag on">&#10003; Done as prescribed</span>';
+const el=document.getElementById("detail");el.className="detail show";
+el.innerHTML=`<div class="dt">${P.n}</div><div class="dm">Day ${i+1} &middot; ${d.toLocaleDateString(undefined,{weekday:'long'})} ${fmt(d)}</div>
+${flag}
+<div class="row"><b>Prescribed${PM[i]?" (AM)":""}:</b> ${P.d}</div>
+${PM[i]?`<div class="row"><b>Prescribed (PM, stacked):</b> ${TYPE[PM[i]].n} &mdash; ${TYPE[PM[i]].d} <i>Keep it genuinely easy; 6+ hours after the AM session; priority session first.</i></div>`:``}
+<div class="row"><b>What I actually did:</b><select id="actSel">${opts}</select></div>
+<div class="row"><b>Prehab for this day:</b> ${ph}</div>
+<textarea id="noteBox" placeholder="Details: what you did, how it felt, why you adapted...">${rec.note||""}</textarea>
+<div class="act"><button class="btn ${rec.done?'done':'pri'}" onclick="toggle(${i})">${rec.done?'&#10003; Honored':'Mark honored'}</button>
+<button class="btn" onclick="saveDay(${i})">Save</button></div>`;
+render();el.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function toggle(i){const k=key(dateOf(i));A[k]=A[k]||{};A[k].done=!A[k].done;if(A[k].done&&!A[k].actual)A[k].actual=SEQ[i];save(A);openDay(i);toast(A[k].done?"Day honored":"Unmarked")}
+function saveDay(i){const k=key(dateOf(i));A[k]=A[k]||{};A[k].note=document.getElementById("noteBox").value;A[k].actual=document.getElementById("actSel").value;save(A);openDay(i);toast("Saved")}
+render();
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1500)}
+</script>
+</body>
+</html>
