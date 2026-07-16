@@ -107,6 +107,17 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:9px;font-size:13px;opacity:0;transition:.25s;pointer-events:none}
 .toast.show{opacity:1}
 @media print{body{background:#fff}.card,.box,.dose,.cell{box-shadow:none}}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px;margin:10px 0}
+.mcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.mcard ul{margin:8px 0 0;padding-left:0;list-style:none}
+.mcard li{margin:0 0 10px;font-size:13px;line-height:1.45;color:var(--ink);font-weight:600}
+.mcard li span{display:block;color:var(--muted);font-weight:400;margin-top:3px}
+.mtag{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--accent);text-transform:uppercase}
+.mnote{font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+.mcard.t1{border-left:3px solid var(--accent)}
+.mcard.t2{border-left:3px solid var(--trk)}
+.mcard.t3{border-left:3px solid var(--rest)}
+.mcard.t4{border-left:3px solid var(--line)}
 </style>
 </head>
 <body>
@@ -206,6 +217,52 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <li>Knee-to-wall dorsiflexion <span class="s">&middot; 2 x 10/leg</span></li>
 <li>Short-foot / toe splay <span class="s">&middot; 5 x 5s hold</span></li>
 </ul><p class="desc" style="margin-top:6px">Ankle stability for trail. Add hop-and-stick (2 x 5/leg) from week 3. The left ankle is a running abort signal.</p></div></div>
+
+<h2>What we track, and why</h2>
+<p class="desc">The Garmin metrics, ordered by strength of evidence. Rule: rank by <b>causal</b> evidence, not by what predicts best, and not by what the watch happens to measure. <b>Measured beats modeled.</b></p>
+
+<div class="mgrid">
+  <div class="mcard t1">
+    <div class="mtag">Track towards</div>
+    <ul>
+      <li><b>Vigorous minutes, chronic (28-day)</b><span>The dose that matters is chronic, not acute. One hard session does not move it; a season of them does.</span></li>
+      <li><b>Vigorous days per week</b><span>Countable. Garmin computes it natively over a rolling 6-week window.</span></li>
+      <li><b>Strength sessions per week</b><span>Strength and aerobic together beat either alone: HR 0.60, vs 0.71 aerobic-only and 0.89 strength-only. The dose optimum is about 40 min/week, so the 2x floor is already right. Do not inflate it. The real risk is letting cardio crowd it out.</span></li>
+      <li><b>Resting HR, trend</b><span>RR 1.09 per 10 bpm across 1.2M people. Better evidenced than HRV. Read the trend, never the level.</span></li>
+      <li><b>Sleep duration</b><span>Short sleep in midlife carries real risk. This is the window where it counts.</span></li>
+    </ul>
+  </div>
+
+  <div class="mcard t2">
+    <div class="mtag">Govern by <span class="mnote">(monitor, do not target)</span></div>
+    <ul>
+      <li><b>HRV, overnight, raw ms</b><span><b>A governor, not a goal.</b> It answers "go hard today?" It is not a scoreboard. Use the raw number, not the status label.</span></li>
+      <li><b>Sleep continuity</b><span>Awakenings and restless moments.</span></li>
+      <li><b>Acute:chronic load ratio</b><span>Overreach management, not a health metric.</span></li>
+    </ul>
+  </div>
+
+  <div class="mcard t3">
+    <div class="mtag">Context only <span class="mnote">(modeled &mdash; never grade a block on these)</span></div>
+    <ul>
+      <li><b>VO2max</b><span>The strongest known <i>predictor</i> of mortality. But the one randomized trial was null and the genetic-instrument study found no causal effect on longevity. The curve is steepest at the bottom, so the gain is in getting off the floor, not in polishing the top.</span></li>
+      <li><b>Fitness age</b><span>A proxy for a proxy: derived from VO2max and resting HR.</span></li>
+      <li><b>Body fat / weight / BMI</b><span>Weak predictors. Waist beats all three. Garmin carries the last weigh-in forward for days, so filter to real weigh-ins before doing any math on it.</span></li>
+      <li><b>Training readiness, Body Battery, stress</b><span>Modeled composites. Soft context.</span></li>
+      <li><b>Lactate threshold HR and pace</b><span>A real physiological marker. Sitting in the export, never used.</span></li>
+    </ul>
+  </div>
+
+  <div class="mcard t4">
+    <div class="mtag">Dropped</div>
+    <ul>
+      <li><b>SpO2</b><span>No usable signal in the data. An earned deletion, not a preference.</span></li>
+      <li><b>Running economy</b><span>Cadence, ground contact, vertical oscillation, stride length. Fine for the 5K. <b>Not health metrics. Never confuse the two.</b></span></li>
+    </ul>
+  </div>
+</div>
+
+<p class="desc" style="margin-top:12px"><b>The honest part:</b> the watch measures the governor and one real lever. The highest-leverage things in this program are not on this list and cannot be. A wearable is an instrument, not a plan.</p>
 
 <div class="toast" id="toast"></div>
 
