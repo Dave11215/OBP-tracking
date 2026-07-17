@@ -549,12 +549,27 @@ function psave(s){localStorage.setItem(PKEY,JSON.stringify(s))}
 // tendon - the partial tear, and the only ESTABLISHED item in the routine.
 // DOING THE TRI-SET DOES NOT PROTECT THE ELBOW. One chip hid exactly that.
 const PT={
- sh:{n:"Sh",full:"Shoulder (tri-set)",days:[0,1,2,3,4,5,6],cls:"psh",why:"Daily. Rotator cuff + delt, 3 planes, low load. Not a progression target."},
- el:{n:"El",full:"Elbow (Tyler Twist)",days:[0,1,2,3,4,5,6],cls:"pel",why:"Daily. Tyler 2010 RCT, 3x15. Protects the common-flexor tear. Sub-painful."},
- kn:{n:"Kn",full:"Knee",days:[1,4],cls:"pkn",why:"Mon + Thu. Heavy-slow, on strength days, off the Sat track day."},
- ak:{n:"Ak",full:"Ankle / foot",days:[2,4,0],cls:"pak",why:"Tue / Thu / Sun. 3x/wk. NNT 9."}
+ sh:{n:"Sh",full:"Shoulder (tri-set)",cls:"psh",why:"Daily. Rotator cuff + delt, 3 planes, low load. Not a progression target.",
+     due:function(k,d){return true}},
+ el:{n:"El",full:"Elbow (Tyler Twist)",cls:"pel",why:"Daily. Tyler 2010 RCT, 3x15. Protects the common-flexor tear. Sub-painful.",
+     due:function(k,d){return true}},
+ kn:{n:"Kn",full:"Knee",cls:"pkn",why:"On strength days. Heavy-slow. Never on a hard day - running IS patellar loading.",
+     due:function(k,d){return k.indexOf("strength")===0}},
+ ak:{n:"Ak",full:"Ankle / foot",cls:"pak",why:"3x/wk, off the hard days. Balance is a chronic adaptation, not a warm-up. NNT 9.",
+     due:function(k,d){return k==="easy_run"||k==="z2_bike"||k==="long_run"}}
 };
-function pdue(kk,d){return PT[kk].days.indexOf(d.getDay())>-1}
+// CADENCE KEYS OFF THE PRESCRIBED SESSION, NOT THE WEEKDAY. Fixed 2026-07-17.
+// v1 used fixed weekdays (Kn = Mon+Thu) taken from THIRTY_DAY_PLAN.md's template. But SEQ - the
+// calendar Dave actually runs - does not match that template and ROTATES: 7/6 Mon was strength_A,
+// 7/13 Mon was rest. So "Mon+Thu" put heavy-slow knee loading on a REST day and on the HARD day,
+// the exact inverse of the stated rationale, in code whose own comment said not to stack tendon
+// work onto hard days. Read SEQ, not the prose about SEQ.
+function pdue(kk,d){
+ const i=Math.round((d-START)/86400000);
+ if(i<0||i>=SEQ.length) return false;
+ const rec=A[key(d)]||{}, k=rec.actual||SEQ[i];   // grade against what he ACTUALLY did
+ return PT[kk].due(k,d);
+}
 function ptoggle(kk,i){const d=dateOf(i);if(!pdue(kk,d))return;const s=pload(),k=key(d);
  s[k]=s[k]||{};s[k][kk]=!s[k][kk];psave(s);render();prender();toast(s[k][kk]?PT[kk].full+" done":"Unmarked")}
 // Prehab status chips, drawn inside each training-calendar cell.
