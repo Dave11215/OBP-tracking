@@ -134,7 +134,8 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 .pc.done{border-color:transparent}
 .pc.miss{background:repeating-linear-gradient(45deg,transparent,transparent 2px,var(--line) 2px,var(--line) 3px);border-color:var(--line)}
 .pc.today{outline:2px solid var(--ink);outline-offset:1px}
-.psh.done{background:var(--sA)} .pkn.done{background:var(--run)} .pak.done{background:var(--trk)}
+.psh.done{background:var(--sA)}
+.pel.done{background:var(--sB)} .pkn.done{background:var(--run)} .pak.done{background:var(--trk)}
 .prow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:8px}
 .pst{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
 .psn{font-size:17px;font-weight:800} .psl{font-size:10px;color:var(--muted);font-weight:600}
@@ -527,7 +528,7 @@ const PKEY="obp_prehab_v1";
 const CSTART="2026-07-17";
 // Seeded history: work Dave reported that predates the tracker. Lives in the published file so
 // it reaches every device; localStorage alone is per-browser.
-const PSEED={"2026-07-16":{sh:true}};
+const PSEED={"2026-07-16":{sh:true},"2026-07-17":{sh:true,el:true}};
 const PSEEDV=JSON.stringify(PSEED);
 function pload(){var s;try{s=JSON.parse(localStorage.getItem(PKEY))||{}}catch(e){s={}}
  if(localStorage.getItem("obp_pseedv")!==PSEEDV){
@@ -541,8 +542,15 @@ function psave(s){localStorage.setItem(PKEY,JSON.stringify(s))}
 //                 eccentrics, satisfaction 70% vs 22%. Sat TRACK is high patellar load, so knee
 //                 work sits on strength days, maximally spaced from it.
 //  ak Tue/Thu/Sun UNCHANGED, best-evidenced thing here. Hupperets 2009 BMJ n=522: RR 0.63, NNT 9.
+// SPLIT 2026-07-17. Was ONE chip "Shoulder / elbow" - which conflated two different tissues,
+// two different protocols, and two different evidence tiers. The tri-set is rotator cuff + delt
+// (LEDGER: 8 lb, 3 rounds of 12 front-raise + 12 scaption + 12 lateral; a rehab protocol from
+// Dave's rehab guy; NOT a progression target). The Reverse Tyler Twist is the common flexor
+// tendon - the partial tear, and the only ESTABLISHED item in the routine.
+// DOING THE TRI-SET DOES NOT PROTECT THE ELBOW. One chip hid exactly that.
 const PT={
- sh:{n:"Sh",full:"Shoulder / elbow",days:[0,1,2,3,4,5,6],cls:"psh",why:"Daily. Tyler 2010 protocol."},
+ sh:{n:"Sh",full:"Shoulder (tri-set)",days:[0,1,2,3,4,5,6],cls:"psh",why:"Daily. Rotator cuff + delt, 3 planes, low load. Not a progression target."},
+ el:{n:"El",full:"Elbow (Tyler Twist)",days:[0,1,2,3,4,5,6],cls:"pel",why:"Daily. Tyler 2010 RCT, 3x15. Protects the common-flexor tear. Sub-painful."},
  kn:{n:"Kn",full:"Knee",days:[1,4],cls:"pkn",why:"Mon + Thu. Heavy-slow, on strength days, off the Sat track day."},
  ak:{n:"Ak",full:"Ankle / foot",days:[2,4,0],cls:"pak",why:"Tue / Thu / Sun. 3x/wk. NNT 9."}
 };
@@ -559,7 +567,7 @@ function pchips(d,i){
  const s=pload(),k=key(d),today=new Date();today.setHours(0,0,0,0);
  const pre=k<CSTART;                       // cadence set 2026-07-17; do not grade before it
  let out="";
- ["sh","kn","ak"].forEach(kk=>{
+ ["sh","el","kn","ak"].forEach(kk=>{
   if(!pdue(kk,d))return;
   const done=!!(s[k]&&s[k][kk]);
   const missed=!done && d<today && !pre;
@@ -577,7 +585,7 @@ function prender(){
  // know which cell was today. The fitness calendar has both; this had neither.
  const DW=["S","M","T","W","T","F","S"];
  let out="";
- ["sh","kn","ak"].forEach(kk=>{
+ ["sh","el","kn","ak"].forEach(kk=>{
   let due=0,done=0;
   for(let i=0;i<30;i++){const d=dateOf(i);if(d>today)break;const k=key(d);
    if(s[k]&&s[k][kk])done++;                       // logged work always counts
