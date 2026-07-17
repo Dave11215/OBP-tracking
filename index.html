@@ -130,6 +130,7 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 .pc.due{border-color:var(--line);background:var(--card)}
 .pc.due:hover{border-color:var(--muted)}
 .pc.off{background:transparent;cursor:default}
+.pc.pre{border:1px dotted var(--line);background:transparent;opacity:.45}
 .pc.done{border-color:transparent}
 .pc.miss{background:repeating-linear-gradient(45deg,transparent,transparent 2px,var(--line) 2px,var(--line) 3px);border-color:var(--line)}
 .pc.today{outline:2px solid var(--ink);outline-offset:1px}
@@ -529,7 +530,20 @@ function bars(vals,dates,c){
 // GATE THE BEHAVIOUR, NOT THE MARKUP. The check is now `prender();`, not the div.
 // ============================================================================
 const PKEY="obp_prehab_v1";
-function pload(){try{return JSON.parse(localStorage.getItem(PKEY))||{}}catch(e){return{}}}
+// The cadence was SET on 2026-07-17 (from the loading literature). Before that date the old
+// rule was in force (Kn/Ak on run+strength days), so hatching those days as "missed" against
+// the NEW rule would grade Dave retroactively against a schedule that did not exist yet.
+// Days before this are shown neutral and excluded from the denominator. Logged work still counts.
+const CSTART="2026-07-17";
+// Seeded history: work Dave reported that predates the tracker. Lives in the published file so
+// it reaches every device; localStorage alone is per-browser.
+const PSEED={"2026-07-16":{sh:true}};
+const PSEEDV=JSON.stringify(PSEED);
+function pload(){var s;try{s=JSON.parse(localStorage.getItem(PKEY))||{}}catch(e){s={}}
+ if(localStorage.getItem("obp_pseedv")!==PSEEDV){
+  for(var d in PSEED){s[d]=s[d]||{};for(var kk in PSEED[d])if(s[d][kk]===undefined)s[d][kk]=PSEED[d][kk]}
+  psave(s);localStorage.setItem("obp_pseedv",PSEEDV)}
+ return s}
 function psave(s){localStorage.setItem(PKEY,JSON.stringify(s))}
 // CADENCE from the evidence 2026-07-17, not habit:
 //  sh DAILY       Tyler 2010 RCT prescribes 3x15 daily. Verified in the primary source.
@@ -563,7 +577,8 @@ function prender(){
    const d=dateOf(i),k=key(d),due=pdue(kk,d),done=!!(s[k]&&s[k][kk]);
    const past=d<today,isT=d.getTime()===today.getTime();
    let c="pc "+PT[kk].cls;
-   if(!due)c+=" off"; else if(done)c+=" done"; else if(past)c+=" miss"; else c+=" due";
+   const pre=k<CSTART;
+   if(!due)c+=" off"; else if(done)c+=" done"; else if(pre)c+=" pre"; else if(past)c+=" miss"; else c+=" due";
    if(isT)c+=" today";
    h+='<div class="'+c+'" '+(due?'onclick="ptoggle(\''+kk+'\','+i+')"':'')+' title="'+PT[kk].full+' '+k+'"></div>';
   }
@@ -572,8 +587,9 @@ function prender(){
  let out="";
  ["sh","kn","ak"].forEach(kk=>{
   let due=0,done=0;
-  for(let i=0;i<30;i++){const d=dateOf(i);if(d>today)break;if(!pdue(kk,d))continue;due++;
-   const k=key(d);if(s[k]&&s[k][kk])done++}
+  for(let i=0;i<30;i++){const d=dateOf(i);if(d>today)break;const k=key(d);
+   if(s[k]&&s[k][kk])done++;                       // logged work always counts
+   if(k<CSTART||!pdue(kk,d))continue; due++}       // but only grade from the cadence start
   const pct=due?Math.round(done/due*100):0;
   const col=pct>=80?"var(--run)":pct>=50?"var(--trk)":"var(--qual)";
   out+='<div class="pst"><div class="psn" style="color:'+(due?col:"var(--muted)")+'">'+done+"/"+due+
@@ -581,7 +597,7 @@ function prender(){
        '<div class="psl" style="font-weight:400;margin-top:2px">'+PT[kk].why+'</div></div>';
  });
  document.getElementById("pstats").innerHTML=out;
- document.getElementById("pnote").innerHTML="<b>Every cadence above is extrapolated from rehab trials in symptomatic patients, mostly athletes in their 20s.</b> Prehab frequency in an asymptomatic 54-year-old has no direct evidence. The sub-painful ceiling is what protects the flexor tear, not the schedule.";
+ document.getElementById("pnote").innerHTML="Dotted cells predate <b>'+CSTART+'</b>, when this cadence was set from the literature. They are not graded, because that rule did not exist yet. <b>Every cadence above is extrapolated from rehab trials in symptomatic patients, mostly athletes in their 20s.</b> Prehab frequency in an asymptomatic 54-year-old has no direct evidence. The sub-painful ceiling is what protects the flexor tear, not the schedule.";
 }
 prender();
 
