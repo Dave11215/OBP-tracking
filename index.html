@@ -116,7 +116,7 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 .mnote{font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
 .mcard.t1{border-left:3px solid var(--accent)}
 .mcard.t2{border-left:3px solid var(--trk)}
-.cwrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;margin:10px 0}
+.cwrap{display:grid;grid-template-columns:1fr;gap:10px;margin:10px 0}
 .cc{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 12px}
 .ch{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .cn{font-size:12px;font-weight:700;color:var(--ink)}
@@ -125,6 +125,30 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 .cd{font-size:11px;color:var(--muted);margin:1px 0 5px;line-height:1.4}
 .ct{font-size:11px;font-weight:700}
 .up{color:var(--run)}.dn{color:var(--qual)}.fl{color:var(--muted)}
+.pgrid{display:grid;grid-template-columns:34px repeat(30,1fr);gap:2px;align-items:center;margin:8px 0}
+.plab{font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.04em}
+.pc{aspect-ratio:1;border-radius:3px;cursor:pointer;border:1.5px solid transparent;transition:.1s}
+.pc.due{border-color:var(--line);background:var(--card)}
+.pc.due:hover{border-color:var(--muted)}
+.pc.off{background:transparent;cursor:default}
+.pc.done{border-color:transparent}
+.pc.miss{background:repeating-linear-gradient(45deg,transparent,transparent 2px,var(--line) 2px,var(--line) 3px);border-color:var(--line)}
+.pc.today{outline:2px solid var(--ink);outline-offset:1px}
+.psh.done{background:var(--sA)} .pkn.done{background:var(--run)} .pak.done{background:var(--trk)}
+.prow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:8px}
+.pst{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.psn{font-size:17px;font-weight:800} .psl{font-size:10px;color:var(--muted);font-weight:600}
+.pdet{display:grid;gap:10px;margin:10px 0}
+.pd{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--line);border-radius:9px;padding:11px 13px}
+.pd.chg{border-left-color:var(--qual)} .pd.best{border-left-color:var(--run)}
+.pdh{font-size:13px;font-weight:800;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}
+.pdc{font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--muted);text-transform:uppercase}
+.pdc.hot{color:var(--qual)}
+.pd ul{margin:7px 0 0;padding-left:16px}
+.pd li{font-size:12.5px;margin-bottom:3px}
+.ev1{font-size:9px;color:var(--run);letter-spacing:.04em}
+.ev2{font-size:9px;color:var(--trk);letter-spacing:.04em}
+.ev3{font-size:9px;color:var(--muted);letter-spacing:.04em;font-weight:600}
 </style>
 </head>
 <body>
@@ -145,6 +169,12 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <div class="cal" id="cal"></div>
 <div class="detail" id="detail"></div>
 <div class="legend" id="legend"></div>
+<h2>Prehab calendar</h2>
+<p class="desc"><b>The countermeasure to the thing most likely to end this program.</b> Cadence set from the loading literature, 2026-07-17. Outlined = due. Filled = done. Tap to log.</p>
+<div id="pcal"></div>
+<div id="pstats" class="prow"></div>
+<p class="desc" id="pnote" style="margin-top:8px"></p>
+
 <h2>Running sessions</h2>
 <div class="card"><div class="hd" style="background:var(--run)">Easy Run + strides <small>&mdash; Zone 2</small></div>
 <div class="bd"><p class="desc">30&ndash;40 min conversational (HR ~125&ndash;140, cap 145), then 4&ndash;6 x 10&ndash;15s strides. Keep it genuinely easy.</p></div></div>
@@ -197,33 +227,49 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 </ul></div></div>
 
 <h2>Prehab routines</h2>
-<div class="note">Knees + ankle/foot ride with your runs (do them as a quick pre-run activation) and strength days; shoulders/elbows is a daily near-freebie. A few minutes each.</div>
-<div class="card ph"><div class="hd">Shoulders / Elbows <small>&mdash; daily, ~3&ndash;5 min</small></div>
-<div class="bd"><ul class="ex">
-<li>Reverse Tyler Twist <span class="s">&middot; for the right common-flexor tendon, 2 x 12-15</span></li>
-<li>Band external + internal rotation <span class="s">&middot; 2 x 12/side</span></li>
-<li>Scapular / face pulls <span class="s">&middot; 2 x 12-15</span></li>
-<li>Hammer eccentric pronation + supination <span class="s">&middot; slow, 2 x 10/side</span></li>
-</ul><p class="desc" style="margin-top:6px">Protects the right elbow (partial common-flexor tear + golfer's elbow) and shoulder. Keep sub-painful.</p></div></div>
-<div class="card ph"><div class="hd">Knees <small>&mdash; run + strength days, ~3&ndash;5 min</small></div>
-<div class="bd"><ul class="ex">
-<li>Step-ups <span class="s">&middot; controlled, 3 x 12</span></li>
-<li>Sit-downs to a bench/box <span class="s">&middot; 3 x 12</span></li>
-<li>Reverse lunges <span class="s">&middot; 3 x 12</span></li>
-<li>Lateral lunges <span class="s">&middot; 3 x 12 &mdash; the frontal-plane work running never trains</span></li>
-<li>Star taps <span class="s">&middot; 3 x 12</span></li>
-<li>Wall sits <span class="s">&middot; 3 x 30s</span></li>
-<li>Eccentric step-downs <span class="s">&middot; add these: highest-value patellar-tendon move, 2 x 8/leg slow</span></li>
-</ul><p class="desc" style="margin-top:6px">Maintenance for the knee (the strength-before-running gate that closed the recurrence cycle). Cadence toward 165+ is the #1 running-mechanics fix alongside this.</p></div></div>
-<div class="card ph"><div class="hd">Ankle / Foot <small>&mdash; run + strength days, ~5 min (trail-driven)</small></div>
-<div class="bd"><ul class="ex">
-<li>Single-leg balance <span class="s">&middot; 30s/leg; eyes open &rarr; closed &rarr; on a cushion</span></li>
-<li>Band eversion (peroneals) <span class="s">&middot; slow, 2 x 15/leg &mdash; resists the ankle-roll</span></li>
-<li>Eccentric calf raise <span class="s">&middot; 3s lower, 2-3 x 10/leg (straight + bent knee)</span></li>
-<li>Single-leg RDL reach <span class="s">&middot; 2 x 8/leg</span></li>
-<li>Knee-to-wall dorsiflexion <span class="s">&middot; 2 x 10/leg</span></li>
-<li>Short-foot / toe splay <span class="s">&middot; 5 x 5s hold</span></li>
-</ul><p class="desc" style="margin-top:6px">Ankle stability for trail. Add hop-and-stick (2 x 5/leg) from week 3. The left ankle is a running abort signal.</p></div></div>
+<p class="desc"><b>Cadence rebuilt from the loading literature 2026-07-17.</b> One routine changed, two were already right. Ratings: <b>ESTABLISHED</b> = RCT or meta-analysis · <b>PLAUSIBLE</b> = cohort or mechanism · <b>SPECULATIVE</b> = extrapolation.</p>
+
+<div class="pdet">
+<div class="pd"><div class="pdh">Shoulder / Elbow <span class="pdc">DAILY &middot; unchanged</span></div>
+<ul>
+<li>Reverse Tyler Twist <span class="s">&middot; 3 x 15</span> <b class="ev1">ESTABLISHED</b></li>
+<li>Band external + internal rotation <span class="s">&middot; 2 x 12/side</span> <b class="ev3">unassessed</b></li>
+<li>Scapular / face pulls <span class="s">&middot; 2 x 12-15</span> <b class="ev3">unassessed</b></li>
+<li>Hammer eccentric pronation + supination <span class="s">&middot; slow, 2 x 10/side</span> <b class="ev3">unassessed</b></li>
+</ul>
+<p class="desc" style="margin-top:6px"><b>Daily is correct and stays.</b> Tyler 2010 (RCT, n=21) prescribes 3x15 <b>daily</b> &mdash; verified in the primary paper, not the internet version. DASH improved 76% vs 13% (p=.01). A frequency RCT found 6x/wk beat 3x/wk by week 6.<br>
+<b>Keep it sub-painful. That ceiling, not the schedule, is what protects the partial flexor tear</b> (Silbernagel 2007: pain during activity &le;5/10 is safe and does not worsen outcomes). <b>There is no dose-response trial for loading a partially torn common flexor tendon. None.</b></p></div>
+
+<div class="pd chg"><div class="pdh">Knee <span class="pdc hot">MON + THU &middot; CHANGED</span></div>
+<ul>
+<li>Eccentric step-down <span class="s">&middot; slow, heavy-slow progression</span> <b class="ev1">ESTABLISHED</b></li>
+<li>Step-ups / sit-downs to box / reverse lunges <span class="s">&middot; 3 x 12</span> <b class="ev3">unassessed</b></li>
+<li>Wall sits <span class="s">&middot; 3 x 30s</span> <b class="ev3">unassessed</b></li>
+<li><s>Lateral lunges</s> <b class="ev3">SPECULATIVE &middot; demoted</b></li>
+<li><s>Star taps</s> <b class="ev3">unassessed</b></li>
+</ul>
+<p class="desc" style="margin-top:6px"><b>Was: run + strength days (~5-6x/wk) of daily-style eccentrics. Now: 2-3x/wk heavy-slow, on strength days, spaced off the Saturday track session. Fewer sessions, heavier load.</b><br>
+Kongsgaard 2009: heavy-slow at 3x/wk <b>matched</b> daily eccentrics on pain and function &mdash; and satisfaction at 6 months was <b>70% vs 22%</b>, with continued structural improvement only in the heavy-slow group. Breda 2021 (n=76): staged loading beat eccentrics by <b>9 VISA-P points</b> (p=.023); its stage 2 runs every second day.<br>
+<b>Running is itself high-energy-storage patellar loading, and tendons have a 24-48h latent response</b> (Cook &amp; Purdam). Stacking step-downs onto run days doubled the same tissue on the same day. <b>No trial tests stacking directly &mdash; this is the mechanism-based call, and it is the least certain recommendation here.</b><br>
+<b>Lateral lunges demoted:</b> a 2023 systematic review found hip/lower-limb strengthening did <b>not</b> improve knee valgus; technique training did. <b>Pes anserine work has no loading evidence base at all</b> &mdash; it is borrowed from patellar tendon research by analogy. Cadence toward 165+ reduces patellofemoral force ~14% at +10% (Lenhart 2014), <b>but no trial shows it reduces injury.</b></p></div>
+
+<div class="pd best"><div class="pdh">Ankle / Foot <span class="pdc">TUE / THU / SUN &middot; unchanged &middot; protect this one</span></div>
+<ul>
+<li><b>Single-leg balance</b> <span class="s">&middot; 30s/leg; eyes open &rarr; closed &rarr; cushion</span> <b class="ev1">ESTABLISHED &middot; NNT 9</b></li>
+<li>Eccentric calf raise <span class="s">&middot; 3s lower, 2-3 x 10/leg, straight + bent knee</span> <b class="ev1">ESTABLISHED</b></li>
+<li>Band eversion (peroneals) <span class="s">&middot; slow, 2 x 15/leg</span> <b class="ev2">PLAUSIBLE</b></li>
+<li>Knee-to-wall dorsiflexion <span class="s">&middot; 2 x 10/leg</span> <b class="ev3">unassessed</b></li>
+<li>Single-leg RDL reach <span class="s">&middot; 2 x 8/leg</span> <b class="ev3">unassessed</b></li>
+<li>Hop-and-stick from week 3 <span class="s">&middot; 2 x 5/leg</span> <b class="ev2">consensus, not RCT-dated</b></li>
+<li><s>Short-foot / toe splay</s> <b class="ev3">SPECULATIVE &middot; demoted</b></li>
+</ul>
+<p class="desc" style="margin-top:6px"><b>This is the best-evidenced intervention in the whole program, and 2-3x/wk was already exactly right.</b> Hupperets 2009 (BMJ, RCT, n=522): home balance training 3x/wk for 8 weeks cut re-sprain <b>22% vs 33%, RR 0.63, NNT 9</b>. Schiftan 2015, meta-analysis of 7 RCTs: <b>RR 0.65</b>. NATA rates balance training <b>Category A</b>, their highest tier.<br>
+<b>For scale: that NNT of 9 is better than SPRINT's ~83 for all-cause mortality.</b> Nine people do this for eight weeks, one sprain prevented.<br>
+Calf work does not need to be daily &mdash; Beyer 2015 (RCT, n=58): 3x/wk heavy-slow matched daily eccentrics for Achilles; Stevens 2014: 112 reps/day matched 166. <b>Bent-knee (soleus) and straight-knee (gastroc) are separate targets</b> and both belong. Age doesn't change the dose: proprioceptive decline is a 60s-70s phenomenon, not a 50s one.<br>
+<b>Short-foot demoted:</b> meta-analytic effect on navicular drop is <b>-0.23 mm</b>, with no injury outcome. Harmless, but not evidence.</p></div>
+</div>
+
+<p class="desc"><b>The caveat on all of it:</b> every number above comes from rehab trials in symptomatic patients, mostly athletes in their twenties. <b>Prehab frequency in an asymptomatic, previously-injured 54-year-old has no direct evidence. Not thin &mdash; none.</b> This whole schedule is extrapolation from treatment dosing, and it should be read that way.</p>
 
 <h2>What we track, and why</h2>
 <p class="desc">The Garmin metrics, ordered by strength of evidence. Rule: rank by <b>causal</b> evidence, not by what predicts best, and not by what the watch happens to measure. <b>Measured beats modeled.</b></p>
@@ -384,7 +430,6 @@ sel=i;const d=dateOf(i);const P=TYPE[SEQ[i]];const rec=A[key(d)]||{};
 const cur=rec.actual||SEQ[i];
 const adapted=!!(rec.actual&&rec.actual!==SEQ[i]);
 const phFor=rec.actual?rec.actual:SEQ[i];
-const ph=prehabsFor(phFor).map(p=>`<span class="tag">${PREHAB[p]}</span>`).join("");
 const opts=ORDER.map(k=>`<option value="${k}"${k===cur?' selected':''}>${TYPE[k].n}${k===SEQ[i]?' (as prescribed)':''}</option>`).join("");
 let flag="";
 if(rec.done&&adapted)flag='<span class="flag ad">Adapted &mdash; and it still counts</span>';
@@ -395,7 +440,6 @@ ${flag}
 <div class="row"><b>Prescribed${PM[i]?" (AM)":""}:</b> ${P.d}</div>
 ${PM[i]?`<div class="row"><b>Prescribed (PM, stacked):</b> ${TYPE[PM[i]].n} &mdash; ${TYPE[PM[i]].d} <i>Keep it genuinely easy; 6+ hours after the AM session; priority session first.</i></div>`:``}
 <div class="row"><b>What I actually did:</b><select id="actSel">${opts}</select></div>
-<div class="row"><b>Prehab for this day:</b> ${ph}</div>
 <textarea id="noteBox" placeholder="Details: what you did, how it felt, why you adapted...">${rec.note||""}</textarea>
 <div class="act"><button class="btn ${rec.done?'done':'pri'}" onclick="toggle(${i})">${rec.done?'&#10003; Honored':'Mark honored'}</button>
 <button class="btn" onclick="saveDay(${i})">Save</button></div>`;
@@ -406,49 +450,76 @@ function saveDay(i){const k=key(dateOf(i));A[k]=A[k]||{};A[k].note=document.getE
 render();
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1500)}
 
+// ============================================================================
+// REBUILT 2026-07-17. Dave: "fairly useless... I have no idea what's good or bad."
+// He was right. Changes: FULL RANGE (Aug 2025 -> now, not a 90d window), DAILY BARS not
+// smoothed lines, and an EXPLICIT TARGET LINE wherever one can be defended.
+//
+// THE HONEST PART: only THREE metrics have a target I can defend from evidence.
+// strength 2/wk (Momma: ~40min/wk optimum) - sleep 7h (Sabia) - vigorous 10.7/day (WHO 75/wk).
+// For the rest there is NO target, and drawing one would be inventing. RECOMP_PLAN says it
+// outright: "Target is a direction, not a number (because the measurement is noisy)."
+// So those get a DIRECTION, not a line. A fake target line is worse than no line.
+// ============================================================================
 const CH=[
- {k:"vig28",n:"Vigorous minutes",u:"min/day, 28d avg",g:1,d:"The dose that matters is chronic. Winter is where this dies.",fmt:v=>v.toFixed(1)},
- {k:"vigd7",n:"Vigorous days",u:"per week",g:1,d:"Countable. Rolling 7 days.",fmt:v=>v.toFixed(0)},
- {k:"str7",n:"Strength sessions",u:"per week",g:1,ref:2,rl:"2x floor",d:"The floor is 2. The dose optimum is ~40 min/wk, so 2 is right. The risk is cardio crowding it out.",fmt:v=>v.toFixed(0)},
- {k:"rhr",n:"Resting HR",u:"bpm, 7d avg",g:-1,d:"Lower is better. Read the trend, never the level.",fmt:v=>v.toFixed(1)},
- {k:"sleep",n:"Sleep duration",u:"hours, 7d avg",g:1,ref:7,rl:"7h",d:"Short sleep in midlife carries real risk.",fmt:v=>v.toFixed(2)},
- {k:"hrv",n:"HRV overnight",u:"ms, 7d avg",g:1,gov:1,d:"A governor, not a goal. Answers \'go hard today?\' Not a scoreboard.",fmt:v=>v.toFixed(1)},
- {k:"awk",n:"Awakenings",u:"per night, 7d avg",g:-1,gov:1,d:"Sleep continuity.",fmt:v=>v.toFixed(1)},
- {k:"rest",n:"Restless moments",u:"per night, 7d avg",g:-1,gov:1,d:"Sleep continuity.",fmt:v=>v.toFixed(0)}
+ {k:"vig28",n:"Vigorous minutes",u:"min/day, 28d avg",g:1,tgt:10.7,tl:"WHO floor 75/wk",
+  d:"The dose that matters is chronic, not acute. Winter is where this dies."},
+ {k:"vigd7",n:"Vigorous days",u:"per week",g:1,tgt:3,tl:"3/wk",d:"Rolling 7 days."},
+ {k:"str7",n:"Strength sessions",u:"per week",g:1,tgt:2,tl:"floor = 2",
+  d:"The best-supported behavior here. 2 is the floor AND near the dose optimum. Don't inflate it; don't let cardio eat it."},
+ {k:"sleep",n:"Sleep duration",u:"hours",g:1,tgt:7,tl:"7h",d:"Short sleep in midlife carries real risk."},
+ {k:"rhr",n:"Resting HR",u:"bpm",g:-1,d:"Lower is better, but there is no target. Read the trend. Your low RHR is partly constitutional."},
+ {k:"hrv",n:"HRV overnight",u:"ms",g:1,band:[41,55],tl:"your baseline band",
+  d:"A GOVERNOR, not a goal. Answers 'go hard today?' It is not a scoreboard, and it has no target."},
+ {k:"wt",n:"Weight",u:"lb",g:0,d:"Measured, Index scale. No target: your recomp plan says direction, not a number."},
+ {k:"bf",n:"Body fat",u:"%",g:-1,d:"Measured. Weak mortality predictor; waist beats it. No numeric target by your own plan."},
+ {k:"mm",n:"Muscle mass",u:"kg",g:1,d:"Measured. NOT a longevity target (strength predicts, mass doesn't) but it IS the direct readout of the muscle-as-regulatory-organ thesis. Direction: up."},
+ {k:"awk",n:"Awakenings",u:"per night",g:-1,d:"Sleep continuity. No target."}
 ];
-function sm(a,w){return a.map((_,i)=>{const s=a.slice(Math.max(0,i-w+1),i+1).filter(x=>x!=null);return s.length?s.reduce((p,c)=>p+c,0)/s.length:null})}
-function spark(vals,dates,good,ref){
- const W=300,H=64,P=4;const v=vals.map((x,i)=>[i,x]).filter(x=>x[1]!=null);
- if(v.length<2)return'<div class="cd">not enough data</div>';
- let lo=Math.min(...v.map(x=>x[1])),hi=Math.max(...v.map(x=>x[1]));
- if(ref!=null){lo=Math.min(lo,ref);hi=Math.max(hi,ref)}
- const pad=(hi-lo)*.12||1;lo-=pad;hi+=pad;
- const X=i=>P+i/(vals.length-1)*(W-2*P), Y=y=>H-P-(y-lo)/(hi-lo)*(H-2*P);
- const d=v.map((x,j)=>(j?"L":"M")+X(x[0]).toFixed(1)+" "+Y(x[1]).toFixed(1)).join(" ");
- const a=d+" L"+X(v[v.length-1][0]).toFixed(1)+" "+(H-P)+" L"+X(v[0][0]).toFixed(1)+" "+(H-P)+" Z";
- const first=v[0][1],last=v[v.length-1][1],dir=(last-first)*good;
- const c=dir>0?"var(--run)":dir<0?"var(--qual)":"var(--muted)";
- let r="";if(ref!=null)r=`<line x1="${P}" y1="${Y(ref).toFixed(1)}" x2="${W-P}" y2="${Y(ref).toFixed(1)}" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3" opacity=".7"/>`;
- return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:64px;display:block">
- <defs><linearGradient id="g${good}${ref}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${c}" stop-opacity=".16"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></linearGradient></defs>
- <path d="${a}" fill="url(#g${good}${ref})"/>${r}<path d="${d}" fill="none" stroke="${c}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
- <circle cx="${X(v[v.length-1][0]).toFixed(1)}" cy="${Y(last).toFixed(1)}" r="2.6" fill="${c}"/></svg>`;
+function bars(vals,dates,c){
+ const W=680,H=78,P=5,N=vals.length;
+ const v=vals.filter(x=>x!=null); if(v.length<2) return '<div class="cd">not enough data</div>';
+ let lo=Math.min(...v),hi=Math.max(...v);
+ if(c.tgt!=null){lo=Math.min(lo,c.tgt);hi=Math.max(hi,c.tgt)}
+ if(c.band){lo=Math.min(lo,c.band[0]);hi=Math.max(hi,c.band[1])}
+ const zero=(c.k==="vig28"||c.k==="vigd7"||c.k==="str7"||c.k==="awk");
+ if(zero) lo=0; else {const pad=(hi-lo)*0.10||1; lo-=pad; hi+=pad}
+ const X=i=>P+i/N*(W-2*P), BW=Math.max(0.9,(W-2*P)/N-0.4), Y=y=>H-P-(y-lo)/(hi-lo)*(H-2*P);
+ let s="";
+ if(c.band) s+=`<rect x="${P}" y="${Y(c.band[1]).toFixed(1)}" width="${W-2*P}" height="${(Y(c.band[0])-Y(c.band[1])).toFixed(1)}" fill="var(--accent)" opacity=".10"/>`;
+ vals.forEach((y,i)=>{ if(y==null) return;
+  const good = c.tgt!=null ? (c.g>0 ? y>=c.tgt : y<=c.tgt) : null;
+  const col = good===null ? "var(--rest)" : good ? "var(--run)" : "var(--qual)";
+  const yy=Y(y), h=Math.max(0.8,(H-P)-yy);
+  s+=`<rect x="${X(i).toFixed(1)}" y="${yy.toFixed(1)}" width="${BW.toFixed(2)}" height="${h.toFixed(1)}" fill="${col}" opacity="${good===null?.55:.85}"/>`;
+ });
+ if(c.tgt!=null){ const ty=Y(c.tgt);
+  s+=`<line x1="${P}" y1="${ty.toFixed(1)}" x2="${W-P}" y2="${ty.toFixed(1)}" stroke="var(--ink)" stroke-width="1.4" stroke-dasharray="5 3"/>`;
+  s+=`<rect x="${W-P-96}" y="${(ty-13).toFixed(1)}" width="96" height="12" fill="var(--bg)" opacity=".92"/>`;
+  s+=`<text x="${W-P-2}" y="${(ty-4).toFixed(1)}" text-anchor="end" font-size="9" font-weight="700" fill="var(--ink)">${c.tl}</text>`;
+ }
+ return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:78px;display:block">${s}</svg>`;
 }
 (function(){
- const S=M.series.slice(-90),D=S.map(x=>x.d);
+ const S=M.series, D=S.map(x=>x.d);
  document.getElementById("charts").innerHTML=CH.map(c=>{
-  let raw=S.map(x=>x[c.k]);
-  const vals=(c.k==="vig28"||c.k==="vigd7"||c.k==="str7")?raw:sm(raw,7);
-  const v=vals.filter(x=>x!=null);
-  if(!v.length)return"";
-  const last=v[v.length-1],first=v[0],dl=(last-first)*(c.g||1);
-  const cls=dl>0.05?"up":dl<-0.05?"dn":"fl", ar=dl>0.05?"&#9650;":dl<-0.05?"&#9660;":"&#9644;";
-  return `<div class="cc"><div class="ch"><span class="cn">${c.n}${c.gov?' <span class="cu">&middot; governor</span>':''}</span>
-  <span><span class="cv" style="color:${dl>0.05?'var(--run)':dl<-0.05?'var(--qual)':'var(--ink)'}">${c.fmt(last)}</span> <span class="cu">${c.u}</span></span></div>
-  <div class="cd">${c.d}</div>${spark(vals,D,c.g||1,c.ref)}
-  <div class="ct ${cls}" style="margin-top:4px">${ar} ${c.fmt(Math.abs(last-first))} over 90d${c.rl?` <span class="cu">&middot; dashed = ${c.rl}</span>`:''}</div></div>`;
+  const vals=S.map(x=>x[c.k]); const v=vals.filter(x=>x!=null); if(!v.length) return "";
+  const last=v[v.length-1], first=v[0], dl=(last-first)*(c.g||0);
+  let hdr="";
+  if(c.tgt!=null){ const hit=vals.filter((y,i)=>y!=null&&(c.g>0?y>=c.tgt:y<=c.tgt)).length;
+   const pct=Math.round(hit/v.length*100);
+   hdr=`<span class="ct ${pct>=70?'up':pct>=40?'fl':'dn'}">${pct}% of days on target</span>`;
+  } else {
+   const cls=dl>0?"up":dl<0?"dn":"fl", ar=dl>0?"&#9650;":dl<0?"&#9660;":"&#9644;";
+   hdr=`<span class="ct ${c.g?cls:'fl'}">${c.g?ar+" ":""}${first.toFixed(1)} &rarr; ${last.toFixed(1)}${c.g?"":" (no target)"}</span>`;
+  }
+  return `<div class="cc"><div class="ch"><span class="cn">${c.n}</span>
+  <span><span class="cv">${last.toFixed(c.k==="mm"||c.k==="sleep"?2:1)}</span> <span class="cu">${c.u}</span></span></div>
+  <div class="cd">${c.d}</div>${bars(vals,D,c)}
+  <div class="ct" style="margin-top:4px;display:flex;justify-content:space-between"><span class="cu">${D[0]}</span>${hdr}<span class="cu">${D[D.length-1]}</span></div></div>`;
  }).join("");
- document.getElementById("cgen").innerHTML="Data through <b>"+M.series[M.series.length-1].d+"</b> &middot; built "+M.generated+" &middot; acute:chronic load ratio not yet wired.";
+ document.getElementById("cgen").innerHTML="<b>"+D[0]+" to "+D[D.length-1]+"</b>, every day, measured. Built "+M.generated+
+  ". <b>Only three of these have a target I can defend from evidence</b> (strength, sleep, vigorous minutes). The rest have a direction, not a number &mdash; your recomp plan says so itself. A made-up target line would be worse than none.";
 })();
 
 </script>
