@@ -116,8 +116,15 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 .mnote{font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
 .mcard.t1{border-left:3px solid var(--accent)}
 .mcard.t2{border-left:3px solid var(--trk)}
-.mcard.t3{border-left:3px solid var(--rest)}
-.mcard.t4{border-left:3px solid var(--line)}
+.cwrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;margin:10px 0}
+.cc{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 12px}
+.ch{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.cn{font-size:12px;font-weight:700;color:var(--ink)}
+.cv{font-size:19px;font-weight:800;letter-spacing:-.02em}
+.cu{font-size:11px;color:var(--muted);font-weight:600}
+.cd{font-size:11px;color:var(--muted);margin:1px 0 5px;line-height:1.4}
+.ct{font-size:11px;font-weight:700}
+.up{color:var(--run)}.dn{color:var(--qual)}.fl{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -242,30 +249,18 @@ ul.ex li .s{color:var(--muted);font-size:12px}
     </ul>
   </div>
 
-  <div class="mcard t3">
-    <div class="mtag">Context only <span class="mnote">(modeled &mdash; never grade a block on these)</span></div>
-    <ul>
-      <li><b>VO2max</b><span>The strongest known <i>predictor</i> of mortality. But the one randomized trial was null and the genetic-instrument study found no causal effect on longevity. The curve is steepest at the bottom, so the gain is in getting off the floor, not in polishing the top.</span></li>
-      <li><b>Fitness age</b><span>A proxy for a proxy: derived from VO2max and resting HR.</span></li>
-      <li><b>Body fat / weight / BMI</b><span>Weak predictors. Waist beats all three. Garmin carries the last weigh-in forward for days, so filter to real weigh-ins before doing any math on it.</span></li>
-      <li><b>Training readiness, Body Battery, stress</b><span>Modeled composites. Soft context.</span></li>
-      <li><b>Lactate threshold HR and pace</b><span>A real physiological marker. Sitting in the export, never used.</span></li>
-    </ul>
-  </div>
-
-  <div class="mcard t4">
-    <div class="mtag">Dropped</div>
-    <ul>
-      <li><b>SpO2</b><span>No usable signal in the data. An earned deletion, not a preference.</span></li>
-      <li><b>Running economy</b><span>Cadence, ground contact, vertical oscillation, stride length. Fine for the 5K. <b>Not health metrics. Never confuse the two.</b></span></li>
-    </ul>
-  </div>
 </div>
 
 <p class="desc" style="margin-top:12px"><b>The honest part:</b> the watch measures the governor and one real lever. The highest-leverage things in this program are not on this list and cannot be. A wearable is an instrument, not a plan.</p>
 
+<h2>Progress</h2>
+<p class="desc">Real data, straight from the Garmin export. Rebuilt every time a new export lands. <b>90-day window.</b></p>
+<div class="cwrap" id="charts"></div>
+<p class="desc" id="cgen" style="margin-top:6px"></p>
+
 <div class="toast" id="toast"></div>
 
+<script src="metrics_data.js"></script>
 <script>
 const START=new Date(2026,6,6);
 const TYPE={
@@ -410,6 +405,52 @@ function toggle(i){const k=key(dateOf(i));A[k]=A[k]||{};A[k].done=!A[k].done;if(
 function saveDay(i){const k=key(dateOf(i));A[k]=A[k]||{};A[k].note=document.getElementById("noteBox").value;A[k].actual=document.getElementById("actSel").value;save(A);openDay(i);toast("Saved")}
 render();
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1500)}
+
+const CH=[
+ {k:"vig28",n:"Vigorous minutes",u:"min/day, 28d avg",g:1,d:"The dose that matters is chronic. Winter is where this dies.",fmt:v=>v.toFixed(1)},
+ {k:"vigd7",n:"Vigorous days",u:"per week",g:1,d:"Countable. Rolling 7 days.",fmt:v=>v.toFixed(0)},
+ {k:"str7",n:"Strength sessions",u:"per week",g:1,ref:2,rl:"2x floor",d:"The floor is 2. The dose optimum is ~40 min/wk, so 2 is right. The risk is cardio crowding it out.",fmt:v=>v.toFixed(0)},
+ {k:"rhr",n:"Resting HR",u:"bpm, 7d avg",g:-1,d:"Lower is better. Read the trend, never the level.",fmt:v=>v.toFixed(1)},
+ {k:"sleep",n:"Sleep duration",u:"hours, 7d avg",g:1,ref:7,rl:"7h",d:"Short sleep in midlife carries real risk.",fmt:v=>v.toFixed(2)},
+ {k:"hrv",n:"HRV overnight",u:"ms, 7d avg",g:1,gov:1,d:"A governor, not a goal. Answers \'go hard today?\' Not a scoreboard.",fmt:v=>v.toFixed(1)},
+ {k:"awk",n:"Awakenings",u:"per night, 7d avg",g:-1,gov:1,d:"Sleep continuity.",fmt:v=>v.toFixed(1)},
+ {k:"rest",n:"Restless moments",u:"per night, 7d avg",g:-1,gov:1,d:"Sleep continuity.",fmt:v=>v.toFixed(0)}
+];
+function sm(a,w){return a.map((_,i)=>{const s=a.slice(Math.max(0,i-w+1),i+1).filter(x=>x!=null);return s.length?s.reduce((p,c)=>p+c,0)/s.length:null})}
+function spark(vals,dates,good,ref){
+ const W=300,H=64,P=4;const v=vals.map((x,i)=>[i,x]).filter(x=>x[1]!=null);
+ if(v.length<2)return'<div class="cd">not enough data</div>';
+ let lo=Math.min(...v.map(x=>x[1])),hi=Math.max(...v.map(x=>x[1]));
+ if(ref!=null){lo=Math.min(lo,ref);hi=Math.max(hi,ref)}
+ const pad=(hi-lo)*.12||1;lo-=pad;hi+=pad;
+ const X=i=>P+i/(vals.length-1)*(W-2*P), Y=y=>H-P-(y-lo)/(hi-lo)*(H-2*P);
+ const d=v.map((x,j)=>(j?"L":"M")+X(x[0]).toFixed(1)+" "+Y(x[1]).toFixed(1)).join(" ");
+ const a=d+" L"+X(v[v.length-1][0]).toFixed(1)+" "+(H-P)+" L"+X(v[0][0]).toFixed(1)+" "+(H-P)+" Z";
+ const first=v[0][1],last=v[v.length-1][1],dir=(last-first)*good;
+ const c=dir>0?"var(--run)":dir<0?"var(--qual)":"var(--muted)";
+ let r="";if(ref!=null)r=`<line x1="${P}" y1="${Y(ref).toFixed(1)}" x2="${W-P}" y2="${Y(ref).toFixed(1)}" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3" opacity=".7"/>`;
+ return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:64px;display:block">
+ <defs><linearGradient id="g${good}${ref}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${c}" stop-opacity=".16"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></linearGradient></defs>
+ <path d="${a}" fill="url(#g${good}${ref})"/>${r}<path d="${d}" fill="none" stroke="${c}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+ <circle cx="${X(v[v.length-1][0]).toFixed(1)}" cy="${Y(last).toFixed(1)}" r="2.6" fill="${c}"/></svg>`;
+}
+(function(){
+ const S=M.series.slice(-90),D=S.map(x=>x.d);
+ document.getElementById("charts").innerHTML=CH.map(c=>{
+  let raw=S.map(x=>x[c.k]);
+  const vals=(c.k==="vig28"||c.k==="vigd7"||c.k==="str7")?raw:sm(raw,7);
+  const v=vals.filter(x=>x!=null);
+  if(!v.length)return"";
+  const last=v[v.length-1],first=v[0],dl=(last-first)*(c.g||1);
+  const cls=dl>0.05?"up":dl<-0.05?"dn":"fl", ar=dl>0.05?"&#9650;":dl<-0.05?"&#9660;":"&#9644;";
+  return `<div class="cc"><div class="ch"><span class="cn">${c.n}${c.gov?' <span class="cu">&middot; governor</span>':''}</span>
+  <span><span class="cv" style="color:${dl>0.05?'var(--run)':dl<-0.05?'var(--qual)':'var(--ink)'}">${c.fmt(last)}</span> <span class="cu">${c.u}</span></span></div>
+  <div class="cd">${c.d}</div>${spark(vals,D,c.g||1,c.ref)}
+  <div class="ct ${cls}" style="margin-top:4px">${ar} ${c.fmt(Math.abs(last-first))} over 90d${c.rl?` <span class="cu">&middot; dashed = ${c.rl}</span>`:''}</div></div>`;
+ }).join("");
+ document.getElementById("cgen").innerHTML="Data through <b>"+M.series[M.series.length-1].d+"</b> &middot; built "+M.generated+" &middot; acute:chronic load ratio not yet wired.";
+})();
+
 </script>
 </body>
 </html>
