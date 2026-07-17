@@ -62,7 +62,6 @@ h2{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--acce
 .cell .plan{font-size:8px;color:#9aa3af;font-weight:700;margin-top:2px;line-height:1.1;letter-spacing:.01em}
 .cell .ab{font-size:9.5px;font-weight:800;color:#fff;border-radius:5px;padding:3px 1px;margin-top:2px;line-height:1.1}
 .cell .pm{font-size:8px;font-weight:800;color:#fff;border-radius:4px;padding:2px 1px;margin-top:2px;line-height:1.1;opacity:.9}
-.cell .ph{margin-top:2px;font-size:8px;color:var(--ph);font-weight:700;letter-spacing:.02em}
 .cell .chk{position:absolute;top:2px;right:3px;font-size:11px;color:var(--accent);font-weight:800}
 .legend{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 2px;font-size:11px;color:var(--muted)}
 .legend span{display:inline-flex;align-items:center;gap:5px}
@@ -300,7 +299,7 @@ Calf work does not need to be daily &mdash; Beyer 2015 (RCT, n=58): 3x/wk heavy-
 <p class="desc" style="margin-top:12px"><b>The honest part:</b> the watch measures the governor and one real lever. The highest-leverage things in this program are not on this list and cannot be. A wearable is an instrument, not a plan.</p>
 
 <h2>Progress</h2>
-<p class="desc">Real data, straight from the Garmin export. Rebuilt every time a new export lands. <b>90-day window.</b></p>
+<p class="desc">Real data, straight from the Garmin export. Every day since the watch started, as daily bars. <b>Green = on target, red = off, gray = no target exists.</b> The dashed line is the target, and it only appears where I can defend one from evidence.</p>
 <div class="cwrap" id="charts"></div>
 <p class="desc" id="cgen" style="margin-top:6px"></p>
 
@@ -323,7 +322,6 @@ rest:{a:"Rest",c:"var(--rest)",n:"Rest / recovery",d:"Full rest or an easy walk 
 other:{a:"Other",c:"#6b7a8f",n:"Other activity",d:"Something else that counted (walk, hike, swim, play, ocean)."}};
 const ORDER=["strength_A","strength_B","strength_C","easy_run","quality_run","track","long_run","z2_bike","bike_vo2","rest","other"];
 const PREHAB={se:"Shoulders/Elbows",ankle:"Ankle/Foot",knee:"Knees"};
-function prehabsFor(t){var run=(t==="easy_run"||t==="quality_run"||t==="track"||t==="long_run");var str=(t.indexOf("strength")===0);return (str||run)?["se","knee","ankle"]:["se"];}
 const SEQ=[
 "strength_A","easy_run","strength_B","track","rest","long_run","track",
 "rest","strength_C","easy_run","bike_vo2","rest","long_run","z2_bike",
@@ -411,25 +409,21 @@ SEQ.forEach((k,i)=>{
   const adapted=!!(rec.actual&&rec.actual!==k);
   const shown=rec.actual?TYPE[rec.actual]:P;
   const pm=PM[i];
-  const phFor=rec.actual?rec.actual:k;
-  const ph=prehabsFor(phFor).map(p=>p==="se"?"Sh":p==="knee"?"Kn":"Ak").join(" ");
   html+=`<div class="cell${wend?' wend':''}${isT?' today':''}${i===sel?' sel':''}" onclick="openDay(${i})">
 <div class="dn">${fmt(d)}</div>
 <div class="ab" style="background:${shown.c}">${shown.a}</div>
 ${pm?`<div class="pm" style="background:${TYPE[pm].c}">+ ${TYPE[pm].a}</div>`:``}
 ${adapted?`<div class="plan">${P.a}</div>`:``}
-<div class="ph">+ ${ph}</div>
 ${done?'<div class="chk">&#10003;</div>':''}</div>`;});
 document.getElementById("cal").innerHTML=html;
 const leg=[["Easy Run","var(--run)"],["Tempo","var(--qual)"],["Track","var(--trk)"],["Long Run","var(--long)"],["Z2 Bike","var(--z2b)"],["Bike VO2","var(--vo2)"],["Str A","var(--sA)"],["Str B","var(--sB)"],["Str C","var(--sC)"],["Rest","var(--rest)"]];
-document.getElementById("legend").innerHTML=leg.map(l=>`<span><span class="sw" style="background:${l[1]}"></span>${l[0]}</span>`).join("")+' <span style="color:var(--ph)">prehab: Sh shoulders/elbows &middot; Kn knees &middot; Ak ankle/foot</span>';
+document.getElementById("legend").innerHTML=leg.map(l=>`<span><span class="sw" style="background:${l[1]}"></span>${l[0]}</span>`).join("");
 renderStats();
 }
 function openDay(i){
 sel=i;const d=dateOf(i);const P=TYPE[SEQ[i]];const rec=A[key(d)]||{};
 const cur=rec.actual||SEQ[i];
 const adapted=!!(rec.actual&&rec.actual!==SEQ[i]);
-const phFor=rec.actual?rec.actual:SEQ[i];
 const opts=ORDER.map(k=>`<option value="${k}"${k===cur?' selected':''}>${TYPE[k].n}${k===SEQ[i]?' (as prescribed)':''}</option>`).join("");
 let flag="";
 if(rec.done&&adapted)flag='<span class="flag ad">Adapted &mdash; and it still counts</span>';
@@ -521,6 +515,61 @@ function bars(vals,dates,c){
  document.getElementById("cgen").innerHTML="<b>"+D[0]+" to "+D[D.length-1]+"</b>, every day, measured. Built "+M.generated+
   ". <b>Only three of these have a target I can defend from evidence</b> (strength, sleep, vigorous minutes). The rest have a direction, not a number &mdash; your recomp plan says so itself. A made-up target line would be worse than none.";
 })();
+
+
+// ============================================================================
+// PREHAB CALENDAR. Deleted once already: the 2026-07-17 chart rebuild replaced everything
+// between `const CH=[` and the closing script tag, and this block lived after it. The pcal div
+// survived, so the gate that checked for `id="pcal"` PASSED while the code behind it was gone.
+// GATE THE BEHAVIOUR, NOT THE MARKUP. The check is now `prender();`, not the div.
+// ============================================================================
+const PKEY="obp_prehab_v1";
+function pload(){try{return JSON.parse(localStorage.getItem(PKEY))||{}}catch(e){return{}}}
+function psave(s){localStorage.setItem(PKEY,JSON.stringify(s))}
+// CADENCE from the evidence 2026-07-17, not habit:
+//  sh DAILY       Tyler 2010 RCT prescribes 3x15 daily. Verified in the primary source.
+//  kn Mon+Thu     CHANGED from run+strength days. Kongsgaard 2009: HSR 3x/wk matched daily
+//                 eccentrics, satisfaction 70% vs 22%. Sat TRACK is high patellar load, so knee
+//                 work sits on strength days, maximally spaced from it.
+//  ak Tue/Thu/Sun UNCHANGED, best-evidenced thing here. Hupperets 2009 BMJ n=522: RR 0.63, NNT 9.
+const PT={
+ sh:{n:"Sh",full:"Shoulder / elbow",days:[0,1,2,3,4,5,6],cls:"psh",why:"Daily. Tyler 2010 protocol."},
+ kn:{n:"Kn",full:"Knee",days:[1,4],cls:"pkn",why:"Mon + Thu. Heavy-slow, on strength days, off the Sat track day."},
+ ak:{n:"Ak",full:"Ankle / foot",days:[2,4,0],cls:"pak",why:"Tue / Thu / Sun. 3x/wk. NNT 9."}
+};
+function pdue(kk,d){return PT[kk].days.indexOf(d.getDay())>-1}
+function ptoggle(kk,i){const d=dateOf(i);if(!pdue(kk,d))return;const s=pload(),k=key(d);
+ s[k]=s[k]||{};s[k][kk]=!s[k][kk];psave(s);prender();toast(s[k][kk]?PT[kk].full+" done":"Unmarked")}
+function prender(){
+ const s=pload(),today=new Date();today.setHours(0,0,0,0);
+ let h='<div class="pgrid">';
+ ["sh","kn","ak"].forEach(kk=>{
+  h+='<span class="plab">'+PT[kk].n+'</span>';
+  for(let i=0;i<30;i++){
+   const d=dateOf(i),k=key(d),due=pdue(kk,d),done=!!(s[k]&&s[k][kk]);
+   const past=d<today,isT=d.getTime()===today.getTime();
+   let c="pc "+PT[kk].cls;
+   if(!due)c+=" off"; else if(done)c+=" done"; else if(past)c+=" miss"; else c+=" due";
+   if(isT)c+=" today";
+   h+='<div class="'+c+'" '+(due?'onclick="ptoggle(\''+kk+'\','+i+')"':'')+' title="'+PT[kk].full+' '+k+'"></div>';
+  }
+ });
+ document.getElementById("pcal").innerHTML=h+'</div>';
+ let out="";
+ ["sh","kn","ak"].forEach(kk=>{
+  let due=0,done=0;
+  for(let i=0;i<30;i++){const d=dateOf(i);if(d>today)break;if(!pdue(kk,d))continue;due++;
+   const k=key(d);if(s[k]&&s[k][kk])done++}
+  const pct=due?Math.round(done/due*100):0;
+  const col=pct>=80?"var(--run)":pct>=50?"var(--trk)":"var(--qual)";
+  out+='<div class="pst"><div class="psn" style="color:'+(due?col:"var(--muted)")+'">'+done+"/"+due+
+       ' <span class="psl">'+(due?pct+"%":"")+'</span></div><div class="psl">'+PT[kk].full+'</div>'+
+       '<div class="psl" style="font-weight:400;margin-top:2px">'+PT[kk].why+'</div></div>';
+ });
+ document.getElementById("pstats").innerHTML=out;
+ document.getElementById("pnote").innerHTML="<b>Every cadence above is extrapolated from rehab trials in symptomatic patients, mostly athletes in their 20s.</b> Prehab frequency in an asymptomatic 54-year-old has no direct evidence. The sub-painful ceiling is what protects the flexor tear, not the schedule.";
+}
+prender();
 
 </script>
 </body>
