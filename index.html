@@ -148,6 +148,11 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 .ev1{font-size:9px;color:var(--run);letter-spacing:.04em}
 .ev2{font-size:9px;color:var(--trk);letter-spacing:.04em}
 .ev3{font-size:9px;color:var(--muted);letter-spacing:.04em;font-weight:600}
+.phd{text-align:center;line-height:1.05;padding-bottom:2px}
+.phdt{background:var(--accent-soft);border-radius:3px}
+.pdw{display:block;font-size:8.5px;font-weight:800;color:var(--muted)}
+.pdd{display:block;font-size:7.5px;color:var(--muted);opacity:.8}
+.phdt .pdw,.phdt .pdd{color:var(--accent)}
 </style>
 </head>
 <body>
@@ -542,7 +547,16 @@ function ptoggle(kk,i){const d=dateOf(i);if(!pdue(kk,d))return;const s=pload(),k
  s[k]=s[k]||{};s[k][kk]=!s[k][kk];psave(s);prender();toast(s[k][kk]?PT[kk].full+" done":"Unmarked")}
 function prender(){
  const s=pload(),today=new Date();today.setHours(0,0,0,0);
- let h='<div class="pgrid">';
+ // HEADER: day-of-week + date. Added 2026-07-17 - Dave: "i don't know what the day of week
+ // and date is". The grid shipped as 30 unlabeled columns: you could see the pattern and not
+ // know which cell was today. The fitness calendar has both; this had neither.
+ const DW=["S","M","T","W","T","F","S"];
+ let h='<div class="pgrid"><span class="plab"></span>';
+ for(let i=0;i<30;i++){
+  const d=dateOf(i), isT=d.getTime()===today.getTime(), mon=d.getDate()===1||i===0;
+  h+='<div class="phd'+(isT?' phdt':'')+'"><span class="pdw">'+DW[d.getDay()]+'</span>'+
+     '<span class="pdd">'+(mon?(d.getMonth()+1)+"/":"")+d.getDate()+'</span></div>';
+ }
  ["sh","kn","ak"].forEach(kk=>{
   h+='<span class="plab">'+PT[kk].n+'</span>';
   for(let i=0;i<30;i++){
