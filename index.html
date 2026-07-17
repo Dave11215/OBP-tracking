@@ -154,6 +154,14 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 .pdw{display:block;font-size:8.5px;font-weight:800;color:var(--muted)}
 .pdd{display:block;font-size:7.5px;color:var(--muted);opacity:.8}
 .phdt .pdw,.phdt .pdd{color:var(--accent)}
+.pks{display:flex;gap:2px;margin-top:3px;justify-content:center;flex-wrap:wrap}
+.pk{font-size:8.5px;font-weight:800;letter-spacing:-.02em;padding:1px 3px;border-radius:3px;
+ border:1px solid var(--line);color:var(--muted);background:var(--card);cursor:pointer;line-height:1.3}
+.pk:hover{border-color:var(--ink)}
+.pk b{font-weight:900;margin-left:1px}
+.pk.done{background:var(--run);border-color:var(--run);color:#fff}
+.pk.miss{background:#fdeceb;border-color:var(--qual);color:var(--qual)}
+.pk.pre{opacity:.35;border-style:dotted;cursor:pointer}
 </style>
 </head>
 <body>
@@ -175,8 +183,7 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <div class="detail" id="detail"></div>
 <div class="legend" id="legend"></div>
 <h2>Prehab calendar</h2>
-<p class="desc"><b>The countermeasure to the thing most likely to end this program.</b> Cadence set from the loading literature, 2026-07-17. Outlined = due. Filled = done. Tap to log.</p>
-<div id="pcal"></div>
+<p class="desc"><b>The countermeasure to the thing most likely to end this program.</b> Logged on the calendar above: <b>green check = done, red x = missed, plain box = today or later.</b> Tap a box to log it. Cadence set from the loading literature 2026-07-17.</p>
 <div id="pstats" class="prow"></div>
 <p class="desc" id="pnote" style="margin-top:8px"></p>
 
@@ -420,7 +427,8 @@ SEQ.forEach((k,i)=>{
 <div class="ab" style="background:${shown.c}">${shown.a}</div>
 ${pm?`<div class="pm" style="background:${TYPE[pm].c}">+ ${TYPE[pm].a}</div>`:``}
 ${adapted?`<div class="plan">${P.a}</div>`:``}
-${done?'<div class="chk">&#10003;</div>':''}</div>`;});
+${done?'<div class="chk">&#10003;</div>':''}
+${pchips(d,i)}</div>`;});
 document.getElementById("cal").innerHTML=html;
 const leg=[["Easy Run","var(--run)"],["Tempo","var(--qual)"],["Track","var(--trk)"],["Long Run","var(--long)"],["Z2 Bike","var(--z2b)"],["Bike VO2","var(--vo2)"],["Str A","var(--sA)"],["Str B","var(--sB)"],["Str C","var(--sC)"],["Rest","var(--rest)"]];
 document.getElementById("legend").innerHTML=leg.map(l=>`<span><span class="sw" style="background:${l[1]}"></span>${l[0]}</span>`).join("");
@@ -447,7 +455,6 @@ render();el.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 function toggle(i){const k=key(dateOf(i));A[k]=A[k]||{};A[k].done=!A[k].done;if(A[k].done&&!A[k].actual)A[k].actual=SEQ[i];save(A);openDay(i);toast(A[k].done?"Day honored":"Unmarked")}
 function saveDay(i){const k=key(dateOf(i));A[k]=A[k]||{};A[k].note=document.getElementById("noteBox").value;A[k].actual=document.getElementById("actSel").value;save(A);openDay(i);toast("Saved")}
-render();
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1500)}
 
 // ============================================================================
@@ -558,32 +565,34 @@ const PT={
 };
 function pdue(kk,d){return PT[kk].days.indexOf(d.getDay())>-1}
 function ptoggle(kk,i){const d=dateOf(i);if(!pdue(kk,d))return;const s=pload(),k=key(d);
- s[k]=s[k]||{};s[k][kk]=!s[k][kk];psave(s);prender();toast(s[k][kk]?PT[kk].full+" done":"Unmarked")}
+ s[k]=s[k]||{};s[k][kk]=!s[k][kk];psave(s);render();prender();toast(s[k][kk]?PT[kk].full+" done":"Unmarked")}
+// Prehab status chips, drawn inside each training-calendar cell.
+// REPLACED the standalone 30-column strip (2026-07-17). Dave: "the light outline of some of the
+// boxes is too hard to see. also the dates are really hard to see." He was right, and his fix is
+// better: the calendar cells already carry a big readable date and day-of-week, so putting the
+// chips here means the labels come for free and the semantics are unambiguous.
+//   green check = done - red x = missed - plain outline = today or future - nothing = not due
+function pchips(d,i){
+ const s=pload(),k=key(d),today=new Date();today.setHours(0,0,0,0);
+ const pre=k<CSTART;                       // cadence set 2026-07-17; do not grade before it
+ let out="";
+ ["sh","kn","ak"].forEach(kk=>{
+  if(!pdue(kk,d))return;
+  const done=!!(s[k]&&s[k][kk]);
+  const missed=!done && d<today && !pre;
+  const cls=done?"pk done":missed?"pk miss":pre?"pk pre":"pk";
+  const g=done?"&#10003;":missed?"&#10005;":"";
+  out+='<span class="'+cls+'" onclick="event.stopPropagation();ptoggle(\''+kk+'\','+i+')" title="'+
+       PT[kk].full+' '+k+'">'+PT[kk].n+'<b>'+g+'</b></span>';
+ });
+ return out?'<div class="pks">'+out+'</div>':"";
+}
 function prender(){
  const s=pload(),today=new Date();today.setHours(0,0,0,0);
  // HEADER: day-of-week + date. Added 2026-07-17 - Dave: "i don't know what the day of week
  // and date is". The grid shipped as 30 unlabeled columns: you could see the pattern and not
  // know which cell was today. The fitness calendar has both; this had neither.
  const DW=["S","M","T","W","T","F","S"];
- let h='<div class="pgrid"><span class="plab"></span>';
- for(let i=0;i<30;i++){
-  const d=dateOf(i), isT=d.getTime()===today.getTime(), mon=d.getDate()===1||i===0;
-  h+='<div class="phd'+(isT?' phdt':'')+'"><span class="pdw">'+DW[d.getDay()]+'</span>'+
-     '<span class="pdd">'+(mon?(d.getMonth()+1)+"/":"")+d.getDate()+'</span></div>';
- }
- ["sh","kn","ak"].forEach(kk=>{
-  h+='<span class="plab">'+PT[kk].n+'</span>';
-  for(let i=0;i<30;i++){
-   const d=dateOf(i),k=key(d),due=pdue(kk,d),done=!!(s[k]&&s[k][kk]);
-   const past=d<today,isT=d.getTime()===today.getTime();
-   let c="pc "+PT[kk].cls;
-   const pre=k<CSTART;
-   if(!due)c+=" off"; else if(done)c+=" done"; else if(pre)c+=" pre"; else if(past)c+=" miss"; else c+=" due";
-   if(isT)c+=" today";
-   h+='<div class="'+c+'" '+(due?'onclick="ptoggle(\''+kk+'\','+i+')"':'')+' title="'+PT[kk].full+' '+k+'"></div>';
-  }
- });
- document.getElementById("pcal").innerHTML=h+'</div>';
  let out="";
  ["sh","kn","ak"].forEach(kk=>{
   let due=0,done=0;
@@ -599,6 +608,10 @@ function prender(){
  document.getElementById("pstats").innerHTML=out;
  document.getElementById("pnote").innerHTML="Dotted cells predate <b>'+CSTART+'</b>, when this cadence was set from the literature. They are not graded, because that rule did not exist yet. <b>Every cadence above is extrapolated from rehab trials in symptomatic patients, mostly athletes in their 20s.</b> Prehab frequency in an asymptomatic 54-year-old has no direct evidence. The sub-painful ceiling is what protects the flexor tear, not the schedule.";
 }
+// render() AFTER the prehab consts exist: it calls pchips -> pload -> PSEEDV,
+// and const is not hoisted. Calling it earlier threw a TDZ ReferenceError that node --check
+// passed and only the runtime gate caught.
+render();
 prender();
 
 </script>
