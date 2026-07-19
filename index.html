@@ -376,7 +376,7 @@ function elapsedCount(){const t=new Date();t.setHours(0,0,0,0);const diff=Math.f
 function stats(){
   const el=elapsedCount();let honored=0,total=0,streak=0;
   for(let i=0;i<30;i++){const r=A[key(dateOf(i))];if(r&&r.done){total++;if(i<el)honored++;}}
-  for(let i=el-1;i>=0;i--){const r=A[key(dateOf(i))];if(r&&r.done)streak++;else break;}
+  let si=el-1;if(si>=0){const r0=A[key(dateOf(si))];if(!(r0&&r0.done))si--;}/*skip a not-yet-done TODAY so an in-progress day does not zero the streak - bug surfaced 2026-07-19 (long-run morning, not yet done)*/for(;si>=0;si--){const r=A[key(dateOf(si))];if(r&&r.done)streak++;else break;}
   return {el,honored,total,streak};
 }
 function renderStats(){
