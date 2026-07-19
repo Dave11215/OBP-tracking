@@ -322,11 +322,11 @@ rest:{a:"Rest",c:"var(--rest)",n:"Rest / recovery",d:"Full rest or an easy walk 
 other:{a:"Other",c:"#6b7a8f",n:"Other activity",d:"Something else that counted (walk, hike, swim, play, ocean)."}};
 const ORDER=["strength_A","strength_B","strength_C","easy_run","quality_run","track","long_run","z2_bike","bike_vo2","rest","other"];
 const PREHAB={se:"Shoulders/Elbows",ankle:"Ankle/Foot",knee:"Knees"};
-const SEQ=["strength_A","easy_run","strength_B","track","rest","long_run","track","rest","strength_C","easy_run","bike_vo2","rest","z2_bike","long_run","rest","strength_A","easy_run","track","rest","long_run","z2_bike","rest","strength_C","easy_run","quality_run","rest","long_run","z2_bike","rest","strength_A"];
+const SEQ=["strength_A","easy_run","strength_B","track","rest","long_run","track","rest","strength_C","easy_run","bike_vo2","rest","z2_bike","long_run","strength_B","easy_run","strength_A","track","rest","long_run","z2_bike","rest","strength_C","easy_run","quality_run","rest","long_run","z2_bike","rest","strength_A"];
 // PM = optional/second session that day (same-day stacking). null = single session.
 const PM=[
 null,null,null,null,null,null,null,
-null,"z2_bike",null,null,null,null,"strength_B",
+null,"z2_bike",null,null,null,null,null,
 null,"z2_bike",null,null,null,null,"strength_B",
 null,"z2_bike",null,null,null,null,"strength_B",
 null,"z2_bike"];
@@ -525,10 +525,10 @@ const CSTART="2026-07-17";
 // Seeded history: work Dave reported that predates the tracker. Lives in the published file so
 // it reaches every device; localStorage alone is per-browser.
 const PSEED={"2026-07-16":{arm:true},"2026-07-17":{arm:true},"2026-07-18":{arm:true,ak:true}};
-const PSEEDV=JSON.stringify(PSEED);
+const PSEEDV="v2:"+JSON.stringify(PSEED);
 function pload(){var s;try{s=JSON.parse(localStorage.getItem(PKEY))||{}}catch(e){s={}}
  if(localStorage.getItem("obp_pseedv")!==PSEEDV){
-  for(var d in PSEED){s[d]=s[d]||{};for(var kk in PSEED[d])if(s[d][kk]===undefined)s[d][kk]=PSEED[d][kk]}
+  for(var d in PSEED){s[d]=s[d]||{};for(var kk in PSEED[d])s[d][kk]=PSEED[d][kk]/*seed is AUTHORITATIVE for backfilled days: a stale local false (tap/untap) must not survive an explicit "this was done" seed - fixed 2026-07-19 (7/18 Arm showed X on Dave browser)*/}
   psave(s);localStorage.setItem("obp_pseedv",PSEEDV)}
  return s}
 function psave(s){localStorage.setItem(PKEY,JSON.stringify(s))}
