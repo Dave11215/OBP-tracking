@@ -180,6 +180,7 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <div class="goal" id="stGoal"></div>
 
 <div class="cap">Colored pill = what you did &middot; gray = prescribed &middot; tap to log &middot; <a href="pvt.html" style="color:var(--accent);font-weight:700">PVT test &rarr;</a></div>
+<div class="cap" style="margin-top:1px"><span id="ver" style="color:var(--muted)"></span> &middot; <a href="#" id="refreshBtn" style="color:var(--accent);font-weight:700">&#8635; force update</a></div>
 <div class="cal" id="dows"></div>
 <div class="cal" id="cal"></div>
 <div class="detail" id="detail"></div>
@@ -618,6 +619,10 @@ function prender(){
 render();
 prender();
 
+
+// Version stamp + one-tap cache-buster (added 2026-07-20 after a cache-stale pill fix: the published file was correct but Dave's phone served a pre-fix cached copy).
+var BUILD="2026-07-20 07:20";
+(function(){var v=document.getElementById("ver");if(v){v.textContent="build "+BUILD;}var b=document.getElementById("refreshBtn");if(b){b.onclick=function(e){e.preventDefault();location.replace(location.pathname+"?v="+Date.now());};}})();
 </script>
 </body>
 </html>
