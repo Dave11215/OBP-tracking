@@ -239,6 +239,9 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <li>Pallof Press or Plank <span class="s">&middot; 3 sets</span></li>
 </ul><p class="desc" style="margin-top:4px"><b>Volume up (2026-07-18 dose decision):</b> +1-2 hard sets on the leg compounds. Same gate as B.</p></div></div>
 
+<h2>Strength load</h2>
+<div id="sload"></div>
+
 <h2>Prehab routines</h2>
 
 <div class="pdet">
@@ -622,8 +625,14 @@ prender();
 
 
 // Version stamp + one-tap cache-buster (added 2026-07-20 after a cache-stale pill fix: the published file was correct but Dave's phone served a pre-fix cached copy).
-var BUILD="2026-07-20 07:20";
+var BUILD="2026-07-20 08:45";
 (function(){var v=document.getElementById("ver");if(v){v.textContent="build "+BUILD;}var b=document.getElementById("refreshBtn");if(b){b.onclick=function(e){e.preventDefault();location.replace(location.pathname+"?v="+Date.now());};}})();
+
+// ---- STRENGTH PROGRESS (added 2026-07-20; Solance owns how strength is tracked). Consistency (2+/wk) is the metric that MATTERS and is charted vs the floor in Progress. This panel adds the missing LOAD view + a LIVE sessions-this-week count from the calendar (robust to the stale Garmin export). Read the table: hold-or-gently-up = win, decline = flag. ----
+const SLOAD=[{lift:"Barbell Bench",day:"A",sets:[{w:135,r:12,d:"~7/1"},{w:140,r:12,d:"7/8"}]},{lift:"Incline DB Press",day:"A",sets:[{w:35,r:10,d:"7/8"}]},{lift:"Chest-Supported Row",day:"A",sets:[{w:30,r:12,d:"7/8"}]},{lift:"KB Swing",day:"B",sets:[{w:25,r:16,d:"7/20"}]},{lift:"Lat Pulldown",day:"B",sets:[{w:85,r:11,d:"7/20"}]},{lift:"Seated Cable Row",day:"B",sets:[{w:75,r:12,d:"7/20"}]},{lift:"Flat DB Press",day:"B",sets:[{w:30,r:12,d:"7/20"}]},{lift:"Leg Extension",day:"C",sets:[{w:70,r:12,d:"6/8"},{w:80,r:12,d:"6/19"}]},{lift:"Machine Leg Curl",day:"C",sets:[{w:80,r:12,d:"6/8"},{w:90,r:12,d:"6/19"}]}];
+function strCount(a,b){var c=0,t=new Date();t.setHours(0,0,0,0);for(var i=0;i<30;i++){var d=dateOf(i);if(d>t)break;var diff=Math.floor((t-d)/86400000);if(diff>=a&&diff<b){var rec=A[key(d)]||{};var did=rec.actual||SEQ[i];if(rec.done&&did.indexOf("strength")===0)c++;}}return c;}
+function renderSload(){var el=document.getElementById("sload");if(!el)return;var wk=strCount(0,7),wc=wk>=2?"var(--run)":"var(--qual)";var head='<div class="cap" style="text-align:left;margin:0 0 8px"><b style="color:'+wc+'">Last 7 days: '+wk+' strength session'+(wk===1?'':'s')+'</b> (floor 2). Consistency is the number that matters; the table below checks the sessions are real load.</div>';var rows=SLOAD.map(function(x){var s=x.sets,nn=s[s.length-1],pp=s.length>1?s[s.length-2]:null,tr,tc;if(!pp){tr="baseline";tc="var(--muted)";}else{var dn=(nn.w-pp.w)||((nn.r||0)-(pp.r||0));if(dn>0){tr="&#9650;";tc="var(--run)";}else if(dn<0){tr="&#9660;";tc="var(--qual)";}else{tr="=";tc="var(--trk)";}}return '<tr><td style="padding:4px 8px;font-weight:700">'+x.lift+'</td><td style="padding:4px 8px;color:var(--muted)">'+x.day+'</td><td style="padding:4px 8px;font-weight:800">'+nn.w+' &times; '+nn.r+'</td><td style="padding:4px 8px;color:'+tc+';font-weight:800">'+tr+'</td><td style="padding:4px 8px;color:var(--muted)">'+nn.d+'</td></tr>';}).join("");el.innerHTML=head+'<table style="width:100%;border-collapse:collapse;font-size:12px"><tr style="color:var(--muted);text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.03em"><th style="padding:4px 8px">Lift</th><th style="padding:4px 8px">Day</th><th style="padding:4px 8px">Top set (lb)</th><th style="padding:4px 8px">Trend</th><th style="padding:4px 8px">Logged</th></tr>'+rows+'</table>';}
+renderSload();
 </script>
 </body>
 </html>
