@@ -239,7 +239,7 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <li>Pallof Press or Plank <span class="s">&middot; 3 sets</span></li>
 </ul><p class="desc" style="margin-top:4px"><b>Volume up (2026-07-18 dose decision):</b> +1-2 hard sets on the leg compounds. Same gate as B.</p></div></div>
 
-<h2>Strength load</h2>
+<h2>Strength progression</h2>
 <div id="sload"></div>
 
 <h2>Prehab routines</h2>
@@ -628,11 +628,53 @@ prender();
 var BUILD="2026-07-20 08:45";
 (function(){var v=document.getElementById("ver");if(v){v.textContent="build "+BUILD;}var b=document.getElementById("refreshBtn");if(b){b.onclick=function(e){e.preventDefault();location.replace(location.pathname+"?v="+Date.now());};}})();
 
-// ---- STRENGTH PROGRESS (added 2026-07-20; Solance owns how strength is tracked). Consistency (2+/wk) is the metric that MATTERS and is charted vs the floor in Progress. This panel adds the missing LOAD view + a LIVE sessions-this-week count from the calendar (robust to the stale Garmin export). Read the table: hold-or-gently-up = win, decline = flag. ----
-const SLOAD=[{lift:"Barbell Bench",day:"A",sets:[{w:135,r:12,d:"~7/1"},{w:140,r:12,d:"7/8"}]},{lift:"Incline DB Press",day:"A",sets:[{w:35,r:10,d:"7/8"}]},{lift:"Chest-Supported Row",day:"A",sets:[{w:30,r:12,d:"7/8"}]},{lift:"KB Swing",day:"B",sets:[{w:25,r:16,d:"7/20"}]},{lift:"Lat Pulldown",day:"B",sets:[{w:85,r:11,d:"7/20"}]},{lift:"Seated Cable Row",day:"B",sets:[{w:75,r:12,d:"7/20"}]},{lift:"Flat DB Press",day:"B",sets:[{w:30,r:12,d:"7/20"}]},{lift:"Leg Extension",day:"C",sets:[{w:70,r:12,d:"6/8"},{w:80,r:12,d:"6/19"}]},{lift:"Machine Leg Curl",day:"C",sets:[{w:80,r:12,d:"6/8"},{w:90,r:12,d:"6/19"}]}];
+// ---- STRENGTH PROGRESSION (rebuilt 2026-07-20 per Dave's spec: track by exercise, display the
+// working WEIGHT, show the trend, and CALL the move-up. Double progression: hold the weight, bank
+// reps within the target range, move up when you own the top of the range with 1-2 in reserve.
+// Flat weight with reps not climbing = the stall flag. At 54, autoregulated: slow is fine, never
+// force it. Accessories/prehab are tracked but not pushed. Consistency (2+/wk) stays the metric
+// that MATTERS and is charted vs the floor in Progress. ----
+const SPROG=[
+ {g:"A",ex:"Barbell Bench",rng:[8,12],inc:5,h:[{w:135,r:12,d:"2026-07-01"},{w:140,r:12,d:"2026-07-08"}]},
+ {g:"A",ex:"Incline DB Press",rng:[10,12],inc:5,h:[{w:35,r:10,d:"2026-07-08",rir:0}]},
+ {g:"A",ex:"Chest-Sup. Row",rng:[10,12],inc:5,h:[{w:30,r:12,d:"2026-07-08"}]},
+ {g:"A",ex:"Pallof Press",rng:null,inc:5,acc:1,h:[{w:30,r:12,d:"2026-07-08"}],note:"anti-rotation, form over load"},
+ {g:"B",ex:"KB Swing",rng:null,inc:5,h:[{w:25,r:16,d:"2026-07-20"}],note:"power/hinge, progress load when the swing stays crisp"},
+ {g:"B",ex:"Lat Pulldown",rng:[10,12],inc:5,h:[{w:85,r:11,d:"2026-07-20"}]},
+ {g:"B",ex:"Seated Cable Row",rng:[10,12],inc:5,h:[{w:75,r:12,d:"2026-07-20"}]},
+ {g:"B",ex:"Flat DB Press",rng:[10,12],inc:5,h:[{w:30,r:12,d:"2026-07-20"}]},
+ {g:"B",ex:"Hammer Curl",rng:[10,12],inc:5,h:[{w:20,r:12,d:"2026-07-20"}]},
+ {g:"B",ex:"Cable Crossover",rng:[10,12],inc:5,h:[{w:40,r:12,d:"2026-07-20"}]},
+ {g:"B",ex:"Face Pull",rng:null,inc:5,acc:1,h:[{w:70,r:12,d:"2026-07-20"}]},
+ {g:"B",ex:"Farmer Carry",rng:null,inc:5,acc:1,h:[{w:30,r:1,d:"2026-07-20"}],note:"progress by load/distance"},
+ {g:"C",ex:"Bulgarian Split Sq",rng:[8,10],inc:5,h:[{w:10,r:8,d:"2026-06-16"}],note:"per hand"},
+ {g:"C",ex:"Leg Extension",rng:[12,15],inc:10,h:[{w:70,r:12,d:"2026-06-08"},{w:80,r:12,d:"2026-06-19"}]},
+ {g:"C",ex:"Machine Leg Curl",rng:[12,12],inc:10,h:[{w:80,r:12,d:"2026-06-08"},{w:90,r:12,d:"2026-06-19"}]},
+ {g:"*",ex:"Lat Raise (prehab)",rng:null,inc:0,acc:1,h:[{w:10,r:36,d:"2026-07-20"}],note:"rehab tri-set, do NOT progress"}
+];
 function strCount(a,b){var c=0,t=new Date();t.setHours(0,0,0,0);for(var i=0;i<30;i++){var d=dateOf(i);if(d>t)break;var diff=Math.floor((t-d)/86400000);if(diff>=a&&diff<b){var rec=A[key(d)]||{};var did=rec.actual||SEQ[i];if(rec.done&&did.indexOf("strength")===0)c++;}}return c;}
-function renderSload(){var el=document.getElementById("sload");if(!el)return;var wk=strCount(0,7),wc=wk>=2?"var(--run)":"var(--qual)";var head='<div class="cap" style="text-align:left;margin:0 0 8px"><b style="color:'+wc+'">Last 7 days: '+wk+' strength session'+(wk===1?'':'s')+'</b> (floor 2). Consistency is the number that matters; the table below checks the sessions are real load.</div>';var rows=SLOAD.map(function(x){var s=x.sets,nn=s[s.length-1],pp=s.length>1?s[s.length-2]:null,tr,tc;if(!pp){tr="baseline";tc="var(--muted)";}else{var dn=(nn.w-pp.w)||((nn.r||0)-(pp.r||0));if(dn>0){tr="&#9650;";tc="var(--run)";}else if(dn<0){tr="&#9660;";tc="var(--qual)";}else{tr="=";tc="var(--trk)";}}return '<tr><td style="padding:4px 8px;font-weight:700">'+x.lift+'</td><td style="padding:4px 8px;color:var(--muted)">'+x.day+'</td><td style="padding:4px 8px;font-weight:800">'+nn.w+' &times; '+nn.r+'</td><td style="padding:4px 8px;color:'+tc+';font-weight:800">'+tr+'</td><td style="padding:4px 8px;color:var(--muted)">'+nn.d+'</td></tr>';}).join("");el.innerHTML=head+'<table style="width:100%;border-collapse:collapse;font-size:12px"><tr style="color:var(--muted);text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.03em"><th style="padding:4px 8px">Lift</th><th style="padding:4px 8px">Day</th><th style="padding:4px 8px">Top set (lb)</th><th style="padding:4px 8px">Trend</th><th style="padding:4px 8px">Logged</th></tr>'+rows+'</table>';}
-renderSload();
+function sprec(x){var h=x.h,n=h[h.length-1];
+ if(x.acc)return["hold",(x.note||"accessory, track not push")];
+ if(x.rng===null)return["base",(x.note||"progress by feel")];
+ if(h.length<2)return["base","baseline "+n.w+"x"+n.r+", move-up call starts next clean session"];
+ var p=h[h.length-2];
+ if(n.w>p.w)return["up","just moved up to "+n.w+", own "+x.rng[0]+"-"+x.rng[1]+"r here before the next jump"];
+ if(n.rir===0||n.r<x.rng[0])return["hold","held "+n.w+" (reps "+n.r+" &lt; "+x.rng[0]+"), build reps before adding load"];
+ if(n.r>=x.rng[1])return["ready","&#9650; ready: top of range ("+n.r+"r), try +"+x.inc+" ("+(n.w+x.inc)+") next time if 1-2 in reserve"];
+ return["build","in range, add reps toward "+x.rng[1]+"r then +"+x.inc];}
+function renderSprog(){var el=document.getElementById("sload");if(!el)return;
+ var wkn=strCount(0,7),wc=wkn>=2?"var(--run)":"var(--qual)";
+ var out='<div class="cap" style="text-align:left;margin:0 0 6px"><b style="color:'+wc+'">Last 7 days: '+wkn+' strength session'+(wkn===1?'':'s')+'</b> (floor 2, the number that matters). Below: per-exercise weight, trend, and the move-up call. Move up only when the top set had 1-2 reps in reserve. At 54, slow is a win.</div>';
+ var GN={A:"Strength A · push + quad",B:"Strength B · pull + hinge",C:"Strength C · legs","*":"Prehab / accessory"};
+ var TC={ready:"var(--run)",up:"var(--z2b)",build:"var(--trk)",hold:"var(--muted)",base:"var(--muted)"};
+ var curg="";
+ SPROG.forEach(function(x){
+  if(x.g!==curg){curg=x.g;out+='<div style="font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);font-weight:700;margin:11px 0 3px">'+(GN[curg]||curg)+'</div>';}
+  var n=x.h[x.h.length-1],trend=x.h.map(function(e){return e.w;}).join(' &rarr; '),rr=sprec(x),col=TC[rr[0]]||"var(--muted)";
+  out+='<div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:5px 0;border-top:1px solid var(--line)"><div style="flex:0 0 auto;min-width:145px"><b>'+x.ex+'</b>: <b style="font-size:14px">'+n.w+' lb</b><span style="color:var(--muted);font-size:10.5px"> · '+trend+'</span></div><div style="flex:1;text-align:right;color:'+col+';font-size:11px;font-weight:600">'+rr[1]+'</div></div>';
+ });
+ el.innerHTML=out;}
+renderSprog();
 </script>
 </body>
 </html>
