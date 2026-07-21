@@ -185,6 +185,9 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <div class="cal" id="cal"></div>
 <div class="detail" id="detail"></div>
 <div class="legend" id="legend"></div>
+<h2>5K progression</h2>
+<div id="race5k"></div>
+
 <h2>Prehab calendar</h2>
 <div id="pstats" class="prow"></div>
 
@@ -360,6 +363,7 @@ const SEED={
 11:{done:true,actual:"rest",note:"HONORED. REST - and this one is deliberate. It sits between Thursday's hard Bike VO2 and Saturday's long run so BOTH land on fresh legs. Do not fill it. (This day was mistakenly turned into a strength session, which created a 10-day unbroken block; Dave caught it.) Arm prehab done (tri-set + Tyler Twist). Body Battery 61 at 6 PM, peak 100, +49/-39, Garmin: easy day, plenty of energy left. Hip: totally fine after Thursday's 51 min of intervals - the pre-ride soreness resolved THROUGH the ride."},
 13:{done:true,actual:"long_run",note:"LONG RUN DONE. 5.29 mi / 1:05 on the W&OD. Hot, humid morning - kept it easy with walk breaks. Ak + Arm prehab done."},
 14:{done:true,actual:"strength_B",note:"STRENGTH B DONE (moved from Sun). 50 min, 28 sets, 351 reps, avg HR 98 / max 151, load 20. KB Swing 4x~16 @25, Lat Pulldown 3x9-11 @85, Cable Row 3x12 @75, Face Pull 3x12 @70, Flat DB Press 3x12 @30, Hammer Curl 3x12 @20, Cable Crossover 3x11-12 @30-40, Lat Raise tri-set 8-10, Farmer Carry 3x30. Conservative per plan: base volume, no PRs, low CV cost."},
+15:{done:true,actual:"quality_run",note:"5K PR 30:09 (planned easy run; Dave overrode to a hard 5K). 3.30mi/31:58 continuous, avg HR 162/max 177, 90% Z4 threshold, aerobic TE 3.7, load 140, rolling ~90ft. Prior best 30:32 (7/2). Warm-up 0.92mi + 0.49mi cool-down walk. Clean, strong finish, no distress - first max-HR effort since the 7/19 event and it went perfectly."},
 12:{done:true,actual:"z2_bike",note:"SWAPPED with Sun 7/19: the AQI blocked outdoor running, so today became the Zone 2 bike and Sunday takes the long run. DONE - 61 min Peloton, avg HR 122, 83% in Z2, zero threshold. Base volume banked. Plus two brief equipment probes (rower, elliptical), no elbow/back complaint."},
 };
 // SEED VERSIONING: when Solance ships new/updated log data, it must actually land.
@@ -675,6 +679,40 @@ function renderSprog(){var el=document.getElementById("sload");if(!el)return;
  });
  el.innerHTML=out;}
 renderSprog();
+// ---- 5K PROGRESSION (added 2026-07-20 per Dave). Bars = best 5K time per race, lower is better,
+// so bars descend toward the sub-30 goal line; a trend line joins the tops. Add a row per race. ----
+const RACE5K=[
+ {d:"6/1", s:2096, t:"34:56"},
+ {d:"6/27",s:1904, t:"31:44"},
+ {d:"6/30",s:1867, t:"31:07"},
+ {d:"7/2", s:1832, t:"30:32"},
+ {d:"7/21",s:1809, t:"30:09", pr:1}
+];
+const R5K_GOAL=1800, R5K_GOALT="30:00";  // sub-30 by the 9/13 race
+function renderRace5k(){
+ var el=document.getElementById("race5k"); if(!el) return;
+ var W=680,H=210,L=8,R=8,TOP=30,BOT=32,lo=1740,hi=2100;
+ var x0=L,x1=W-R,pB=H-BOT,pT=TOP;
+ var y=function(sc){return pT+(hi-sc)/(hi-lo)*(pB-pT);};
+ var n=RACE5K.length,band=(x1-x0)/n,bw=band*0.46;
+ var s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;font-family:inherit">';
+ var gy=y(R5K_GOAL);
+ s+='<line x1="'+x0+'" y1="'+gy.toFixed(1)+'" x2="'+x1+'" y2="'+gy.toFixed(1)+'" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="5 4"/>';
+ s+='<text x="'+(x0+2)+'" y="'+(gy-5).toFixed(1)+'" font-size="10" fill="var(--accent)" font-weight="700">sub-'+R5K_GOALT+' goal (9/13 race)</text>';
+ var pts=[];
+ RACE5K.forEach(function(r,i){
+  var cx=x0+band*(i+0.5),by=y(r.s),col=r.pr?"var(--run)":"var(--z2b)";
+  pts.push([cx.toFixed(1),by.toFixed(1)]);
+  s+='<rect x="'+(cx-bw/2).toFixed(1)+'" y="'+by.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+(pB-by).toFixed(1)+'" rx="3" fill="'+col+'" opacity="'+(r.pr?1:0.5)+'"/>';
+  s+='<text x="'+cx.toFixed(1)+'" y="'+(by-5).toFixed(1)+'" text-anchor="middle" font-size="11.5" font-weight="800" fill="'+(r.pr?"var(--run)":"var(--ink)")+'">'+r.t+'</text>';
+  s+='<text x="'+cx.toFixed(1)+'" y="'+(pB+15)+'" text-anchor="middle" font-size="10" fill="var(--muted)">'+r.d+'</text>';
+ });
+ s+='<polyline points="'+pts.map(function(p){return p[0]+','+p[1];}).join(' ')+'" fill="none" stroke="var(--ink)" stroke-width="2" opacity="0.45"/>';
+ var lp=pts[pts.length-1];
+ s+='<circle cx="'+lp[0]+'" cy="'+lp[1]+'" r="4.5" fill="var(--run)"/></svg>';
+ el.innerHTML='<div class="cap" style="text-align:left;margin:0 0 4px">Best 5K per race, lower is better. Bars fall toward the sub-30 goal line; PR in green. You are 9 seconds off sub-30 and trending down fast, on track to break it before the 9/13 race.</div>'+s;
+}
+renderRace5k();
 </script>
 </body>
 </html>
