@@ -329,7 +329,7 @@ rest:{a:"Rest",c:"var(--rest)",n:"Rest / recovery",d:"Full rest or an easy walk 
 other:{a:"Other",c:"#6b7a8f",n:"Other activity",d:"Something else that counted (walk, hike, swim, play, ocean)."}};
 const ORDER=["strength_A","strength_B","strength_C","easy_run","quality_run","track","long_run","z2_bike","bike_vo2","rest","other"];
 const PREHAB={se:"Shoulders/Elbows",ankle:"Ankle/Foot",knee:"Knees"};
-const SEQ=["strength_A","easy_run","strength_B","track","rest","long_run","track","rest","strength_C","easy_run","bike_vo2","rest","z2_bike","long_run","strength_B","easy_run","strength_A","track","rest","long_run","z2_bike","rest","strength_C","easy_run","quality_run","rest","long_run","z2_bike","rest","strength_A"];
+const SEQ=["strength_A","easy_run","strength_B","track","rest","long_run","track","rest","strength_C","easy_run","bike_vo2","rest","z2_bike","long_run","strength_B","quality_run","strength_A","track","rest","long_run","z2_bike","rest","strength_C","easy_run","quality_run","rest","long_run","z2_bike","rest","strength_A"];
 // PM = optional/second session that day (same-day stacking). null = single session.
 const PM=[null,null,null,null,null,null,null,null,"z2_bike",null,null,null,null,null,null,null,"z2_bike",null,null,null,"strength_B",null,"z2_bike",null,null,null,null,"strength_B",null,"z2_bike"];
 const AKEY="obp_actual_v2";
@@ -559,8 +559,8 @@ const PT={
       due:function(k,d){return true}},
  kn:{n:"Kn",full:"Knee",cls:"pkn",why:"On strength days. Heavy-slow. Never on a hard day - running IS patellar loading.",
      due:function(k,d){return k.indexOf("strength")===0}},
- ak:{n:"Ak",full:"Ankle / foot",cls:"pak",why:"3x/wk, off the hard days. Balance is a chronic adaptation, not a warm-up. NNT 9.",
-     due:function(k,d){return k==="easy_run"||k==="z2_bike"||k==="long_run"}}
+ ak:{n:"Ak",full:"Ankle / foot",cls:"pak",why:"Most days (skips track + strength days). Balance is a chronic adaptation, not a warm-up; keep it steady. NNT 9.",
+     due:function(k,d){return k!=="track"&&k.indexOf("strength")!==0}}
 };
 // CADENCE KEYS OFF THE PRESCRIBED SESSION, NOT THE WEEKDAY. Fixed 2026-07-17.
 // v1 used fixed weekdays (Kn = Mon+Thu) taken from THIRTY_DAY_PLAN.md's template. But SEQ - the
