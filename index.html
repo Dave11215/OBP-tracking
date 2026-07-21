@@ -331,12 +331,7 @@ const ORDER=["strength_A","strength_B","strength_C","easy_run","quality_run","tr
 const PREHAB={se:"Shoulders/Elbows",ankle:"Ankle/Foot",knee:"Knees"};
 const SEQ=["strength_A","easy_run","strength_B","track","rest","long_run","track","rest","strength_C","easy_run","bike_vo2","rest","z2_bike","long_run","strength_B","easy_run","strength_A","track","rest","long_run","z2_bike","rest","strength_C","easy_run","quality_run","rest","long_run","z2_bike","rest","strength_A"];
 // PM = optional/second session that day (same-day stacking). null = single session.
-const PM=[
-null,null,null,null,null,null,null,
-null,"z2_bike",null,null,null,null,null,
-null,"z2_bike",null,null,null,null,"strength_B",
-null,"z2_bike",null,null,null,null,"strength_B",
-null,"z2_bike"];
+const PM=[null,null,null,null,null,null,null,null,"z2_bike",null,null,null,null,null,null,null,"z2_bike",null,null,null,"strength_B",null,"z2_bike",null,null,null,null,"strength_B",null,"z2_bike"];
 const AKEY="obp_actual_v2";
 function load(){try{return JSON.parse(localStorage.getItem(AKEY))||{}}catch(e){return{}}}
 function save(s){localStorage.setItem(AKEY,JSON.stringify(s))}
