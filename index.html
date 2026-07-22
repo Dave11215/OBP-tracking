@@ -228,7 +228,7 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <li>Flat DB Press <span class="s">&middot; <b>3-4</b> x 10-12</span></li>
 <li>Hammer Curl <span class="s">&middot; 3 x 10-12</span></li>
 <li>Farmer's Carry <span class="s">&middot; 3 x ~40 m</span></li>
-<li>Cable Woodchop <span class="s">&middot; 3 x 10-12/side</span></li>
+<li>Low-to-High Cable Lift <span class="s">&middot; reverse chop, low-to-high &middot; 3 x 10-12/side</span></li>
 </ul><p class="desc" style="margin-top:4px"><b>Volume up (2026-07-18 dose decision):</b> +1-2 hard sets on the big compounds (Pulldown, Cable Row, Flat DB). Gated: back off on any HRV/sleep/tissue signal. Not a 3rd session.</p></div></div>
 <div class="card"><div class="hd" style="background:var(--sC)">Strength C <small>&mdash; legs + shoulders + arms</small></div>
 <div class="bd"><ul class="ex">
@@ -317,7 +317,7 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 const START=new Date(2026,6,6);
 const TYPE={
 strength_A:{a:"Str A",c:"var(--sA)",n:"Strength A",d:"push + quad. Reverse Lunge (POWER, do FIRST while fresh), Bench, Incline Dumbbell Press, CS Row, High-to-Low Cable Chop (single-arm, functional trainer, top pulley, stand perpendicular, near hand high -> down across to opposite waist), Lat Raise tri-set (PREHAB - do NOT progress: 8 lb, 3 rounds of 12 front + 12 scaption + 12 lateral), Close-Grip Bench (REPLACES the pushdown/skull crushers - elbow-safe triceps compound; any elbow twinge = stop), Pallof (anti-rotation - if hips or shoulders turn, too heavy). WORKING WEIGHTS: Bench 145 (3x8-12) / Incline DB hold 35 -> 40 (get 12 @ RIR 1-2 first) / CS Row up to 35 (3x10-12) / Chop 30 / Pallof 30. Close-grip bench: establish a start weight."},
-strength_B:{a:"Str B",c:"var(--sB)",n:"Strength B",d:"pull + hinge. KB Swing (POWER, do FIRST), Pulldown, Cable Row, Face Pull, Flat DB Press, Hammer Curl, Farmer Carry, Woodchop. VOLUME UP (hypertrophy, from the 2026-07-18 dose decision): add 1-2 hard sets to the big compounds - Pulldown, Cable Row, Flat DB Press. This is the added-volume-on-existing-days move, NOT a 3rd session. GATED: back off if HRV drifts, sleep suffers, or any tissue flares - the recovery ceiling still governs."},
+strength_B:{a:"Str B",c:"var(--sB)",n:"Strength B",d:"pull + hinge. KB Swing (POWER, do FIRST), Pulldown, Cable Row, Face Pull, Flat DB Press, Hammer Curl, Farmer Carry, Low-to-High Cable Lift (reverse chop - LOW pulley, drive from hip up-and-across to the opposite shoulder; finish at shoulder height, NOT overhead - respects the no-overhead rule. This is the OTHER diagonal to Strength A's high-to-low chop, so the two days train opposite patterns instead of the same one twice). VOLUME UP (hypertrophy, from the 2026-07-18 dose decision): add 1-2 hard sets to the big compounds - Pulldown, Cable Row, Flat DB Press. This is the added-volume-on-existing-days move, NOT a 3rd session. GATED: back off if HRV drifts, sleep suffers, or any tissue flares - the recovery ceiling still governs."},
 strength_C:{a:"Str C",c:"var(--sC)",n:"Strength C",d:"legs. Box Step-Up (POWER, do FIRST), Bulgarian Split Squat, Leg Extension, Leg Curl, Calf Raise, Lat Raise (prehab), arm superset, core. VOLUME UP (from the 2026-07-18 dose decision): add 1-2 hard sets to the leg compounds - Bulgarian Split Squat, Leg Ext, Leg Curl. Same gate as B: back off on any HRV/sleep/tissue signal."},
 easy_run:{a:"Easy Run",c:"var(--run)",n:"Easy Run + strides",d:"30-40 min Zone 2 (HR ~125-140, cap 145) + 4-6 strides. Genuinely easy."},
 quality_run:{a:"Tempo",c:"var(--qual)",n:"Tempo / Threshold (hard) - RUN or BIKE",d:"Sustained threshold 15-20 min. CHOOSE BY TISSUE STATE: all green = RUN it (running tempo builds aerobic ECONOMY, the actual 5K limiter). Back/knee/ankle grumbling = BIKE it (impact-free, and the leg-limit bites far less at threshold than at VO2). Finish strong, not to failure. Gate hard bike work by EFFORT, not an HR number."},
@@ -624,7 +624,7 @@ prender();
 
 
 // Version stamp + one-tap cache-buster (added 2026-07-20 after a cache-stale pill fix: the published file was correct but Dave's phone served a pre-fix cached copy).
-var BUILD="2026-07-21 17:45";
+var BUILD="2026-07-22 13:10";
 (function(){var v=document.getElementById("ver");if(v){v.textContent="build "+BUILD;}var b=document.getElementById("refreshBtn");if(b){b.onclick=function(e){e.preventDefault();location.replace(location.pathname+"?v="+Date.now());};}})();
 
 // ---- STRENGTH PROGRESSION (rebuilt 2026-07-20 per Dave's spec: track by exercise, display the
@@ -634,9 +634,9 @@ var BUILD="2026-07-21 17:45";
 // force it. Accessories/prehab are tracked but not pushed. Consistency (2+/wk) stays the metric
 // that MATTERS and is charted vs the floor in Progress. ----
 const SPROG=[
- {g:"A",ex:"Barbell Bench",rng:[8,12],inc:5,h:[{w:135,r:12,d:"2026-07-01"},{w:140,r:12,d:"2026-07-08"}]},
- {g:"A",ex:"Incline DB Press",rng:[10,12],inc:5,h:[{w:35,r:10,d:"2026-07-08",rir:0}]},
- {g:"A",ex:"Chest-Sup. Row",rng:[10,12],inc:5,h:[{w:30,r:12,d:"2026-07-08"}]},
+ {g:"A",ex:"Barbell Bench",rng:[8,12],inc:5,h:[{w:104,r:12,d:"2026-07-01"},{w:109,r:12,d:"2026-07-08"},{w:114,r:10,d:"2026-07-22"}]},
+ {g:"A",ex:"Incline DB Press",rng:[10,12],inc:5,h:[{w:35,r:10,d:"2026-07-08",rir:0},{w:35,r:10,d:"2026-07-22"}]},
+ {g:"A",ex:"Chest-Sup. Row",rng:[10,12],inc:5,h:[{w:30,r:12,d:"2026-07-08"},{w:35,r:12,d:"2026-07-22"}]},
  {g:"A",ex:"Pallof Press",rng:null,inc:5,acc:1,h:[{w:30,r:12,d:"2026-07-08"}],note:"anti-rotation, form over load"},
  {g:"B",ex:"KB Swing",rng:null,inc:5,h:[{w:25,r:16,d:"2026-07-20"}],note:"power/hinge, progress load when the swing stays crisp"},
  {g:"B",ex:"Lat Pulldown",rng:[10,12],inc:5,h:[{w:85,r:11,d:"2026-07-20"}]},
