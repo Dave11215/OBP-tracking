@@ -624,7 +624,7 @@ prender();
 
 
 // Version stamp + one-tap cache-buster (added 2026-07-20 after a cache-stale pill fix: the published file was correct but Dave's phone served a pre-fix cached copy).
-var BUILD="2026-07-22 13:10";
+var BUILD="2026-07-22 14:00";
 (function(){var v=document.getElementById("ver");if(v){v.textContent="build "+BUILD;}var b=document.getElementById("refreshBtn");if(b){b.onclick=function(e){e.preventDefault();location.replace(location.pathname+"?v="+Date.now());};}})();
 
 // ---- STRENGTH PROGRESSION (rebuilt 2026-07-20 per Dave's spec: track by exercise, display the
@@ -635,9 +635,10 @@ var BUILD="2026-07-22 13:10";
 // that MATTERS and is charted vs the floor in Progress. ----
 const SPROG=[
  {g:"A",ex:"Barbell Bench",rng:[8,12],inc:5,h:[{w:104,r:12,d:"2026-07-01"},{w:109,r:12,d:"2026-07-08"},{w:114,r:10,d:"2026-07-22"}]},
+ {g:"A",ex:"Close-Grip Bench",rng:[8,12],inc:5,h:[{w:84,r:6,d:"2026-07-22"}],note:"debut 84x12/12/6; hold 84, build the last set before adding"},
  {g:"A",ex:"Incline DB Press",rng:[10,12],inc:5,h:[{w:35,r:10,d:"2026-07-08",rir:0},{w:35,r:10,d:"2026-07-22"}]},
  {g:"A",ex:"Chest-Sup. Row",rng:[10,12],inc:5,h:[{w:30,r:12,d:"2026-07-08"},{w:35,r:12,d:"2026-07-22"}]},
- {g:"A",ex:"Pallof Press",rng:null,inc:5,acc:1,h:[{w:30,r:12,d:"2026-07-08"}],note:"anti-rotation, form over load"},
+ {g:"A",ex:"Pallof Press",rng:null,inc:5,acc:1,h:[{w:30,r:12,d:"2026-07-08"},{w:40,r:12,d:"2026-07-22"}],note:"anti-rotation, form over load; 40 held clean 7/22"},
  {g:"B",ex:"KB Swing",rng:null,inc:5,h:[{w:25,r:16,d:"2026-07-20"}],note:"power/hinge, progress load when the swing stays crisp"},
  {g:"B",ex:"Lat Pulldown",rng:[10,12],inc:5,h:[{w:85,r:11,d:"2026-07-20"}]},
  {g:"B",ex:"Seated Cable Row",rng:[10,12],inc:5,h:[{w:75,r:12,d:"2026-07-20"}]},
@@ -646,6 +647,7 @@ const SPROG=[
  {g:"B",ex:"Cable Crossover",rng:[10,12],inc:5,h:[{w:40,r:12,d:"2026-07-20"}]},
  {g:"B",ex:"Face Pull",rng:null,inc:5,acc:1,h:[{w:70,r:12,d:"2026-07-20"}]},
  {g:"B",ex:"Farmer Carry",rng:null,inc:5,acc:1,h:[{w:30,r:1,d:"2026-07-20"}],note:"progress by load/distance"},
+ {g:"C",ex:"DB Squat",rng:[10,12],inc:5,h:[{w:20,r:12,d:"2026-07-22"}],note:"one DB held (goblet); back-safe compound lower"},
  {g:"C",ex:"Bulgarian Split Sq",rng:[8,10],inc:5,h:[{w:10,r:8,d:"2026-06-16"}],note:"per hand"},
  {g:"C",ex:"Leg Extension",rng:[12,15],inc:10,h:[{w:70,r:12,d:"2026-06-08"},{w:80,r:12,d:"2026-06-19"}]},
  {g:"C",ex:"Machine Leg Curl",rng:[12,12],inc:10,h:[{w:80,r:12,d:"2026-06-08"},{w:90,r:12,d:"2026-06-19"}]},
