@@ -528,7 +528,7 @@ const PKEY="obp_prehab_v1";
 const CSTART="2026-07-17";
 // Seeded history: work Dave reported that predates the tracker. Lives in the published file so
 // it reaches every device; localStorage alone is per-browser.
-const PSEED={"2026-07-16":{arm:true},"2026-07-17":{arm:true},"2026-07-18":{arm:true,ak:true},"2026-07-19":{arm:true,ak:true},"2026-07-20":{arm:true,kn:true}};
+const PSEED={"2026-07-16":{arm:true},"2026-07-17":{arm:true},"2026-07-18":{arm:true,ak:true},"2026-07-19":{arm:true,ak:true},"2026-07-20":{arm:true,kn:true},"2026-07-21":{arm:true,ak:true}};
 const PSEEDV="v2:"+JSON.stringify(PSEED);
 function pload(){var s;try{s=JSON.parse(localStorage.getItem(PKEY))||{}}catch(e){s={}}
  if(localStorage.getItem("obp_pseedv")!==PSEEDV){
@@ -624,7 +624,7 @@ prender();
 
 
 // Version stamp + one-tap cache-buster (added 2026-07-20 after a cache-stale pill fix: the published file was correct but Dave's phone served a pre-fix cached copy).
-var BUILD="2026-07-20 08:45";
+var BUILD="2026-07-21 17:45";
 (function(){var v=document.getElementById("ver");if(v){v.textContent="build "+BUILD;}var b=document.getElementById("refreshBtn");if(b){b.onclick=function(e){e.preventDefault();location.replace(location.pathname+"?v="+Date.now());};}})();
 
 // ---- STRENGTH PROGRESSION (rebuilt 2026-07-20 per Dave's spec: track by exercise, display the
