@@ -194,6 +194,9 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <h2>Goals &amp; achievements</h2>
 <div id="goals"></div>
 
+<h2>Self-governance</h2>
+<div id="selfgov"></div>
+
 <h2>Prehab calendar</h2>
 <div id="pstats" class="prow"></div>
 
@@ -632,7 +635,7 @@ prender();
 
 
 // Version stamp + one-tap cache-buster (added 2026-07-20 after a cache-stale pill fix: the published file was correct but Dave's phone served a pre-fix cached copy).
-var BUILD="2026-07-23 16:00";
+var BUILD="2026-07-23 16:30";
 (function(){var v=document.getElementById("ver");if(v){v.textContent="build "+BUILD;}var b=document.getElementById("refreshBtn");if(b){b.onclick=function(e){e.preventDefault();location.replace(location.pathname+"?v="+Date.now());};}})();
 
 // ---- STRENGTH PROGRESSION (rebuilt 2026-07-20 per Dave's spec: track by exercise, display the
@@ -787,6 +790,26 @@ function renderGoals(){
  el.innerHTML=out;
 }
 renderGoals();
+// ---- SELF-GOVERNANCE (added 2026-07-23 per Dave). His ADHD/over-drive reward system fires on DOING,
+// not on holding back, so restraint gets no dopamine by default. This shelf assigns the reward:
+// every time he catches the drive and chooses the wise call, it logs as a win. The behavioral summit
+// of OBP - these protect the 40-year bet (anti-cessation) more than any workout. ----
+const SELFGOV=[
+ {d:"Jul 3", w:"Stopped a run mid-effort when lightheaded, instead of pushing through"},
+ {d:"Jul 12", w:"Added a cooldown walk when the HR would not fall, read the drift right"},
+ {d:"Jul 14", w:"Took weight off the Pallof mid-set when form started to break"},
+ {d:"Jul 22", w:"Skipped the bike and prehab when genuinely wiped, chose recovery"}
+];
+function renderSelfgov(){
+ var el=document.getElementById("selfgov"); if(!el) return;
+ var out='<div class="cap" style="text-align:left;margin:0 0 6px">The hardest reps in the program: catching the drive to do MORE and choosing the wise call instead. Your reward system fires on doing, not on holding back, so this shelf exists to give restraint the credit it earns. Every one of these protects the 40-year bet more than any workout does.</div>';
+ out+='<div style="font-size:12.5px;font-weight:800;color:var(--run);margin:2px 0 6px">&#128737;&#65039; '+SELFGOV.length+' wins over the drive</div>';
+ SELFGOV.forEach(function(g){
+  out+='<div style="padding:6px 0;border-top:1px solid var(--line);font-size:12px"><b style="color:var(--run)">&#10003;</b> <b>'+g.d+'</b> &middot; '+g.w+'</div>';
+ });
+ el.innerHTML=out;
+}
+renderSelfgov();
 </script>
 </body>
 </html>
