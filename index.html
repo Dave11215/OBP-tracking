@@ -188,6 +188,9 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <h2>5K progression</h2>
 <div id="race5k"></div>
 
+<h2>Goals &amp; achievements</h2>
+<div id="goals"></div>
+
 <h2>Prehab calendar</h2>
 <div id="pstats" class="prow"></div>
 
@@ -360,6 +363,8 @@ const SEED={
 14:{done:true,actual:"strength_B",note:"STRENGTH B DONE (moved from Sun). 50 min, 28 sets, 351 reps, avg HR 98 / max 151, load 20. KB Swing 4x~16 @25, Lat Pulldown 3x9-11 @85, Cable Row 3x12 @75, Face Pull 3x12 @70, Flat DB Press 3x12 @30, Hammer Curl 3x12 @20, Cable Crossover 3x11-12 @30-40, Lat Raise tri-set 8-10, Farmer Carry 3x30. Conservative per plan: base volume, no PRs, low CV cost."},
 15:{done:true,actual:"quality_run",note:"5K PR 30:09 (planned easy run; Dave overrode to a hard 5K). 3.30mi/31:58 continuous, avg HR 162/max 177, 90% Z4 threshold, aerobic TE 3.7, load 140, rolling ~90ft. Prior best 30:32 (7/2). Warm-up 0.92mi + 0.49mi cool-down walk. Clean, strong finish, no distress - first max-HR effort since the 7/19 event and it went perfectly."},
 12:{done:true,actual:"z2_bike",note:"SWAPPED with Sun 7/19: the AQI blocked outdoor running, so today became the Zone 2 bike and Sunday takes the long run. DONE - 61 min Peloton, avg HR 122, 83% in Z2, zero threshold. Base volume banked. Plus two brief equipment probes (rower, elliptical), no elbow/back complaint."},
+16:{done:true,actual:"strength_A",note:"STRENGTH A DONE - full push + quad-lower day. TRUE loads (TAG ~14 lb bar): Bench 109x12/114x10/114x10; Close-Grip Bench 84x12/12/6 (debut - hold + build the last set); Incline DB 35x10x3; Chest-Sup Row 35/35/40x12 (leveled up); DB/Goblet Squat 20x12x3 (lower finally added at 47 min); High-to-Low Chop 40/side x12x3; Lat Raise tri-set 10x12 (3 planes); Pallof 30/40/40 (40 held CLEAN = new working weight). ~54 min. Ankle prehab done, knee skipped (fatigue). Big, complete session."},
+17:{done:true,actual:"track",note:"TRACK DONE (ran before I could clear the AM gate). Planned controlled 4-5x800 VO2; ran near-continuous THRESHOLD - real interval structure (power DID drop in recoveries) but HR DECOUPLED: 95% at/above threshold, 30% >172bpm, never below 134, recoveries stuck ~150s. 3.31mi/30:31, avg 9:13, avg HR 167/MAX 181 (new observed ceiling, was 177), load 134, TE Threshold. Garmin flagged a 5K PR 28:34 but it is INTERVAL-ASSISTED (fast reps + jog recoveries averaged), NOT a clean 5K - clean best stays 30:09. Off a fasted AM + dehydration headache that resolved before the run (warm-up clean). Great engine, wrong dose = a 2nd hard 5K-equivalent this week. Saturday long run firmly gated."}
 };
 // SEED VERSIONING: when Solance ships new/updated log data, it must actually land.
 // Without this, a day already stored (e.g. seeded done:false) could never be updated.
@@ -624,7 +629,7 @@ prender();
 
 
 // Version stamp + one-tap cache-buster (added 2026-07-20 after a cache-stale pill fix: the published file was correct but Dave's phone served a pre-fix cached copy).
-var BUILD="2026-07-23 14:45";
+var BUILD="2026-07-23 15:40";
 (function(){var v=document.getElementById("ver");if(v){v.textContent="build "+BUILD;}var b=document.getElementById("refreshBtn");if(b){b.onclick=function(e){e.preventDefault();location.replace(location.pathname+"?v="+Date.now());};}})();
 
 // ---- STRENGTH PROGRESSION (rebuilt 2026-07-20 per Dave's spec: track by exercise, display the
@@ -717,6 +722,38 @@ function renderRace5k(){
  el.innerHTML='<div class="cap" style="text-align:left;margin:0 0 4px">Best 5K per effort, lower is better. The 9/13 race is RETIRED - we optimize for OBP now, so this is a record, not a countdown. Green = clean-race PR (clean best 30:09, 7/21). *7/23 28:34 is the fastest 3.1 mi INSIDE an interval session (jog recoveries averaged in), so it flatters a true continuous 5K - shown dashed and kept OFF the trend line.</div>'+s;
 }
 renderRace5k();
+// ---- GOALS & ACHIEVEMENTS (added 2026-07-23 per Dave). Soft-horizon targets; when one is
+// reached it moves to GOALS_DONE with the date hit - a completed-goal ledger to look back on.
+// Populate ONLY the right kind of goal (lifts, health levers, efficiency) - never a race PR. ----
+const GOALS=[
+ {n:"Bench press", base:114, cur:114, tgt:135, u:"lb", by:"Oct 22"},
+ {n:"Chest-supported row", base:35, cur:40, tgt:50, u:"lb/hand", by:"Oct 22"},
+ {n:"DB / goblet squat", base:20, cur:20, tgt:50, u:"lb", by:"Oct 22", note:"retest true working weight first"},
+ {n:"Lat pulldown", base:85, cur:85, tgt:105, u:"lb", by:"Oct 22"}
+];
+const GOALS_DONE=[]; // {n, tgt:"135 lb", set:"Jul 22", by:"Oct 22", hit:"reached-date"}
+function renderGoals(){
+ var el=document.getElementById("goals"); if(!el) return;
+ var out='<div class="cap" style="text-align:left;margin:0 0 6px">Targets with a SOFT horizon - the date is a checkpoint, not a deadline. Reach one and it moves to Completed with the date you hit it, a record to look back on. Miss the date and keep going; arriving late is data, not a failure.</div>';
+ out+='<div style="font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);font-weight:700;margin:9px 0 3px">In progress</div>';
+ GOALS.forEach(function(g){
+  var pct=Math.max(0,Math.min(100,Math.round((g.cur-g.base)/(g.tgt-g.base)*100)));
+  out+='<div style="padding:5px 0;border-top:1px solid var(--line)">'
+     +'<div style="display:flex;justify-content:space-between;gap:8px;font-size:12px"><b>'+g.n+'</b><span style="color:var(--muted)">'+g.cur+' &rarr; <b style="color:var(--ink)">'+g.tgt+' '+g.u+'</b> &middot; by '+g.by+'</span></div>'
+     +'<div style="height:6px;background:var(--line);border-radius:4px;margin-top:4px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--z2b)"></div></div>'
+     +(g.note?'<div style="font-size:10px;color:var(--muted);margin-top:2px">'+g.note+'</div>':'')+'</div>';
+ });
+ out+='<div style="font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--run);font-weight:700;margin:12px 0 3px">&#127942; Trophy case</div>';
+ if(GOALS_DONE.length===0){
+  out+='<div style="font-size:11px;color:var(--muted);padding:3px 0">No goals reached yet. The four lift targets are in progress; the first one you hit lands here with the date. This is the trophy case.</div>';
+ } else {
+  GOALS_DONE.forEach(function(g){
+   out+='<div style="padding:6px 0;border-top:1px solid var(--line);font-size:12px"><span style="font-size:16px">&#127942;</span> <b style="color:var(--run)">'+g.n+'</b> &middot; '+g.tgt+' &middot; set '+g.set+', reached <b>'+g.hit+'</b></div>';
+  });
+ }
+ el.innerHTML=out;
+}
+renderGoals();
 </script>
 </body>
 </html>
