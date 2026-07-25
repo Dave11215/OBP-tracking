@@ -370,7 +370,9 @@ const SEED={
 15:{done:true,actual:"quality_run",note:"5K PR 30:09 (planned easy run; Dave overrode to a hard 5K). 3.30mi/31:58 continuous, avg HR 162/max 177, 90% Z4 threshold, aerobic TE 3.7, load 140, rolling ~90ft. Prior best 30:32 (7/2). Warm-up 0.92mi + 0.49mi cool-down walk. Clean, strong finish, no distress - first max-HR effort since the 7/19 event and it went perfectly."},
 12:{done:true,actual:"z2_bike",note:"SWAPPED with Sun 7/19: the AQI blocked outdoor running, so today became the Zone 2 bike and Sunday takes the long run. DONE - 61 min Peloton, avg HR 122, 83% in Z2, zero threshold. Base volume banked. Plus two brief equipment probes (rower, elliptical), no elbow/back complaint."},
 16:{done:true,actual:"strength_A",note:"STRENGTH A DONE - full push + quad-lower day. TRUE loads (TAG ~14 lb bar): Bench 109x12/114x10/114x10; Close-Grip Bench 84x12/12/6 (debut - hold + build the last set); Incline DB 35x10x3; Chest-Sup Row 35/35/40x12 (leveled up); DB/Goblet Squat 20x12x3 (lower finally added at 47 min); High-to-Low Chop 40/side x12x3; Lat Raise tri-set 10x12 (3 planes); Pallof 30/40/40 (40 held CLEAN = new working weight). ~54 min. Ankle prehab done, knee skipped (fatigue). Big, complete session."},
-17:{done:true,actual:"track",note:"TRACK DONE (ran before I could clear the AM gate). Planned controlled 4-5x800 VO2; ran near-continuous THRESHOLD - real interval structure (power DID drop in recoveries) but HR DECOUPLED: 95% at/above threshold, 30% >172bpm, never below 134, recoveries stuck ~150s. 3.31mi/30:31, avg 9:13, avg HR 167/MAX 181 (new observed ceiling, was 177), load 134, TE Threshold. Garmin flagged a 5K PR 28:34 but it is INTERVAL-ASSISTED (fast reps + jog recoveries averaged), NOT a clean 5K - clean best stays 30:09. Off a fasted AM + dehydration headache that resolved before the run (warm-up clean). Great engine, wrong dose = a 2nd hard 5K-equivalent this week. Saturday long run firmly gated."}
+17:{done:true,actual:"track",note:"TRACK DONE (ran before I could clear the AM gate). Planned controlled 4-5x800 VO2; ran near-continuous THRESHOLD - real interval structure (power DID drop in recoveries) but HR DECOUPLED: 95% at/above threshold, 30% >172bpm, never below 134, recoveries stuck ~150s. 3.31mi/30:31, avg 9:13, avg HR 167/MAX 181 (new observed ceiling, was 177), load 134, TE Threshold. Garmin flagged a 5K PR 28:34 but it is INTERVAL-ASSISTED (fast reps + jog recoveries averaged), NOT a clean 5K - clean best stays 30:09. Off a fasted AM + dehydration headache that resolved before the run (warm-up clean). Great engine, wrong dose = a 2nd hard 5K-equivalent this week. Saturday long run firmly gated."},
+18:{done:true,actual:"rest",note:"REST, HONORED. The scheduled rest between Thursday track and the Saturday long run. The board read High and the urge to train was there, and the rest was taken anyway, which is the entire point of a scheduled rest day. Honoring a rest earns the check exactly like honoring a hard session."},
+19:{done:true,actual:"long_run",note:"LONG RUN DONE. 5.02 mi in about 1:01 on the National Mall in DC, 8 AM start, roughly 72F. THE EFFORT NEVER CHANGED: Power Zone 1 (Easy) 54:54 = 90 percent of the run, with nothing meaningful above Power Zone 2. Avg HR 132, HR Zone 3 30:36 and Zone 2 27:45, and ZERO seconds in Zone 4 or 5. Load 53, Body Battery -12. Form held flat start to finish: cadence settled at 150-152 by minute 12 and stayed there for 48 minutes, stride 0.88 m, vertical oscillation 8.9 cm, GCT 300-325 ms once warmed up. RESTRAINT: capped at 5 easy miles when a clean board and a new city made a hard 6 tempting. Longest is still 5.29 (7/19), and a shorter bar after a longer one is the plan working, not a slip."}
 };
 // SEED VERSIONING: when Solance ships new/updated log data, it must actually land.
 // Without this, a day already stored (e.g. seeded done:false) could never be updated.
@@ -731,9 +733,13 @@ renderRace5k();
 // ---- LONG RUN PROGRESSION (added 2026-07-23 per Dave). EASY long run ONLY (not intervals/tempo/track).
 // Gradual build ~10%/wk max, hold when unrecovered, ceiling ~9 mi (aerobic base + durability, not racing). ----
 const LONGRUN=[
- {d:"7/19",mi:5.29}
+ {d:"7/19",mi:5.29},
+ {d:"7/25",mi:5.02}
 ];
 const LR_CEIL=9;
+// 10K interim marker (added 2026-07-25 per Dave): DISTANCE only. No clock, no date. Deliberately
+// not a GOALS entry, because every GOALS row carries a "by" date and he chose not to have one.
+const LR_10K=6.21;
 function renderLongrun(){
  var el=document.getElementById("longrun"); if(!el) return;
  var W=680,H=200,L=8,R=8,TOP=26,BOT=32,lo=0,hi=LR_CEIL+0.6;
@@ -744,18 +750,23 @@ function renderLongrun(){
  var cy=y(LR_CEIL);
  s+='<line x1="'+x0+'" y1="'+cy.toFixed(1)+'" x2="'+x1+'" y2="'+cy.toFixed(1)+'" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="5 4"/>';
  s+='<text x="'+(x0+2)+'" y="'+(cy-5).toFixed(1)+'" font-size="10" fill="var(--accent)" font-weight="700">~'+LR_CEIL+' mi ceiling (aerobic base, then hold)</text>';
+ var ky=y(LR_10K);
+ s+='<line x1="'+x0+'" y1="'+ky.toFixed(1)+'" x2="'+x1+'" y2="'+ky.toFixed(1)+'" stroke="var(--long)" stroke-width="1.5" stroke-dasharray="2 3"/>';
+ s+='<text x="'+(x0+2)+'" y="'+(ky-5).toFixed(1)+'" font-size="10" fill="var(--long)" font-weight="700">10K &middot; 6.2 mi (easy, no clock, no date)</text>';
  var pts=[];
  LONGRUN.forEach(function(r,i){
-  var cx=x0+band*(i+0.5),by=y(r.mi),isL=(i===LONGRUN.length-1);
+  var cx=x0+band*(i+0.5),by=y(r.mi),isL=(i===LONGRUN.length-1),hit=(r.mi>=LR_10K);
   pts.push([cx.toFixed(1),by.toFixed(1)]);
-  s+='<rect x="'+(cx-bw/2).toFixed(1)+'" y="'+by.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+(pB-by).toFixed(1)+'" rx="3" fill="'+(isL?"var(--run)":"var(--z2b)")+'" opacity="'+(isL?1:0.55)+'"/>';
-  s+='<text x="'+cx.toFixed(1)+'" y="'+(by-5).toFixed(1)+'" text-anchor="middle" font-size="11.5" font-weight="800" fill="'+(isL?"var(--run)":"var(--ink)")+'">'+r.mi.toFixed(1)+' mi</text>';
+  s+='<rect x="'+(cx-bw/2).toFixed(1)+'" y="'+by.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+(pB-by).toFixed(1)+'" rx="3" fill="'+(hit?"var(--long)":(isL?"var(--run)":"var(--z2b)"))+'" opacity="'+((hit||isL)?1:0.55)+'"/>';
+  s+='<text x="'+cx.toFixed(1)+'" y="'+(by-5).toFixed(1)+'" text-anchor="middle" font-size="11.5" font-weight="800" fill="'+(hit?"var(--long)":(isL?"var(--run)":"var(--ink)"))+'">'+r.mi.toFixed(1)+' mi'+(hit?' &#127942;':'')+'</text>';
   s+='<text x="'+cx.toFixed(1)+'" y="'+(pB+15)+'" text-anchor="middle" font-size="10" fill="var(--muted)">'+r.d+'</text>';
  });
  if(pts.length>1) s+='<polyline points="'+pts.map(function(p){return p[0]+","+p[1];}).join(" ")+'" fill="none" stroke="var(--ink)" stroke-width="2" opacity="0.4"/>';
  s+='</svg>';
  var last=LONGRUN[LONGRUN.length-1].mi, nxt=Math.min(LR_CEIL,Math.round(last*1.1*10)/10);
- el.innerHTML='<div class="cap" style="text-align:left;margin:0 0 4px">EASY long run only, miles - a gradual aerobic build, not a distance to race. Raise ~10% a week at most, and hold any week you are not recovered (no guilt). Base ~'+last.toFixed(1)+' mi (7/19 was hot and tough); next SAFE step ~'+nxt.toFixed(1)+' mi. Interval/tempo/track days do NOT count here - they live in the sessions log. Ceiling ~'+LR_CEIL+' mi, then maintain.</div>'+s;
+ var best=Math.max.apply(null,LONGRUN.map(function(r){return r.mi;}));
+ var togo=Math.max(0,Math.round((LR_10K-best)*100)/100);
+ el.innerHTML='<div class="cap" style="text-align:left;margin:0 0 4px">EASY long run only, miles - a gradual aerobic build, not a distance to race. Raise ~10% a week at most, and hold any week you are not recovered (no guilt): a SHORTER bar after a longer one is the plan working, not a slip. Longest so far '+best.toFixed(2)+' mi &middot; most recent '+last.toFixed(2)+' mi &middot; next SAFE step ~'+nxt.toFixed(1)+' mi. INTERIM MARKER: 10K / 6.2 mi, '+(togo>0?togo.toFixed(2)+' mi to go':'REACHED')+' - distance only, no clock and no date on it, reached when it is reached. Interval/tempo/track days do NOT count here - they live in the sessions log. Ceiling ~'+LR_CEIL+' mi, then maintain.</div>'+s;
 }
 renderLongrun();
 // ---- GOALS & ACHIEVEMENTS (added 2026-07-23 per Dave). Soft-horizon targets; when one is
