@@ -202,7 +202,7 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 
 <h2>Running sessions</h2>
 <div class="card"><div class="hd" style="background:var(--run)">Easy Run + strides <small>&mdash; Zone 2</small></div>
-<div class="bd"><p class="desc">30&ndash;40 min conversational (HR ~125&ndash;140, cap 145), then 4&ndash;6 x 10&ndash;15s strides. Keep it genuinely easy.</p></div></div>
+<div class="bd"><p class="desc">30&ndash;40 min conversational (HR 120&ndash;132, soft cap 145), then 4&ndash;6 x 10&ndash;15s strides. Keep it genuinely easy.</p></div></div>
 <div class="card"><div class="hd" style="background:var(--qual)">Quality Run <small>&mdash; midweek hard (gated)</small></div>
 <div class="bd"><p class="desc">5K tempo / threshold. Warm up, finish strong but not to failure, cadence high. Swap to Bike VO2 if legs/HRV need it.</p></div></div>
 <div class="card"><div class="hd" style="background:var(--trk)">Track intervals <small>&mdash; speed (gated)</small></div>
@@ -212,7 +212,7 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 
 <h2>Bike sessions</h2>
 <div class="card"><div class="hd" style="background:var(--z2b)">Zone 2 Bike <small>&mdash; easy base, joint-sparing</small></div>
-<div class="bd"><p class="desc">Conversational Zone 2, HR 120&ndash;140 (soft cap 145), 45&ndash;90 min. Long outdoor ride on the weekend; carbs + salted fluid past ~75 min.</p></div></div>
+<div class="bd"><p class="desc">Conversational Zone 2, HR 120&ndash;132 (soft cap 145), 45&ndash;90 min. Long outdoor ride on the weekend; carbs + salted fluid past ~75 min.</p></div></div>
 <div class="card"><div class="hd" style="background:var(--vo2)">Bike VO2 <small>&mdash; impact-free hard</small></div>
 <div class="bd"><p class="desc">WU 10&ndash;12 min, intervals at ~90&ndash;95% max HR (3&ndash;4 min on / 3&ndash;4 easy), CD. Redline is fine, no impact. Never to failure. This is where the over-threshold work lives.</p></div></div>
 
@@ -220,13 +220,13 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <div class="card"><div class="hd" style="background:var(--sA)">Strength A <small>&mdash; push + quad-dominant lower</small></div>
 <div class="bd"><ul class="ex">
 <li>Reverse Lunge <span class="pw">power &middot; do FIRST</span> <span class="s">&middot; 3 x 8/leg</span></li>
-<li>Barbell Bench Press <span class="s">&middot; 145 lb, 3 x 8-12</span></li>
+<li>Barbell Bench Press <span class="s">&middot; 114 lb true (TAG bar ~14 lb + 50/side), 3 x 8-12</span></li>
 <li>Incline Dumbbell Press <span class="s">&middot; hold 35 &rarr; 40, 3 x 10-12</span></li>
-<li>Chest-Supported DB Row <span class="s">&middot; up to 35, 3 x 10-12</span></li>
-<li>High-to-Low Cable Chop <span class="s">&middot; single-arm, 30 lb, 3 x 12/side</span></li>
-<li>Lat Raise tri-set <span class="pw">prehab &middot; do NOT progress</span> <span class="s">&middot; 8 lb, 3 rounds (front + scaption + lateral)</span></li>
-<li>Close-Grip Bench <span class="s">&middot; replaces pushdown/skull crushers &middot; elbow-safe; any twinge, stop</span></li>
-<li>Pallof Press <span class="s">&middot; 30 lb, 3 x 12/side (anti-rotation; if you turn, too heavy)</span></li>
+<li>Chest-Supported DB Row <span class="s">&middot; up to 40, 3 x 10-12</span></li>
+<li>High-to-Low Cable Chop <span class="s">&middot; single-arm, 40 lb, 3 x 12/side</span></li>
+<li>Lat Raise tri-set <span class="pw">prehab &middot; do NOT progress</span> <span class="s">&middot; 10 lb, 3 rounds (front + scaption + lateral)</span></li>
+<li>Close-Grip Bench <span class="s">&middot; 84 lb, hold &middot; replaces pushdown/skull crushers &middot; elbow-safe; any twinge, stop</span></li>
+<li>Pallof Press <span class="s">&middot; 40 lb, 3 x 12/side (anti-rotation; if you turn, too heavy)</span></li>
 </ul></div></div>
 <div class="card"><div class="hd" style="background:var(--sB)">Strength B <small>&mdash; pull + hip-hinge lower</small></div>
 <div class="bd"><ul class="ex">
@@ -325,7 +325,7 @@ ul.ex li .s{color:var(--muted);font-size:12px}
 <script>
 const START=new Date(2026,6,6);
 const TYPE={
-strength_A:{a:"Str A",c:"var(--sA)",n:"Strength A",d:"push + quad. Reverse Lunge (POWER, do FIRST while fresh), Bench, Incline Dumbbell Press, CS Row, High-to-Low Cable Chop (single-arm, functional trainer, top pulley, stand perpendicular, near hand high -> down across to opposite waist), Lat Raise tri-set (PREHAB - do NOT progress: 8 lb, 3 rounds of 12 front + 12 scaption + 12 lateral), Close-Grip Bench (REPLACES the pushdown/skull crushers - elbow-safe triceps compound; any elbow twinge = stop), Pallof (anti-rotation - if hips or shoulders turn, too heavy). WORKING WEIGHTS: Bench 145 (3x8-12) / Incline DB hold 35 -> 40 (get 12 @ RIR 1-2 first) / CS Row up to 35 (3x10-12) / Chop 30 / Pallof 30. Close-grip bench: establish a start weight."},
+strength_A:{a:"Str A",c:"var(--sA)",n:"Strength A",d:"push + quad. Reverse Lunge (POWER, do FIRST while fresh), Bench, Incline Dumbbell Press, CS Row, High-to-Low Cable Chop (single-arm, functional trainer, top pulley, stand perpendicular, near hand high -> down across to opposite waist), Lat Raise tri-set (PREHAB - do NOT progress: 10 lb, 3 rounds of 12 front + 12 scaption + 12 lateral), Close-Grip Bench (REPLACES the pushdown/skull crushers - elbow-safe triceps compound; any elbow twinge = stop), Pallof (anti-rotation - if hips or shoulders turn, too heavy). WORKING WEIGHTS (true loads, measured 2026-07-22): Bench 114 (3x8-12) - the TAG bar is ~14 lb, so 50 lb/side = 114; the old 145 came from a 45 lb-bar assumption and was never real / Close-Grip Bench 84, HOLD (debut went 12/12/6; build set 3 to 10-12 before adding) / Incline DB hold 35 -> 40 (still 10x3 on 7/22, so get 12 @ RIR 1-2 first) / CS Row up to 40 (35/35/40 x12, top set clean) / Chop 40 per side / Pallof 40 (held CLEAN 7/22 = the new working weight; if hips or shoulders turn, back to 30) / Lat Raise tri-set 10 (PREHAB, do NOT progress) / DB goblet squat 20."},
 strength_B:{a:"Str B",c:"var(--sB)",n:"Strength B",d:"pull + hinge. KB Swing (POWER, do FIRST), Pulldown, Cable Row, Face Pull, Flat DB Press, Hammer Curl, Farmer Carry, Low-to-High Cable Lift (reverse chop - LOW pulley, drive from hip up-and-across to the opposite shoulder; finish at shoulder height, NOT overhead - respects the no-overhead rule. This is the OTHER diagonal to Strength A's high-to-low chop, so the two days train opposite patterns instead of the same one twice). VOLUME UP (hypertrophy, from the 2026-07-18 dose decision): add 1-2 hard sets to the big compounds - Pulldown, Cable Row, Flat DB Press. This is the added-volume-on-existing-days move, NOT a 3rd session. GATED: back off if HRV drifts, sleep suffers, or any tissue flares - the recovery ceiling still governs."},
 strength_C:{a:"Str C",c:"var(--sC)",n:"Strength C",d:"legs. Box Step-Up (POWER, do FIRST), Bulgarian Split Squat, Leg Extension, Leg Curl, Calf Raise, Lat Raise (prehab), arm superset, core. VOLUME UP (from the 2026-07-18 dose decision): add 1-2 hard sets to the leg compounds - Bulgarian Split Squat, Leg Ext, Leg Curl. Same gate as B: back off on any HRV/sleep/tissue signal."},
 easy_run:{a:"Easy Run",c:"var(--run)",n:"Easy Run + strides",d:"30-40 min Zone 2, HR 120-132 (cap 145) + 4-6 strides. Genuinely easy. BAND CORRECTED 2026-07-26 (was ~125-140), same fix the Z2 Bike card got on 7/25: HR Zone 2 ENDS AT 133 on his device, so a band running to 140 prescribed Zone 3 time by construction, and against the max-HR 193 estimate 140 bpm is 72.5 percent, which is not easy. HOW: hold EFFORT steady and let HR drift 5-10 bpm late in the run; 145 is a soft ceiling for cardiac drift, NOT a target to run up to. If holding 132 means walking the hills, walk the hills - the point of this session is aerobic base and knee-rebuild volume, and neither is bought by running the climbs. The strides are the ONLY fast part: 4-6 x ~20 s relaxed and quick, full recovery between, not a finishing kick."},
@@ -650,8 +650,9 @@ const SPROG=[
  {g:"A",ex:"Barbell Bench",rng:[8,12],inc:5,h:[{w:104,r:12,d:"2026-07-01"},{w:109,r:12,d:"2026-07-08"},{w:114,r:10,d:"2026-07-22"}],goal:{w:135,r:"8-10",d:"10/22"}},
  {g:"A",ex:"Close-Grip Bench",rng:[8,12],inc:5,h:[{w:84,r:6,d:"2026-07-22"}],note:"debut 84x12/12/6; hold 84, build the last set before adding"},
  {g:"A",ex:"Incline DB Press",rng:[10,12],inc:5,h:[{w:35,r:10,d:"2026-07-08",rir:0},{w:35,r:10,d:"2026-07-22"}]},
- {g:"A",ex:"Chest-Sup. Row",rng:[10,12],inc:5,h:[{w:30,r:12,d:"2026-07-08"},{w:35,r:12,d:"2026-07-22"}],goal:{w:50,r:"10-12",d:"10/22"}},
+ {g:"A",ex:"Chest-Sup. Row",rng:[10,12],inc:5,h:[{w:30,r:12,d:"2026-07-08"},{w:40,r:12,d:"2026-07-22"}],goal:{w:50,r:"10-12",d:"10/22"},note:"7/22 ran 35/35/40 x12; the top set held clean, so 40 is the level"},
  {g:"A",ex:"Pallof Press",rng:null,inc:5,acc:1,h:[{w:30,r:12,d:"2026-07-08"},{w:40,r:12,d:"2026-07-22"}],note:"anti-rotation, form over load; 40 held clean 7/22"},
+ {g:"A",ex:"Cable Chop (H-to-L)",rng:[10,12],inc:5,h:[{w:30,r:12,d:"2026-07-14"},{w:40,r:12,d:"2026-07-22"}],note:"single-arm, per side; functional-trainer stack numbers compare only to themselves"},
  {g:"B",ex:"KB Swing",rng:null,inc:5,h:[{w:25,r:16,d:"2026-07-20"}],note:"power/hinge, progress load when the swing stays crisp"},
  {g:"B",ex:"Lat Pulldown",rng:[10,12],inc:5,h:[{w:85,r:11,d:"2026-07-20"}],goal:{w:105,r:"10-12",d:"10/22"}},
  {g:"B",ex:"Seated Cable Row",rng:[10,12],inc:5,h:[{w:75,r:12,d:"2026-07-20"}]},
