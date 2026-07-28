@@ -352,9 +352,9 @@ rest:{a:"Rest",c:"var(--rest)",n:"Rest / recovery",d:"Full rest or an easy walk 
 other:{a:"Other",c:"#6b7a8f",n:"Other activity",d:"Something else that counted (walk, hike, swim, play, ocean)."}};
 const ORDER=["strength_A","strength_B","strength_C","easy_run","quality_run","track","long_run","z2_bike","bike_vo2","rest","other"];
 const PREHAB={se:"Shoulders/Elbows",ankle:"Ankle/Foot",knee:"Knees"};
-const SEQ=["strength_A","easy_run","strength_B","track","rest","long_run","track","rest","strength_C","easy_run","bike_vo2","rest","z2_bike","long_run","strength_B","quality_run","strength_A","track","rest","long_run","z2_bike","rest","strength_C","easy_run","quality_run","rest","long_run","z2_bike","rest","strength_A"];
+const SEQ=["strength_A","easy_run","strength_B","track","rest","long_run","track","rest","strength_C","easy_run","bike_vo2","rest","z2_bike","long_run","strength_B","quality_run","strength_A","track","rest","long_run","z2_bike","rest","quality_run","easy_run","quality_run","rest","long_run","z2_bike","rest","strength_A"];
 // PM = optional/second session that day (same-day stacking). null = single session.
-const PM=[null,null,null,null,null,null,null,null,"z2_bike",null,null,null,null,null,null,null,"z2_bike",null,null,null,null,null,"z2_bike",null,null,null,null,"strength_B",null,"z2_bike"]; // PM[20] (Sun 7/26) held Strength B as a same-day stack behind the Z2 ride. It did
+const PM=[null,null,null,null,null,null,null,null,"z2_bike",null,null,null,null,null,null,null,"z2_bike",null,null,null,null,null,"strength_C",null,null,null,null,"strength_B",null,"z2_bike"]; // PM[20] (Sun 7/26) held Strength B as a same-day stack behind the Z2 ride. It did
 // not run there. Dave moved it to Monday 7/27 morning as a standalone session, so the
 // slot is cleared rather than left standing and scored as a miss. The stacking bet is
 // unaffected: a session moved off a stack is not a stack that was attempted and failed.;
@@ -854,7 +854,7 @@ function renderContRuns(){
  s+='</svg>';
  var ex=(typeof M!=="undefined"&&M.runs_excluded)?M.runs_excluded:0;
  var togo=Math.max(0,Math.round((CR_TGT-best)*100)/100);
- el.innerHTML='<div class="cap" style="text-align:left;margin:0 0 4px">One bar per run with under 5 total minutes of walking. Bar height is the RUNNING distance from the watch split, not the total. Longest '+best.toFixed(2)+' mi on '+R[bi].d+' &middot; most recent '+R[n-1].mi.toFixed(2)+' mi on '+R[n-1].d+' &middot; '+(togo>0?togo.toFixed(2)+' mi to the '+CR_TGT+' mi target':'TARGET REACHED')+'. '+ex+' run/walk sessions are deliberately not shown. Hover a bar for the split.</div>'+s;
+ el.innerHTML='<div class="cap" style="text-align:left;margin:0 0 4px">One bar per run with under 5 total minutes of walking. Bar height is the RUNNING distance from the watch split, not the total. Longest '+best.toFixed(2)+' mi on '+R[bi].d+' &middot; most recent '+R[n-1].mi.toFixed(2)+' mi on '+R[n-1].d+' &middot; '+(togo>0?togo.toFixed(2)+' mi to the '+CR_TGT+' mi target':'TARGET REACHED')+'. '+ex+' run/walk sessions are excluded because the '+CR_TGT+' mile target is a continuous run, not because they count for less. Hover a bar for the split.</div>'+s;
 }
 renderContRuns();
 // ---- GOALS & ACHIEVEMENTS (added 2026-07-23 per Dave). Soft-horizon targets; when one is
