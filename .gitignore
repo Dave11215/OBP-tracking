@@ -1,0 +1,4 @@
+# Scratch copies used to render-verify the page before publishing. Never publish these:
+# this repo is public and carries Dave's real name.
+_verify_*.html
+_to_delete/
