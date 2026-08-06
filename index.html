@@ -652,7 +652,7 @@ const PKEY="obp_prehab_v1";
 const CSTART="2026-07-17";
 // Seeded history: work Dave reported that predates the tracker. Lives in the published file so
 // it reaches every device; localStorage alone is per-browser.
-const PSEED={"2026-07-16":{arm:true},"2026-07-17":{arm:true},"2026-07-18":{arm:true,ak:true},"2026-07-19":{arm:true,ak:true},"2026-07-20":{arm:true,kn:true},"2026-07-21":{arm:true,ak:true},"2026-07-22":{ak:true},"2026-07-26":{arm:true,ak:true},"2026-07-27":{arm:true,kn:true},"2026-07-28":{arm:true},"2026-07-29":{arm:true,ak:true},"2026-07-30":{arm:true,ak:true},"2026-08-02":{arm:true,ak:true},"2026-08-03":{arm:true,ak:true},"2026-08-04":{arm:true},"2026-08-06":{arm:true,ak:true},"2026-08-05":{arm:true,ak:true}};
+const PSEED={"2026-07-16":{arm:true},"2026-07-17":{arm:true},"2026-07-18":{arm:true,ak:true},"2026-07-19":{arm:true,ak:true},"2026-07-20":{arm:true,kn:true},"2026-07-21":{arm:true,ak:true},"2026-07-22":{ak:true},"2026-07-26":{arm:true,ak:true},"2026-07-27":{arm:true,kn:true},"2026-07-28":{arm:true},"2026-07-29":{arm:true,ak:true},"2026-07-30":{arm:true,ak:true},"2026-08-02":{arm:true,ak:true},"2026-08-03":{arm:true,ak:true},"2026-08-04":{arm:true},"2026-08-06":{arm:true,kn:true,ak:true},"2026-08-05":{arm:true,ak:true}};
 const PSEEDV="v2:"+JSON.stringify(PSEED);
 function pload(){var s;try{s=JSON.parse(localStorage.getItem(PKEY))||{}}catch(e){s={}}
  if(localStorage.getItem("obp_pseedv")!==PSEEDV){
@@ -698,7 +698,7 @@ function pdue(kk,d){
  const rec=A[key(d)]||{}, k=rec.actual||SEQ[i];   // grade against what he ACTUALLY did
  return PT[kk].due(k,d);
 }
-function ptoggle(kk,i){const d=dateOf(i);if(!pdue(kk,d))return;const s=pload(),k=key(d);
+function ptoggle(kk,i){const d=dateOf(i);const s=pload(),k=key(d);if(!pdue(kk,d)&&!(s[k]&&s[k][kk]))return;
  s[k]=s[k]||{};s[k][kk]=!s[k][kk];psave(s);render();prender();toast(s[k][kk]?PT[kk].full+" done":"Unmarked")}
 // Prehab status chips, drawn inside each training-calendar cell.
 // REPLACED the standalone 30-column strip (2026-07-17). Dave: "the light outline of some of the
@@ -711,8 +711,10 @@ function pchips(d,i){
  const pre=k<CSTART;                       // cadence set 2026-07-17; do not grade before it
  let out="";
  ["arm","kn","ak"].forEach(kk=>{
-  if(!pdue(kk,d))return;
   const done=!!(s[k]&&s[k][kk]);
+  // Off-cadence work still draws. 2026-08-06: Dave did knee prehab on a REST day, knee is due only
+  // on strength days, so the work was in PSEED and had nowhere to render. Recorded work always shows.
+  if(!pdue(kk,d)&&!done)return;
   const missed=!done && d<today && !pre;
   const cls=done?"pk done":missed?"pk miss":pre?"pk pre":"pk";
   const g=done?"&#10003;":missed?"&#10005;":"";
